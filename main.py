@@ -26,7 +26,9 @@ def main():
         print("For File: ", x)
         print('---------------------')
 
-        analyzeGlobalVariables(source[x])
+        fileGlobalVariable,globalVariableLocation = analyzeGlobalVariables(source[x])
+        print("Number of Global Variables: ",fileGlobalVariable)
+        print("line of Occurations: ", globalVariableLocation)
 
 if __name__ == "__main__":
     main()
