@@ -6,5 +6,6 @@ using namespace std;
 double getProcessTime()
 {
 	clock_t time = clock();
+
 	return static_cast<double>(time)/CLOCKS_PER_SEC;
 }
