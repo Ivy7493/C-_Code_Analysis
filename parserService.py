@@ -21,11 +21,11 @@ def getFiles():
                            code_block = False
                     if( not code_block):
                           source_lines.append(source_line.split('//')[0].strip()) # if not in code block, insert line with comments removed         
-                print(source_lines)
+                #print(source_lines)
                 cppList[f]=source_lines
                 
             elif '.h' in f:
-                print(f)
+                #print(f)
                 sourceFile = os.path.join(root, f)
                 source = open(sourceFile, "r")
                 source_lines = []
@@ -37,19 +37,19 @@ def getFiles():
                            code_block = False
                     if( not code_block):
                           source_lines.append(source_line.split('//')[0].strip()) # if not in code block, insert line with comments removed         
-                print(source_lines)
+                #print(source_lines)
                 headerList[f]=source_lines
     
-    for x in cppList:
-        print(" ")
-        print("cpp Item: ", x)
-        for y in cppList[x]:
-            print(y)
+    # for x in cppList:
+    #     print(" ")
+    #     print("cpp Item: ", x)
+    #     for y in cppList[x]:
+    #         print(y)
 
-    for x in headerList:
-        print(" ")
-        print("header Item: ", x)
-        for y in headerList[x]:
-            print(y)
+    # for x in headerList:
+    #     print(" ")
+    #     print("header Item: ", x)
+    #     for y in headerList[x]:
+    #         print(y)
 
     return headerList,cppList
