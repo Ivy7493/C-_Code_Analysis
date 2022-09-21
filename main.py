@@ -4,7 +4,7 @@ from parserService import getFiles
 from friendService import analyzeFriend
 from globalService import analyzeGlobalVariables
 from switchService import analyzeSwitch
-
+from publicMemberService import analyzePublicMembers
         
 
 
@@ -26,6 +26,9 @@ def main():
         fileSwitchCount, fileSwitchLocation = analyzeSwitch(headers[x])
         print("Number of switch statements: ",fileSwitchCount)
         print("line of Occurations: ", fileSwitchLocation)
+        filePublicDataMember,publicDataMemberLocation = analyzePublicMembers(headers[x])
+        print("Number of Public data member declarations: ",filePublicDataMember)
+        print("line of Occurations: ", publicDataMemberLocation) 
 
     for x in source:
         print('---------------------')
@@ -40,6 +43,7 @@ def main():
         fileSwitchCount, fileSwitchLocation = analyzeSwitch(source[x])
         print("Number of switch statements: ",fileSwitchCount)
         print("line of Occurations: ", fileSwitchLocation)
+        
 
 
 if __name__ == "__main__":
