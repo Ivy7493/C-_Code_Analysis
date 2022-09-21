@@ -13,6 +13,8 @@ from implementationInheritanceService import analyzeImplementationInheritance
 
 def main():
     headers,source = getFiles()
+    locationOccurationsForImplementationInheritance = []
+    GlobalImplementationInheritanceCount = 0
     for x in headers:
         print('---------------------')
         print("For File: ", x)
@@ -30,6 +32,9 @@ def main():
         print("Number of Public data member declarations: ",filePublicDataMember)
         print("line of Occurations: ", publicDataMemberLocation) 
         impCount,impLine = analyzeImplementationInheritance(headers[x],source,headers)
+        for member in impLine:
+            locationOccurationsForImplementationInheritance.append(member)
+        GlobalImplementationInheritanceCount += impCount
         print('implementations check:')
         print(impCount,impLine)
 
@@ -46,8 +51,12 @@ def main():
     #     fileSwitchCount, fileSwitchLocation = analyzeSwitch(source[x])
     #     print("Number of switch statements: ",fileSwitchCount)
     #     print("line of Occurations: ", fileSwitchLocation)
-        
-        
+
+    #This section works by 
+    locationOccurationsForImplementationInheritance = list(set(locationOccurationsForImplementationInheritance))    
+    print("Total Implementation Inheritance: ")
+    print ("Count: ", GlobalImplementationInheritanceCount)
+    print("Occurances: ", locationOccurationsForImplementationInheritance)
 
 
 if __name__ == "__main__":

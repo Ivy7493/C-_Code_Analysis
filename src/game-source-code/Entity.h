@@ -51,7 +51,10 @@ public:
     ///@return integer of the entity size
     virtual int GetEntitySize();
     ///Get the lives that the entity currently posesses
-    virtual int GetLives();
+    virtual int GetLives(){
+      int a = 4;
+      return a;
+    }
     ///Decrease the number of lives that the entity posesses by 1
     virtual void LoseLife();
 
