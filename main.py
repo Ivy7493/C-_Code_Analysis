@@ -5,7 +5,7 @@ from friendService import analyzeFriend
 from globalService import analyzeGlobalVariables
 from switchService import analyzeSwitch
 from publicMemberService import analyzePublicMembers
-        
+from implementationInheritanceService import analyzeImplementationInheritance
 
 
 
@@ -29,20 +29,24 @@ def main():
         filePublicDataMember,publicDataMemberLocation = analyzePublicMembers(headers[x])
         print("Number of Public data member declarations: ",filePublicDataMember)
         print("line of Occurations: ", publicDataMemberLocation) 
+        impCount,impLine = analyzeImplementationInheritance(headers[x],source,headers)
+        print('implementations check:')
+        print(impCount,impLine)
 
-    for x in source:
-        print('---------------------')
-        print("For File: ", x)
-        print('---------------------')
+    # for x in source:
+    #     print('---------------------')
+    #     print("For File: ", x)
+    #     print('---------------------')
 
-        fileGlobalVariable,globalVariableLocation = analyzeGlobalVariables(source[x])
-        print("Number of Global Variables: ",fileGlobalVariable)
-        print("line of Occurations: ", globalVariableLocation)
+    #     fileGlobalVariable,globalVariableLocation = analyzeGlobalVariables(source[x])
+    #     print("Number of Global Variables: ",fileGlobalVariable)
+    #     print("line of Occurations: ", globalVariableLocation)
 
 
-        fileSwitchCount, fileSwitchLocation = analyzeSwitch(source[x])
-        print("Number of switch statements: ",fileSwitchCount)
-        print("line of Occurations: ", fileSwitchLocation)
+    #     fileSwitchCount, fileSwitchLocation = analyzeSwitch(source[x])
+    #     print("Number of switch statements: ",fileSwitchCount)
+    #     print("line of Occurations: ", fileSwitchLocation)
+        
         
 
 
