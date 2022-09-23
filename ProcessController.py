@@ -7,12 +7,8 @@ from switchService import analyzeSwitch
 from publicMemberService import analyzePublicMembers
 from implementationInheritanceService import analyzeImplementationInheritance
 
-
-
-
-
-def main():
-    headers,source = getFiles()
+def ProcessController(fileName):
+    headers,source = getFiles(fileName)
     locationOccurationsForImplementationInheritance = []
     GlobalImplementationInheritanceCount = 0
     LocationOccurationsForPublic = []
@@ -23,7 +19,6 @@ def main():
     GlobalFriendCount = 0;
     LocationOccurationForGlobal = []
     GlobalGlobalCount = 0;
-
     for x in headers:
         print('---------------------')
         print("For File: ", x)
@@ -123,8 +118,5 @@ def main():
     print("Total Friend Statements: ")
     print ("Count: ", GlobalFriendCount)
     print("Occurances: ", LocationOccurationsForFriend)
-
-
-
-if __name__ == "__main__":
-    main()
+    
+    return headers,source

@@ -1,7 +1,7 @@
 import os, sys #need this in order to read in infomation.
-def getFiles():
+def getFiles(path):
     # Get the list of all files and directories
-    path = os.path.dirname(__file__)
+    #path = os.path.dirname(__file__)
     #dir_list = os.walk(path)
     cppList = {}
     headerList = {}
