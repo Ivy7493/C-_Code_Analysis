@@ -1,4 +1,3 @@
-
 #imports for different services
 from parserService import getFiles
 from friendService import analyzeFriend
