@@ -21,14 +21,20 @@ tuple<int,int> Entity::GetEntityPosition()
 {
 
 }
- int Entity::GetEntitySize()
- {
 
- }
+int Entity::GetEntitySize()
+{
+
+}
+
+string Entity::GetEntitySize()
+{
+   return "Cool";
+}
 
 int Entity::GetLives()
 {
-
+    
 }
 void Entity::LoseLife()
 {

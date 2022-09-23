@@ -20,7 +20,11 @@ def getFiles():
                     if('*/' in source_line):
                            code_block = False
                     if( not code_block):
-                          source_lines.append(source_line.split('//')[0].strip()) # if not in code block, insert line with comments removed         
+                        if("*/" in source_line):
+                            source_lines.append("") # if not in code block, insert line with comments removed         
+                        else:
+                            source_lines.append(source_line.split('//')[0].strip()) # if not in code block, insert line with comments removed         
+                          
                 #print(source_lines)
                 cppList[f]=source_lines
                 
@@ -36,7 +40,10 @@ def getFiles():
                     if('*/' in source_line):
                            code_block = False
                     if( not code_block):
-                          source_lines.append(source_line.split('//')[0].strip()) # if not in code block, insert line with comments removed         
+                        if("*/" in source_line):
+                            source_lines.append("") # if not in code block, insert line with comments removed         
+                        else:
+                            source_lines.append(source_line.split('//')[0].strip()) # if not in code block, insert line with comments removed 
                 #print(source_lines)
                 headerList[f]=source_lines
     
