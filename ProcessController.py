@@ -87,6 +87,8 @@ def ProcessController(fileName):
         GlobalSwitchCount += fileSwitchCount
 
     #-----------------------TOTAL SECTION--------------------------------#
+    issueLocationArr = [locationOccurrencesForImplementationInheritance,LocationOccurationForGlobal,LocationOccurrencesForPublic,LocationOccurrencesForSwitch,LocationOccurrencesForFriend]
+    issueCountArr = [GlobalImplementationInheritanceCount,GlobalGlobalCount,GlobalPublicCount,GlobalSwitchCount,GlobalFriendCount]
     print(" ")
     print('=========================================================')
     locationOccurrencesForImplementationInheritance = list(set(locationOccurrencesForImplementationInheritance))    
@@ -118,4 +120,4 @@ def ProcessController(fileName):
     print ("Count: ", GlobalFriendCount)
     print("Occurrences: ", LocationOccurrencesForFriend)
     
-    return headers,source
+    return headers,source,issueCountArr,issueLocationArr
