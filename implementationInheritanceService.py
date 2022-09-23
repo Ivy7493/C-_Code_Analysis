@@ -47,10 +47,45 @@ def analyzeImplementationInheritance(file,source,headers):
                                 extractedName = x[y] + extractedName
                             elif(x[y] == " "):
                                 break;
-                        #print("Extracted function Name: ", extractedName) # the above section just extracts the function name
+                        #=====The following deals with extracting types from functions incase of overloading
+                        extractedType = ""
+                        extractedTypeEnd = x.find(" ")
+                        extractedType = x[0:extractedTypeEnd]
+                        if(extractedType == "virtual"):
+                            tempCurrentLine = ""
+                            counter =  extractedTypeEnd + 1
+                            while(x[counter] != " "):
+                                tempCurrentLine = tempCurrentLine + x[counter]
+                                counter+=1
+                            extractedType = tempCurrentLine
+                        #======The following section deals with generalizing expression parameters
+                        extractedParameterTypes = []
+                        if("()" not in x):
+                            functionParamtersEnd = x.find(")")
+                            extractedParameters = x[functionNameEnd + 2:functionParamtersEnd] #we can use function end here as function end begins at parameters +2 for correction factor
+                            splitItems = extractedParameters.split(",")
+                            for item in splitItems:
+                              extractedParameterTypes.append(item.strip().split(" ")[0]) #will return only the data type
+
+                        print("OG line: ", x)
+                        print("Extracted function Name: ", extractedName) # the above section just extracts the function name
+                        print("Extracted Type: ", extractedType)
+                        print("Extracted Data Types: ",extractedParameterTypes)
                         currentCppLine = 0 #variable to keep track of the current line in the cpp file
                         for y in baseClassSource: # for every line in the cpp file seach
-                            if(extractedName in y and "(" in y and ")" in y): #if the function name is in the line and () are in the line, it is a function delcaration;
+                            if(extractedName in y and extractedType in y and "(" in y and ")" in y): #if the function name is in the line and () are in the line, it is a function delcaration;
+                                #extractedSourceParam = []
+                                #if("()" not in y):
+                                #tempStart = y.find("(")
+                               # tempEnd = y.find(")")
+                               # tempParam = y[tempStart+1:tempEnd]
+                               # tempSplitItems = tempParam.split(",")
+
+                               # for tempItem in tempSplitItems:
+                                #    extractedSourceParam.append(tempItem.strip().split(" ")[0]) #will return only the data type
+                               # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                                #if(extractedSourceParam == extractedParameterTypes):
+                                #print("true")
                                 currentCppLine = baseClassSource.index(y); #Find the index of the line at which the function was found
                                 #print("Found cpp Declaration at: ", currentCppLine + 1) #print it for now for debugging
                                 while("}" not in baseClassSource[currentCppLine]): #While the current cpp line isnt } , we still in the delcaration

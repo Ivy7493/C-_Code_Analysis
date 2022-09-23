@@ -74,10 +74,6 @@ def main():
       
         print('---------------------')
         print("For File: ", x)
-        if(x == "Display.cpp"):
-            print("For File: ", x)
-            for y in source[x]:
-                print(y)
         print('---------------------')
 
         #-----------------Global Variable tool--------------------------------------#
