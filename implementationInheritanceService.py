@@ -59,18 +59,18 @@ def analyzeImplementationInheritance(file,source,headers):
                                 counter+=1
                             extractedType = tempCurrentLine
                         #======The following section deals with generalizing expression parameters
-                        extractedParameterTypes = []
-                        if("()" not in x):
-                            functionParamtersEnd = x.find(")")
-                            extractedParameters = x[functionNameEnd + 2:functionParamtersEnd] #we can use function end here as function end begins at parameters +2 for correction factor
-                            splitItems = extractedParameters.split(",")
-                            for item in splitItems:
-                              extractedParameterTypes.append(item.strip().split(" ")[0]) #will return only the data type
+                        #extractedParameterTypes = []
+                        #if("()" not in x):
+                            #functionParamtersEnd = x.find(")")
+                            #extractedParameters = x[functionNameEnd + 2:functionParamtersEnd] #we can use function end here as function end begins at parameters +2 for correction factor
+                            #splitItems = extractedParameters.split(",")
+                            #for item in splitItems:
+                              #extractedParameterTypes.append(item.strip().split(" ")[0]) #will return only the data type
 
                         print("OG line: ", x)
                         print("Extracted function Name: ", extractedName) # the above section just extracts the function name
                         print("Extracted Type: ", extractedType)
-                        print("Extracted Data Types: ",extractedParameterTypes)
+                        #print("Extracted Data Types: ",extractedParameterTypes)
                         currentCppLine = 0 #variable to keep track of the current line in the cpp file
                         for y in baseClassSource: # for every line in the cpp file seach
                             if(extractedName in y and extractedType in y and "(" in y and ")" in y): #if the function name is in the line and () are in the line, it is a function delcaration;
