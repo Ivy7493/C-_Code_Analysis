@@ -1,5 +1,6 @@
 import PySimpleGUI as sg
 import os.path
+import textwrap
 from ProcessController import ProcessController as PrscC
 
 file_list_column = [
@@ -33,23 +34,34 @@ report_viewer_column = [
     [
         sg.Text("Instances of Implementation Inheritance:"),
         sg.Text("",key = "impText"),
-    ],
+    ],    
+    [sg.Text("Location(s):")],
+    [sg.Text("",key = "impLocText")],
     [
         sg.Text("Instances of Global Variables:"),
         sg.Text("",key = "globText"),
     ],
+    [sg.Text("Location(s):")],
+    [sg.Text("",key = "globLocText")],
     [
         sg.Text("Instances of Public Data Members:"),
         sg.Text("",key = "PDMText"),
     ],
+    [sg.Text("Location(s):")],
+    [sg.Text("",key = "PDMLocText")],
     [
         sg.Text("Instances of Switch case use:"),
         sg.Text("",key = "switchText"),
     ],
+    [sg.Text("Location(s):")],
+    [sg.Text("",key = "switchLocText")],
     [
         sg.Text("Instances of Friend keyword use:"),
         sg.Text("",key = "friendText"),
     ],
+    [sg.Text("Location(s):")],
+    [sg.Text("",key = "friendLocText")],
+    #=================================================================
     [sg.Text("Press Return if you wish to go back to the previous page")],
     [sg.Button("RETURN",key = "returnFromReportButton")],
 ]
@@ -89,10 +101,18 @@ while True:
             headers,sources,countArr,occurArr = PrscC(os.path.join(folder))
             window["-TOUT-"].Update("Press VIEW to see the report on bad practice")
             window["impText"].Update(str(countArr[0]))
+            window["impLocText"].Update(occurArr[0])
             window["globText"].Update(str(countArr[1]))
+            window["globLocText"].Update(occurArr[1])
             window["PDMText"].Update(str(countArr[2]))
+            window["PDMLocText"].Update(occurArr[2])
             window["switchText"].Update(str(countArr[3]))
+            window["switchLocText"].Update(occurArr[3])
             window["friendText"].Update(str(countArr[4]))
+            window["friendLocText"].Update(occurArr[4])
+            
+            #-------------------------------------------
+            
             window["listHeaders"].Update(headers.keys())
             window["listSources"].Update(sources.keys())
             window["viewButton"].Update(visible = True)

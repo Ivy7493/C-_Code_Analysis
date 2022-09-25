@@ -20,21 +20,21 @@ def analyzeImplementationInheritance(file,source,headers):
             cleanline = line.rstrip()
             lastSpacePos = cleanline.rfind(' ')
             finalLine = cleanline[lastSpacePos+1:]
-            print('Class is inherited from', finalLine)
+            #print('Class is inherited from', finalLine)
             baseClassFile = headers[finalLine+'.h']
             currentLineInHeader = 0;
             for x in baseClassFile:
                 # if( 'virtual' in x and '=' in x and '0' in x):
                 if(("("  in x and ")" in x) and ("void" in x or "int" in x or "double" in x or "string" in x or "auto" in x or "char" in x or "bool" in x or "float" in x)):
-                    #print("passed 1")
+                    ##print("passed 1")
                     if('=' not in x and '0' not in x):
-                        #print("passed 2")
+                        ##print("passed 2")
                         isPureVirtual = False
                         cleanX = x.rstrip()
                         nextline = baseClassFile[baseClassFile.index(x)+1]
-                        #print(x)
+                        ##print(x)
                         if(('{'in x or '}' in x)or '{' in nextline):
-                            #print("passed 3")
+                            ##print("passed 3")
                             locationOccuration.append(finalLine + '.h' +  "-" + str(currentLineInHeader))
                             implementationCount = implementationCount+1
                         #This section is to do with the cpp exploration of a header
@@ -67,10 +67,10 @@ def analyzeImplementationInheritance(file,source,headers):
                             #for item in splitItems:
                               #extractedParameterTypes.append(item.strip().split(" ")[0]) #will return only the data type
 
-                        print("OG line: ", x)
-                        print("Extracted function Name: ", extractedName) # the above section just extracts the function name
-                        print("Extracted Type: ", extractedType)
-                        #print("Extracted Data Types: ",extractedParameterTypes)
+                        #print("OG line: ", x)
+                        #print("Extracted function Name: ", extractedName) # the above section just extracts the function name
+                        #print("Extracted Type: ", extractedType)
+                        ##print("Extracted Data Types: ",extractedParameterTypes)
                         currentCppLine = 0 #variable to keep track of the current line in the cpp file
                         for y in baseClassSource: # for every line in the cpp file seach
                             if(extractedName in y and extractedType in y and "(" in y and ")" in y): #if the function name is in the line and () are in the line, it is a function delcaration;
@@ -83,16 +83,16 @@ def analyzeImplementationInheritance(file,source,headers):
 
                                # for tempItem in tempSplitItems:
                                 #    extractedSourceParam.append(tempItem.strip().split(" ")[0]) #will return only the data type
-                               # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                               # #print("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                                 #if(extractedSourceParam == extractedParameterTypes):
-                                #print("true")
+                                ##print("true")
                                 currentCppLine = baseClassSource.index(y); #Find the index of the line at which the function was found
-                                #print("Found cpp Declaration at: ", currentCppLine + 1) #print it for now for debugging
+                                ##print("Found cpp Declaration at: ", currentCppLine + 1) ##print it for now for debugging
                                 while("}" not in baseClassSource[currentCppLine]): #While the current cpp line isnt } , we still in the delcaration
-                                    #print("current Line to check:",baseClassSource[currentCppLine] )
-                                    #print("Line Length: ", len(baseClassSource[currentCppLine].strip()))
+                                    ##print("current Line to check:",baseClassSource[currentCppLine] )
+                                    ##print("Line Length: ", len(baseClassSource[currentCppLine].strip()))
                                     if((len(baseClassSource[currentCppLine].strip()) > 1 and baseClassSource[currentCppLine].strip() != "}" and baseClassSource[currentCppLine].strip() != "{") and currentCppLine != baseClassSource.index(y)):
-                                        print(extractedName,"Has declaration found within in it: ", currentCppLine + 1) #if length > 1 then there is tuff in here if its not { or }
+                                        #print(extractedName,"Has declaration found within in it: ", currentCppLine + 1) #if length > 1 then there is tuff in here if its not { or }
                                         locationOccuration.append(finalLine + '.h' +  "-" + str(currentLineInHeader)) #append the .h declaration location
                                         locationOccuration.append(finalLine + '.cpp' +  "-" + str(currentCppLine)) #append the .cpp declaration location
                                         implementationCount = implementationCount+1 #only inc once because of both locations count as 1 implementation

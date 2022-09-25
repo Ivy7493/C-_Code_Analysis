@@ -9,7 +9,7 @@ def getFiles(path):
     for (root, dirs, file) in os.walk(path):
         for f in file:
             if '.cpp' in f:
-                print(f)
+                #print(f)
                 sourceFile = os.path.join(root, f)
                 source = open(sourceFile, "r")
                 source_lines = []
