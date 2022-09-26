@@ -123,8 +123,8 @@ while True:
         window["headerColumn"].Update(visible = False)
         window["sourceColumn"].Update(visible = False)
         window["reportColumn"].Update(visible = True)
-    if event == "-FILE LIST-":  # A file was chosen from the listbox
-        print("butts")
+    #if event == "-FILE LIST-":  # A file was chosen from the listbox
+       # print("butts")
     if event == "returnFromReportButton":
         window["fileColumn"].Update(visible = True)
         window["headerColumn"].Update(visible = True)

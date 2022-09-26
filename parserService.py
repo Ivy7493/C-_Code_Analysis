@@ -5,7 +5,7 @@ def getFiles(path):
     #dir_list = os.walk(path)
     cppList = {}
     headerList = {}
-    print("Files and directories in '", path, "' :")
+    #print("Files and directories in '", path, "' :")
     for (root, dirs, file) in os.walk(path):
         for f in file:
             if '.cpp' in f:
