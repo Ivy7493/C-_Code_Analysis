@@ -10,13 +10,13 @@ def ProcessController(fileName):
     headers,source = getFiles(fileName)
     locationOccurrencesForImplementationInheritance = []
     GlobalImplementationInheritanceCount = 0
-    LocationOccurrencesForPublic = []
+    locationOccurrencesForPublic = []
     GlobalPublicCount = 0;
-    LocationOccurrencesForSwitch = []
+    locationOccurrencesForSwitch = []
     GlobalSwitchCount = 0;
-    LocationOccurrencesForFriend = []
+    locationOccurrencesForFriend = []
     GlobalFriendCount = 0;
-    LocationOccurationForGlobal = []
+    locationOccurencesForGlobal = []
     GlobalGlobalCount = 0;
     for x in headers:
         #print('---------------------')
@@ -24,11 +24,11 @@ def ProcessController(fileName):
         #print('---------------------')
 
         #-----------------Global Variable tool--------------------------------------#
-        fileGlobalVariable,globalVariableLocation = analyzeGlobalVariables(headers[x])
+        fileGlobalVariable,globalVariablelocation = analyzeGlobalVariables(headers[x])
         #print("Number of Global Variables: ",fileGlobalVariable)
-        #print("line of Occurrences: ", globalVariableLocation)
-        for member in globalVariableLocation:
-            LocationOccurationForGlobal.append(x + '-' + str(member))
+        #print("line of Occurrences: ", globalVariablelocation)
+        for member in globalVariablelocation:
+            locationOccurencesForGlobal.append(x + '-' + str(member))
         GlobalGlobalCount += fileGlobalVariable
 
 
@@ -37,7 +37,7 @@ def ProcessController(fileName):
         #print("Number of Friend Counts: ",fileFriendCount)
         #print("Line Occurrences: ",fileFriendLocation)
         for member in fileFriendLocation:
-            LocationOccurrencesForFriend.append(x + '-' + str(member))
+            locationOccurrencesForFriend.append(x + '-' + str(member))
         GlobalFriendCount += fileFriendCount
 
         #------------------Switch Tool------------------------------#
@@ -45,7 +45,7 @@ def ProcessController(fileName):
         #print("Number of switch statements: ",fileSwitchCount)
         #print("line of Occurrences: ", fileSwitchLocation)
         for member in fileSwitchLocation:
-            LocationOccurrencesForSwitch.append(x + '-' + str(member))
+            locationOccurrencesForSwitch.append(x + '-' + str(member))
         GlobalSwitchCount += fileSwitchCount
 
         #------------------Public Data Member------------------------------#
@@ -53,7 +53,7 @@ def ProcessController(fileName):
         #print("Number of Public data member declarations: ",filePublicDataMember)
         #print("line of Occurrences: ", publicDataMemberLocation)
         for member in publicDataMemberLocation:
-            LocationOccurrencesForPublic.append(x + '-' + str(member))
+            locationOccurrencesForPublic.append(x + '-' + str(member))
         GlobalPublicCount += filePublicDataMember
 
         #------------------Implementation Inheritance---------------------#
@@ -75,7 +75,7 @@ def ProcessController(fileName):
         #print("Number of Global Variables: ",fileGlobalVariable)
         #print("line of Occurrences: ", globalVariableLocation)
         for member in globalVariableLocation:
-            LocationOccurationForGlobal.append(x + '-' + str(member))
+            locationOccurencesForGlobal.append(x + '-' + str(member))
         GlobalGlobalCount += fileGlobalVariable
 
         #------------------Switch Tool------------------------------#
@@ -83,11 +83,11 @@ def ProcessController(fileName):
         #print("Number of switch statements: ",fileSwitchCount)
         #print("line of Occurrences: ", fileSwitchLocation)
         for member in fileSwitchLocation:
-            LocationOccurrencesForSwitch.append(x + '-' + str(member))
+            locationOccurrencesForSwitch.append(x + '-' + str(member))
         GlobalSwitchCount += fileSwitchCount
 
     #-----------------------TOTAL SECTION--------------------------------#
-    issueLocationArr = [locationOccurrencesForImplementationInheritance,LocationOccurationForGlobal,LocationOccurrencesForPublic,LocationOccurrencesForSwitch,LocationOccurrencesForFriend]
+    issueLocationArr = [list(set(locationOccurrencesForImplementationInheritance)),list(set(locationOccurencesForGlobal)),list(set(locationOccurrencesForPublic)),list(set(locationOccurrencesForSwitch)),list(set(locationOccurrencesForFriend))]
     issueCountArr = [GlobalImplementationInheritanceCount,GlobalGlobalCount,GlobalPublicCount,GlobalSwitchCount,GlobalFriendCount]
     # print(" ")
     # print('=========================================================')
@@ -97,10 +97,10 @@ def ProcessController(fileName):
     # print("Occurrences: ", locationOccurrencesForImplementationInheritance)
     # print(" ")
     # print('=========================================================')
-    # LocationOccurationForGlobal = list(set(LocationOccurationForGlobal))
+    # LocationOccurencesForGlobal = list(set(LocationOccurencesForGlobal))
     # print("Total Global Variables: ")
     # print ("Count: ", GlobalGlobalCount)
-    # print("Occurrences: ", LocationOccurationForGlobal)
+    # print("Occurrences: ", LocationOccurencesForGlobal)
     # print(" ")
     # print('=========================================================')
     # LocationOccurrencesForPublic = list(set(LocationOccurrencesForPublic))
