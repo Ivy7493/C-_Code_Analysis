@@ -1,15 +1,15 @@
 import os, sys #need this in order to read in infomation.
-def getFiles():
+def getFiles(path):
     # Get the list of all files and directories
-    path = os.path.dirname(__file__)
+    #path = os.path.dirname(__file__)
     #dir_list = os.walk(path)
     cppList = {}
     headerList = {}
-    print("Files and directories in '", path, "' :")
+    #print("Files and directories in '", path, "' :")
     for (root, dirs, file) in os.walk(path):
         for f in file:
             if '.cpp' in f:
-                print(f)
+                #print(f)
                 sourceFile = os.path.join(root, f)
                 source = open(sourceFile, "r")
                 source_lines = []
