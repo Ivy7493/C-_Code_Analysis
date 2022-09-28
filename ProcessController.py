@@ -5,6 +5,7 @@ from globalService import analyzeGlobalVariables
 from switchService import analyzeSwitch
 from publicMemberService import analyzePublicMembers
 from implementationInheritanceService import analyzeImplementationInheritance
+from dryService import analyzeDRY
 
 def ProcessController(fileName):
     headers,source = getFiles(fileName)
@@ -57,12 +58,19 @@ def ProcessController(fileName):
         GlobalPublicCount += filePublicDataMember
 
         #------------------Implementation Inheritance---------------------#
-        impCount,impLine = analyzeImplementationInheritance(headers[x],source,headers)
+        try:
+            impCount,impLine = analyzeImplementationInheritance(headers[x],source,headers)
+        except:
+            print("YAAAAASSSS")
         for member in impLine:
             locationOccurrencesForImplementationInheritance.append(member)
         GlobalImplementationInheritanceCount += impCount
         #print('implementations check:')
         #print(impCount,impLine)
+
+        #------------------DRY TOOL---------------------------------------#
+    
+    analyzeDRY(headers,source)
 
     for x in source:
       
@@ -119,5 +127,4 @@ def ProcessController(fileName):
     # print("Total Friend Statements: ")
     # print ("Count: ", GlobalFriendCount)
     # print("Occurrences: ", LocationOccurrencesForFriend)
-    
     return headers,source,issueCountArr,issueLocationArr

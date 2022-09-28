@@ -8,6 +8,7 @@ def getFiles(path):
     #print("Files and directories in '", path, "' :")
     for (root, dirs, file) in os.walk(path):
         for f in file:
+            print("We found file: ", f)
             if '.cpp' in f:
                 #print(f)
                 sourceFile = os.path.join(root, f)

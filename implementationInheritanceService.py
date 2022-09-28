@@ -21,7 +21,11 @@ def analyzeImplementationInheritance(file,source,headers):
             lastSpacePos = cleanline.rfind(' ')
             finalLine = cleanline[lastSpacePos+1:]
             #print('Class is inherited from', finalLine)
-            baseClassFile = headers[finalLine+'.h']
+            baseClassFile;
+            try:
+                baseClassFile = headers[finalLine+'.h']
+            except:
+                return 0, []
             currentLineInHeader = 0;
             for x in baseClassFile:
                 # if( 'virtual' in x and '=' in x and '0' in x):
@@ -38,8 +42,10 @@ def analyzeImplementationInheritance(file,source,headers):
                             locationOccuration.append(finalLine + '.h' +  "-" + str(currentLineInHeader))
                             implementationCount = implementationCount+1
                         #This section is to do with the cpp exploration of a header
-                        
-                        baseClassSource = source[finalLine + '.cpp'] #we now get the cpp file to see if there is a declaration in there
+                        try:
+                            baseClassSource = source[finalLine + '.cpp'] #we now get the cpp file to see if there is a declaration in there
+                        except:
+                            return implementationCount, locationOccuration
                         functionNameEnd = x.find('(') - 1 # we need the functions name out of the header to search for in the cpp
                         extractedName = ""
                         for y in range(functionNameEnd,0, -1):
