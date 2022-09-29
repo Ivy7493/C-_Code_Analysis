@@ -5,16 +5,7 @@ from threading import Thread #WE NEED MORE POWER BOSS
 
 
 #settings
-scoreThreshold = 0.6
-intWeight = 4;
-floatWeight = 6;
-stringWeight = 7;
-doubleWeight = 7;
-charWeight = 5;
-autoWeight = 5;
-constWeight = 6;
-staticWeight = 7;
-VectorWeight = 7;
+scoreThreshold = 0.8
 reduceChar = ["int ", "float ", "string ", "double ", "auto ",
 "char ", "const ", "static ", "vector", "()", ";", "{", "}"]
 
