@@ -30,6 +30,7 @@ def tempWorkSpace(headers,source):
         endScope = 0;
         currentLine = 0;
         fileScopes = []
+        fileScopeSplits = []
         for line in source[x]:
             if('{' in line):
                 bracketCount += 1;
@@ -48,6 +49,7 @@ def tempWorkSpace(headers,source):
                         #outputBlock += '\n';
                         tempCounter += 1;
                     fileScopes.append(outputBlock)
+                    fileScopeSplits.append(str(startScope) + '-' + str(endScope))
 
             currentLine += 1
         for y in fileScopes:
@@ -65,15 +67,20 @@ def tempWorkSpace(headers,source):
                         print(j)
                         print("score:", score)
                         print("fixedScore: ", fixedScore)
-                        #locationOccurance.append('')
+                        lineIndex = fileScopes.index(y)
+                        lineIndex2 = fileScopes.index(j)
+                        output = x + '-' + fileScopeSplits[lineIndex] + '#' + fileScopeSplits[lineIndex2]
+                        locationOccurance.append(output)
+    print("Extracted:: ")
+    print(locationOccurance)
+    return locationOccurance;
                         
 
 
 
 def analyze(headers,source):
     print("Hello")
-    tempWorkSpace(headers,source)
-    return
+    return tempWorkSpace(headers,source)
     source = headers
     for x in source:
         print("for file: ", x)
