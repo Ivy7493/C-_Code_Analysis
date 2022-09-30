@@ -57,10 +57,22 @@ class TestClass(unittest.TestCase):
         for x in headers:
             temp,tempLocation = analyzeFriend(headers[x])
             print(tempLocation)
-            if(len(tempLocation) > 1):
+            if(len(tempLocation) > 2):
                 check = True;
 
         self.assertEqual(check,False)
+
+    def test_CanFindMultipleFriends(self):
+        testFilePath = "testsrc" + os.sep + 'FriendTest' #os.path.dirname(__file__) + os.sep + 
+        headers,source = getFiles(testFilePath)
+        check = False;
+        for x in headers:
+            temp,tempLocation = analyzeFriend(headers[x])
+            print(tempLocation)
+            if(len(tempLocation) > 1):
+                check = True;
+
+        self.assertEqual(check,True)
 
 
     #========================Test for global variables

@@ -52,9 +52,10 @@ def tempWorkSpace(headers,source):
                         TotalMeanSplit += y.count(phrase)*((len(phrase)/2))
                     fixedScore = score - TotalMeanSplit/len(y)
 
-                    if(fixedScore > 0.5):
+                    if(fixedScore > scoreThreshold):
                         print("For ")
                         print(y) 
+                        print(" ")
                         print(j)
                         print("score:", score)
                         print("fixedScore: ", fixedScore)
