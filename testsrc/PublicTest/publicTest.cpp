@@ -8,7 +8,6 @@ class Numbers
         int b;
 };
 
-//Main function
 int main()
 {
     //declaring object to the class

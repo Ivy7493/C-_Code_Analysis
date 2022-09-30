@@ -1,4 +1,6 @@
 import unittest
+
+from numpy import append
 from parserService import getFiles
 from friendService import analyzeFriend
 from globalService import analyzeGlobalVariables
@@ -26,7 +28,7 @@ class TestClass(unittest.TestCase):
         headers,source = getFiles("testsrc" + os.sep + "parseTest")
         check = False;
         for x in source:
-            temp,tempLocation = analyzeGlobalVariables(source[x])
+            tempLocation = analyzeGlobalVariables(source[x])
             print(tempLocation)
             if(len(tempLocation) == 0):
                 check = True;
@@ -42,7 +44,7 @@ class TestClass(unittest.TestCase):
         headers,source = getFiles(testFilePath)
         check = False;
         for x in headers:
-            temp,tempLocation = analyzeFriend(headers[x])
+            tempLocation = analyzeFriend(headers[x])
             print(tempLocation)
             if(len(tempLocation) > 0):
                 check = True;
@@ -55,12 +57,24 @@ class TestClass(unittest.TestCase):
         headers,source = getFiles(testFilePath)
         check = False;
         for x in headers:
-            temp,tempLocation = analyzeFriend(headers[x])
+            tempLocation = analyzeFriend(headers[x])
+            print(tempLocation)
+            if(len(tempLocation) > 2):
+                check = True;
+
+        self.assertEqual(check,False)
+
+    def test_CanFindMultipleFriends(self):
+        testFilePath = "testsrc" + os.sep + 'FriendTest' #os.path.dirname(__file__) + os.sep + 
+        headers,source = getFiles(testFilePath)
+        check = False;
+        for x in headers:
+            tempLocation = analyzeFriend(headers[x])
             print(tempLocation)
             if(len(tempLocation) > 1):
                 check = True;
 
-        self.assertEqual(check,False)
+        self.assertEqual(check,True)
 
 
     #========================Test for global variables
@@ -71,13 +85,13 @@ class TestClass(unittest.TestCase):
         headers,source = getFiles(testFilePath)
         check = False;
         for x in source:
-            temp,tempLocation = analyzeGlobalVariables(source[x])
+            tempLocation = analyzeGlobalVariables(source[x])
             print(tempLocation)
             if(len(tempLocation) > 0):
                 check = True;
             
         for x in headers:
-            temp,tempLocation = analyzeGlobalVariables(headers[x])
+            tempLocation = analyzeGlobalVariables(headers[x])
             print(tempLocation)
             if(len(tempLocation) > 0):
                 check = True;
@@ -89,13 +103,13 @@ class TestClass(unittest.TestCase):
         headers,source = getFiles(testFilePath)
         check = False;
         for x in source:
-            temp,tempLocation = analyzeGlobalVariables(source[x])
+            tempLocation = analyzeGlobalVariables(source[x])
             print(tempLocation)
             if(len(tempLocation) < 2 and len(tempLocation) > 0):
                 check = True;
             
         for x in headers:
-            temp,tempLocation = analyzeGlobalVariables(headers[x])
+            tempLocation = analyzeGlobalVariables(headers[x])
             print(tempLocation)
             if(len(tempLocation) < 2 and len(tempLocation) > 0):
                 check = True;
@@ -111,13 +125,13 @@ class TestClass(unittest.TestCase):
         checkTwo = False;
 
         for x in source:
-            temp,tempLocation = analyzePublicMembers(source[x])
+            tempLocation = analyzePublicMembers(source[x])
             print(tempLocation)
             if( len(tempLocation) > 0):
                 checkOne = True;
          
         for x in headers:
-            temp,tempLocation = analyzePublicMembers(headers[x])
+            tempLocation = analyzePublicMembers(headers[x])
             if(len(tempLocation) > 1):
                 checkTwo = True;
 
@@ -133,7 +147,7 @@ class TestClass(unittest.TestCase):
         checkTwo = False;
 
         for x in headers:
-            temp,tempLocation = analyzePublicMembers(headers[x])
+            tempLocation = analyzePublicMembers(headers[x])
             if(len(tempLocation) > 1 and len(tempLocation) < 3):
                 checkTwo = True;
 
@@ -146,7 +160,7 @@ class TestClass(unittest.TestCase):
         checkTwo = False;
 
         for x in headers:
-            temp,tempLocation = analyzePublicMembers(headers[x])
+            tempLocation = analyzePublicMembers(headers[x])
             if(len(tempLocation) > 1 and len(tempLocation) < 3):
                 checkTwo = True;
 
@@ -157,9 +171,8 @@ class TestClass(unittest.TestCase):
         testFilePath = "testsrc" + os.sep + 'SwitchTest' #os.path.dirname(__file__) + os.sep + 
         headers,source = getFiles(testFilePath)
         checkTwo = False;
-
         for x in source:
-            temp,tempLocation = analyzeSwitch(source[x])
+            tempLocation = analyzeSwitch(source[x])
             if(len(tempLocation) > 0):
                 checkTwo = True;
 
@@ -171,11 +184,25 @@ class TestClass(unittest.TestCase):
         checkTwo = False;
 
         for x in source:
-            temp,tempLocation = analyzeSwitch(source[x])
+            tempLocation = analyzeSwitch(source[x])
             if(len(tempLocation) > 0 and len(tempLocation) < 2):
                 checkTwo = True;
 
         self.assertEqual(checkTwo,True)
+
+#==============================IMPLEMENTATION TESTING SECTION============================================
+
+#def test_canFindImplementationInheader():
+ #   testFilePath = "testsrc" + os.sep + 'inheritanceTest' #os.path.dirname(__file__) + os.sep + 
+ #   headers,source = getFiles(testFilePath)
+#  totalCount = []
+#   for x  in headers:
+#       impLine = analyzeImplementationInheritance(headers[x],source,headers)
+#       for y in impLine:
+#           totalCount.append(y)
+#
+#    impLine = list(set(totalCount))
+       
 
 
 

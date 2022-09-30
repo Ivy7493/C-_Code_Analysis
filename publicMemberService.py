@@ -1,7 +1,6 @@
 
 
 def analyzePublicMembers(file):
-    publicCount = 0;
     scopeCount = 0;
     underClass = False;
     underPublic = False;
@@ -23,7 +22,6 @@ def analyzePublicMembers(file):
         if(("private:"in line or "protected:" in line) and underClass ):
             underPublic = False;
         if(("(" not in line and ")" not in line) and ("int" in line or "double" in line or "string" in line or "auto" in line or "char" in line or "bool" in line or "float" in line) and underPublic):
-            publicCount = publicCount + 1 #inc in the case where we find the friend keyword
             locationOccuration.append(currentLine)
         currentLine= currentLine + 1;
-    return publicCount, locationOccuration
+    return locationOccuration

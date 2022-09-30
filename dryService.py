@@ -5,16 +5,7 @@ from threading import Thread #WE NEED MORE POWER BOSS
 
 
 #settings
-scoreThreshold = 0.6
-intWeight = 4;
-floatWeight = 6;
-stringWeight = 7;
-doubleWeight = 7;
-charWeight = 5;
-autoWeight = 5;
-constWeight = 6;
-staticWeight = 7;
-VectorWeight = 7;
+scoreThreshold = 0.8
 reduceChar = ["int ", "float ", "string ", "double ", "auto ",
 "char ", "const ", "static ", "vector", "()", ";", "{", "}"]
 
@@ -30,6 +21,7 @@ def tempWorkSpace(headers,source):
         endScope = 0;
         currentLine = 0;
         fileScopes = []
+        fileScopeSplits = []
         for line in source[x]:
             if('{' in line):
                 bracketCount += 1;
@@ -48,6 +40,7 @@ def tempWorkSpace(headers,source):
                         #outputBlock += '\n';
                         tempCounter += 1;
                     fileScopes.append(outputBlock)
+                    fileScopeSplits.append(str(startScope) + '-' + str(endScope))
 
             currentLine += 1
         for y in fileScopes:
@@ -59,21 +52,27 @@ def tempWorkSpace(headers,source):
                         TotalMeanSplit += y.count(phrase)*((len(phrase)/2))
                     fixedScore = score - TotalMeanSplit/len(y)
 
-                    if(fixedScore > 0.5):
+                    if(fixedScore > scoreThreshold):
                         print("For ")
                         print(y) 
+                        print(" ")
                         print(j)
                         print("score:", score)
                         print("fixedScore: ", fixedScore)
-                        #locationOccurance.append('')
+                        lineIndex = fileScopes.index(y)
+                        lineIndex2 = fileScopes.index(j)
+                        output = x + '-' + fileScopeSplits[lineIndex] + '#' + fileScopeSplits[lineIndex2]
+                        locationOccurance.append(output)
+    print("Extracted:: ")
+    print(locationOccurance)
+    return locationOccurance;
                         
 
 
 
 def analyze(headers,source):
     print("Hello")
-    tempWorkSpace(headers,source)
-    return
+    return tempWorkSpace(headers,source)
     source = headers
     for x in source:
         print("for file: ", x)
