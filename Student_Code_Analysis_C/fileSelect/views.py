@@ -2,21 +2,21 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 
-posts = [
+fileLocations = [
     {
-        'filelocation':r"C:\Users\fouri\Documents\aUniversity\Electrical Engineering\3rd Year\2nd Semester\ELEN3009\Course Project\Course project\src",
-        'other':'other'
+        'filelocation':'src',
+        'other':'other1'
     },
     {
-        'filelocation':r'C:\Users\fouri\Documents\aUniversity\Electrical Engineering\4th Year\1st semester\ELEN4002\Project\Student Projectss\Musa project C++\project-repo\src\game-source-code',
-        'other':'other'
+        'filelocation':'gameSourcecode',
+        'other':'other2'
     }
 ]
 
 def fileSelectHome(request):
     context = {
-        'files':posts
+        'fileLocations':fileLocations
     }
-    return render(request,'fileSelect/fileSelectHome.html')
+    return render(request,'fileSelect/fileSelectHome.html',context)
 def fileReader(request):
-    return render(request,'fileSelect/fileDisplay.html')
+    return render(request,'fileSelect/fileDisplay.html',{'title':'File Viewer'})
