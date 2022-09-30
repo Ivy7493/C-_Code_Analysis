@@ -4,4 +4,9 @@
         <h1>{{ file.other }}</h1>
         <p>File location: {{ file.filelocation }}</p>
     {% endfor %}
+    <form action = "" method = "post" novalidate>
+        {% csrf_token %}
+        {{ form }}
+        <input type = "submit" value = "OK">
+    </form>
 {% endblock content%}
