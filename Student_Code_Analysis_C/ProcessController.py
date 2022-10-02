@@ -74,12 +74,11 @@ def ProcessController(fileName):
             impLine = analyzeImplementationInheritance(headers[x],source,headers)
             impLine = list(set(impLine))
             impCount = len(impLine)
-            for member in impLine:
-                locationOccurrencesForImplementationInheritance.append(member)
-            GlobalImplementationInheritanceCount += impCount
         except:
             print("Implementation Error")
-        
+        for member in impLine:
+            locationOccurrencesForImplementationInheritance.append(member)
+        GlobalImplementationInheritanceCount += impCount
 
         #------------------DRY TOOL---------------------------------------#
     # print('---->1')
@@ -96,11 +95,11 @@ def ProcessController(fileName):
             globalVariableLocation = analyzeGlobalVariables(source[x])
             globalVariableLocation = list(set(globalVariableLocation))
             fileGlobalVariable = len(globalVariableLocation)
-            for member in globalVariableLocation:
-                locationOccurencesForGlobal.append(x + '-' + str(member))
-            GlobalGlobalCount += fileGlobalVariable
         except:
             print("global source error")
+        for member in globalVariableLocation:
+            locationOccurencesForGlobal.append(x + '-' + str(member))
+        GlobalGlobalCount += fileGlobalVariable
 
         #------------------Switch Tool------------------------------#
         try:
@@ -109,11 +108,11 @@ def ProcessController(fileName):
             fileSwitchCount = len(fileSwitchLocation)
             #print("Number of switch statements: ",fileSwitchCount)
             #print("line of Occurrences: ", fileSwitchLocation)
-            for member in fileSwitchLocation:
-                locationOccurrencesForSwitch.append(x + '-' + str(member))
-            GlobalSwitchCount += fileSwitchCount
         except:
             print("switch source error")
+        for member in fileSwitchLocation:
+            locationOccurrencesForSwitch.append(x + '-' + str(member))
+        GlobalSwitchCount += fileSwitchCount
 
 
     #======================Raw Location Test===============================#

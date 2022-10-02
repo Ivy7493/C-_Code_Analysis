@@ -31,7 +31,11 @@ def fileSelectHome(request):
 def executeProgram(request):
     folder = request.POST["filePath"]
     headers,sources,countArr,occurArr = PrscC(os.path.join(folder))
+<<<<<<< HEAD
     print("WHORE !")
+=======
+    print("WHORE")
+>>>>>>> b07b63d... Redirects correctly to a new page
     context = {
         'title':'File Viewer',
         'headers':headers,
@@ -39,8 +43,12 @@ def executeProgram(request):
         'countArr':countArr,
         'occurArr':occurArr,
     }
+<<<<<<< HEAD
     print("WHORE2")
+=======
+>>>>>>> b07b63d... Redirects correctly to a new page
     return render(request,'fileSelect/fileDisplay.html',context)
 
-def fileReader(request):
+def viewReport(request):
+    print("here")
     return render(request,'fileSelect/fileDisplay.html',{'title':'File Viewer'})
