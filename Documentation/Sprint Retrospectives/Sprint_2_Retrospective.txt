@@ -1,0 +1,57 @@
+#### Preparation:
+- Date:2022/05/19
+- Participants:HyChriFo, Ivy7493
+- Product owner:  @stephenlevitt
+- Team members: @HyChriFo,@Ivy7493
+
+#### C-_Code_Analysis
+#### Scrum master: @Ivy7493
+
+#### Project Goal
+Develop product for the analysis of student C++ code for the purposes of finding bad coding practices:
+~ Find global variables
+~ Find use of the friend keyword
+~ Find use of the Public Data Members
+~ Find any uses of the switch case
+~ Find any use of Implementation Inheritance
+~ Find infringements of the DRY principle
+~ Present findings to end user
+~ Allow end user to upload/target specific source code or projects
+
+#### Sprint goal
+~ Refine Friend and global variable tool
+~ Refine tests
+~ Decide between GUI and webapp
+~ Create first version of DRY violation detection
+~ Look into plagiarism detection systems that exist for dry principle
+
+#### Duration of Sprint: 1 week
+
+#### Moderation
+
+~ More tests should be writted such as implementation inheritance and dry principle tests
+
+#### Successes
+
+~ Closed all issues
+~ In-depth conversation was held about UI as well as all other issues
+~ Team communicated very well with daily meetings
+	- All team queries were adressed in a timely fashion
+	- All team submissions were looked over by other members of the team
+~ Team members delivered what was expected of them
+
+#### Failures
+
+~ There were merge conflicts that occured that could have been avoided
+~ The team was indecisive about the UI which lead to unneccessary work that was done
+
+#### Improvements
+
+~ Refactor code to be more efficient
+
+#### Velocity for sprint
+
+- Possible points for 7 user stories: 27
+
+		#### Achieved Velocity for Sprint 1: 27
+		
