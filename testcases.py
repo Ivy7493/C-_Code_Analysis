@@ -15,17 +15,17 @@ class TestClass(unittest.TestCase):
     #==========Parser Tests============================#
     #test to see if the system can retrieve header files
     def test_getFilesHeader(self):
-        headers,source = getFiles("testsrc")
+        headers,source,rawHeader,rawSource = getFiles("testsrc")
         self.assertGreater(len(headers),0)
 
     #test to see if the system can retrieve cpp files
     def test_getFilesSource(self):
-        headers,source = getFiles("testsrc")
+        headers,source,rawHeader,rawSource = getFiles("testsrc")
         self.assertGreater(len(source),0)
 
     #test to see if one can strip comments
     def test_getFilesCanParseComments(self):
-        headers,source = getFiles("testsrc" + os.sep + "parseTest")
+        headers,source,rawHeader,rawSource = getFiles("testsrc" + os.sep + "parseTest")
         check = False;
         for x in source:
             tempLocation = analyzeGlobalVariables(source[x])
@@ -41,7 +41,7 @@ class TestClass(unittest.TestCase):
     #test to see if we can find friends
     def test_AnalyzeFriend(self):
         testFilePath = "testsrc" + os.sep + 'FriendTest' #os.path.dirname(__file__) + os.sep + 
-        headers,source = getFiles(testFilePath)
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
         check = False;
         for x in headers:
             tempLocation = analyzeFriend(headers[x])
@@ -54,7 +54,7 @@ class TestClass(unittest.TestCase):
     #test to see if the word friend does not mess with the test
     def test_FalsePostiveFriend(self):
         testFilePath = "testsrc" + os.sep + 'FriendTest' #os.path.dirname(__file__) + os.sep + 
-        headers,source = getFiles(testFilePath)
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
         check = False;
         for x in headers:
             tempLocation = analyzeFriend(headers[x])
@@ -66,7 +66,7 @@ class TestClass(unittest.TestCase):
 
     def test_CanFindMultipleFriends(self):
         testFilePath = "testsrc" + os.sep + 'FriendTest' #os.path.dirname(__file__) + os.sep + 
-        headers,source = getFiles(testFilePath)
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
         check = False;
         for x in headers:
             tempLocation = analyzeFriend(headers[x])
@@ -82,7 +82,7 @@ class TestClass(unittest.TestCase):
     #test to see if global variables can be found
     def test_findGlobal(self):
         testFilePath = "testsrc" + os.sep + 'GlobalTest' #os.path.dirname(__file__) + os.sep + 
-        headers,source = getFiles(testFilePath)
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
         check = False;
         for x in source:
             tempLocation = analyzeGlobalVariables(source[x])
@@ -100,7 +100,7 @@ class TestClass(unittest.TestCase):
     #checks for scoped variable false postives
     def test_noScopedVariables(self):
         testFilePath = "testsrc" + os.sep + 'GlobalTest' #os.path.dirname(__file__) + os.sep + 
-        headers,source = getFiles(testFilePath)
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
         check = False;
         for x in source:
             tempLocation = analyzeGlobalVariables(source[x])
@@ -120,7 +120,7 @@ class TestClass(unittest.TestCase):
     #test to check to see if one can find cpp and h headers
     def test_PublicdataMembers(self):
         testFilePath = "testsrc" + os.sep + 'PublicTest' #os.path.dirname(__file__) + os.sep + 
-        headers,source = getFiles(testFilePath)
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
         checkOne = False;
         checkTwo = False;
 
@@ -143,7 +143,7 @@ class TestClass(unittest.TestCase):
     #test to see if private data members are not caught up
     def test_privateDataMembersFine(self):
         testFilePath = "testsrc" + os.sep + 'PublicTest' #os.path.dirname(__file__) + os.sep + 
-        headers,source = getFiles(testFilePath)
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
         checkTwo = False;
 
         for x in headers:
@@ -156,7 +156,7 @@ class TestClass(unittest.TestCase):
     #checks to see if function is all okay () should not be considered a public data member
     def test_publicFunctionsAreOkay(self):
         testFilePath = "testsrc" + os.sep + 'PublicTest' #os.path.dirname(__file__) + os.sep + 
-        headers,source = getFiles(testFilePath)
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
         checkTwo = False;
 
         for x in headers:
@@ -169,7 +169,7 @@ class TestClass(unittest.TestCase):
     #==================================Switch Tool Section========================#
     def test_publicFunctionsAreOkay(self):
         testFilePath = "testsrc" + os.sep + 'SwitchTest' #os.path.dirname(__file__) + os.sep + 
-        headers,source = getFiles(testFilePath)
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
         checkTwo = False;
         for x in source:
             tempLocation = analyzeSwitch(source[x])
@@ -180,7 +180,7 @@ class TestClass(unittest.TestCase):
     #This test is to see if swith is used, that is wont be mistaken in a variable
     def test_switchKeyWord(self):
         testFilePath = "testsrc" + os.sep + 'SwitchTest' #os.path.dirname(__file__) + os.sep + 
-        headers,source = getFiles(testFilePath)
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
         checkTwo = False;
 
         for x in source:
