@@ -2,14 +2,9 @@ import os #need this in order to read in infomation.
 
 def findRawLocation(issue,rawHeaders,rawSource,source,header):
     rawLocations = []
-    print("we got here at least")
     print(issue)
     for x in issue:
-        print("Working With issue: ", issue)
         data = x.split('-')
-        print("split")
-        print(data[0])
-        print(data[1])
         workingFile = []
         lineInQuestion = ""
         if('.cpp' in data[0]):
@@ -19,8 +14,6 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
         elif('.h' in data[0]):
             workingFile = rawHeaders[data[0]]
             lineInQuestion = header[data[0]][int(data[1])] 
-    
-        print("Yes we have got here poggers")
         counter = 0;
         for y in workingFile:
             if(lineInQuestion in y):
