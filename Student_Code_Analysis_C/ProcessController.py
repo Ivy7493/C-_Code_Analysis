@@ -5,7 +5,7 @@ from globalService import analyzeGlobalVariables
 from switchService import analyzeSwitch
 from publicMemberService import analyzePublicMembers
 from implementationInheritanceService import analyzeImplementationInheritance
-from dryService import analyzeDRY
+# from dryService import analyzeDRY
 
 def ProcessController(fileName):
     headers,source,rawHeaders,rawSource = getFiles(fileName)
@@ -25,53 +25,66 @@ def ProcessController(fileName):
         #print('---------------------')
 
         #-----------------Global Variable tool--------------------------------------#
-        globalVariableLocation = []
-        globalVariablelocation = analyzeGlobalVariables(headers[x])
-        globalVariablelocation = list(set(globalVariableLocation))
-        fileGlobalVariable = len(globalVariablelocation)
-        for member in globalVariablelocation:
-            locationOccurencesForGlobal.append(x + '-' + str(member))
-        GlobalGlobalCount += fileGlobalVariable
+        try:
+            globalVariableLocation = []
+            globalVariablelocation = analyzeGlobalVariables(headers[x])
+            globalVariablelocation = list(set(globalVariableLocation))
+            fileGlobalVariable = len(globalVariablelocation)
+            for member in globalVariablelocation:
+                locationOccurencesForGlobal.append(x + '-' + str(member))
+            GlobalGlobalCount += fileGlobalVariable
+        except:
+            print("global error")
 
         #------------------Friend Tool------------------------------#
-        fileFriendLocation = analyzeFriend(headers[x])
-        fileFriendLocation = list(set(fileFriendLocation))
-        fileFriendCount = len(fileFriendLocation)
-        for member in fileFriendLocation:
-            locationOccurrencesForFriend.append(x + '-' + str(member))
-        GlobalFriendCount += fileFriendCount
+        try:
+            fileFriendLocation = analyzeFriend(headers[x])
+            fileFriendLocation = list(set(fileFriendLocation))
+            fileFriendCount = len(fileFriendLocation)
+            for member in fileFriendLocation:
+                locationOccurrencesForFriend.append(x + '-' + str(member))
+            GlobalFriendCount += fileFriendCount
+        except:
+            print("global error")
 
         #------------------Switch Tool------------------------------#
-        fileSwitchLocation = analyzeSwitch(headers[x])
-        fileSwitchLocation = list(set(fileSwitchLocation))
-        fileSwitchCount = len(fileSwitchLocation)
-        for member in fileSwitchLocation:
-            locationOccurrencesForSwitch.append(x + '-' + str(member))
-        GlobalSwitchCount += fileSwitchCount
+        try:
+            fileSwitchLocation = analyzeSwitch(headers[x])
+            fileSwitchLocation = list(set(fileSwitchLocation))
+            fileSwitchCount = len(fileSwitchLocation)
+            for member in fileSwitchLocation:
+                locationOccurrencesForSwitch.append(x + '-' + str(member))
+            GlobalSwitchCount += fileSwitchCount
+        except:
+            print("switch error")
 
         #------------------Public Data Member------------------------------#
-        publicDataMemberLocation = analyzePublicMembers(headers[x])
-        publicDataMemberLocation = list(set(publicDataMemberLocation))
-        filePublicDataMember = len(publicDataMemberLocation)
-        for member in publicDataMemberLocation:
-            locationOccurrencesForPublic.append(x + '-' + str(member))
-        GlobalPublicCount += filePublicDataMember
+        try:
+            publicDataMemberLocation = analyzePublicMembers(headers[x])
+            publicDataMemberLocation = list(set(publicDataMemberLocation))
+            filePublicDataMember = len(publicDataMemberLocation)
+            for member in publicDataMemberLocation:
+                locationOccurrencesForPublic.append(x + '-' + str(member))
+            GlobalPublicCount += filePublicDataMember
+        except:
+            print("PDM error")
 
         #------------------Implementation Inheritance---------------------#
         try:
             impLine = analyzeImplementationInheritance(headers[x],source,headers)
             impLine = list(set(impLine))
             impCount = len(impLine)
+            for member in impLine:
+                locationOccurrencesForImplementationInheritance.append(member)
+            GlobalImplementationInheritanceCount += impCount
         except:
             print("Implementation Error")
-        for member in impLine:
-            locationOccurrencesForImplementationInheritance.append(member)
-        GlobalImplementationInheritanceCount += impCount
+        
 
         #------------------DRY TOOL---------------------------------------#
-    print('---->1')
-    locationOccurencesForDRY = analyzeDRY(headers,source)
-    print('---->2')
+    # print('---->1')
+    # locationOccurencesForDRY = analyzeDRY(headers,source)
+    # print('---->2')
     for x in source:
       
         #print('---------------------')
@@ -79,22 +92,28 @@ def ProcessController(fileName):
         #print('---------------------')
 
         #-----------------Global Variable tool--------------------------------------#
-        globalVariableLocation = analyzeGlobalVariables(source[x])
-        globalVariableLocation = list(set(globalVariableLocation))
-        fileGlobalVariable = len(globalVariableLocation)
-        for member in globalVariableLocation:
-            locationOccurencesForGlobal.append(x + '-' + str(member))
-        GlobalGlobalCount += fileGlobalVariable
+        try:
+            globalVariableLocation = analyzeGlobalVariables(source[x])
+            globalVariableLocation = list(set(globalVariableLocation))
+            fileGlobalVariable = len(globalVariableLocation)
+            for member in globalVariableLocation:
+                locationOccurencesForGlobal.append(x + '-' + str(member))
+            GlobalGlobalCount += fileGlobalVariable
+        except:
+            print("global source error")
 
         #------------------Switch Tool------------------------------#
-        fileSwitchLocation = analyzeSwitch(source[x])
-        fileSwitchLocation = list(set(fileSwitchLocation))
-        fileSwitchCount = len(fileSwitchLocation)
-        #print("Number of switch statements: ",fileSwitchCount)
-        #print("line of Occurrences: ", fileSwitchLocation)
-        for member in fileSwitchLocation:
-            locationOccurrencesForSwitch.append(x + '-' + str(member))
-        GlobalSwitchCount += fileSwitchCount
+        try:
+            fileSwitchLocation = analyzeSwitch(source[x])
+            fileSwitchLocation = list(set(fileSwitchLocation))
+            fileSwitchCount = len(fileSwitchLocation)
+            #print("Number of switch statements: ",fileSwitchCount)
+            #print("line of Occurrences: ", fileSwitchLocation)
+            for member in fileSwitchLocation:
+                locationOccurrencesForSwitch.append(x + '-' + str(member))
+            GlobalSwitchCount += fileSwitchCount
+        except:
+            print("switch source error")
 
 
     #======================Raw Location Test===============================#
