@@ -5,7 +5,7 @@ from globalService import analyzeGlobalVariables
 from switchService import analyzeSwitch
 from publicMemberService import analyzePublicMembers
 from implementationInheritanceService import analyzeImplementationInheritance
-# from dryService import analyzeDRY
+from dryService import analyzeDRY
 
 def ProcessController(fileName):
     headers,source,rawHeaders,rawSource = getFiles(fileName)
@@ -81,9 +81,9 @@ def ProcessController(fileName):
         GlobalImplementationInheritanceCount += impCount
 
         #------------------DRY TOOL---------------------------------------#
-    # print('---->1')
-    # locationOccurencesForDRY = analyzeDRY(headers,source)
-    # print('---->2')
+    print('---->1')
+    locationOccurencesForDRY = analyzeDRY(headers,source)
+    print('---->2')
     for x in source:
       
         #print('---------------------')
@@ -127,34 +127,35 @@ def ProcessController(fileName):
     #-----------------------TOTAL SECTION--------------------------------#
     issueLocationArr = [list(set(locationOccurrencesForImplementationInheritance)),locationOccurencesForGlobal,list(set(locationOccurrencesForPublic)),list(set(locationOccurrencesForSwitch)),list(set(locationOccurrencesForFriend))]
     issueCountArr = [GlobalImplementationInheritanceCount,GlobalGlobalCount,GlobalPublicCount,GlobalSwitchCount,GlobalFriendCount]
-    # print(" ")
-    # print('=========================================================')
-    # locationOccurrencesForImplementationInheritance = list(set(locationOccurrencesForImplementationInheritance))    
-    # print("Total Implementation Inheritance: ")
-    # print ("Count: ", GlobalImplementationInheritanceCount)
-    # print("Occurrences: ", locationOccurrencesForImplementationInheritance)
-    # print(" ")
-    # print('=========================================================')
-    # LocationOccurencesForGlobal = list(set(LocationOccurencesForGlobal))
-    # print("Total Global Variables: ")
-    # print ("Count: ", GlobalGlobalCount)
-    # print("Occurrences: ", LocationOccurencesForGlobal)
-    # print(" ")
-    # print('=========================================================')
-    # LocationOccurrencesForPublic = list(set(LocationOccurrencesForPublic))
-    # print("Total Public Variables: ")
-    # print ("Count: ", GlobalPublicCount)
-    # print("Occurrences: ", LocationOccurrencesForPublic)
-    # print(" ")
-    # print('=========================================================')
-    # LocationOccurrencesForSwitch = list(set(LocationOccurrencesForSwitch))
-    # print("Total switch Statements: ")
-    # print ("Count: ", GlobalSwitchCount)
-    # print("Occurrences: ", LocationOccurrencesForSwitch)
-    # print(" ")
-    # print('=========================================================')
-    # LocationOccurrencesForFriend = list(set(LocationOccurrencesForFriend))
-    # print("Total Friend Statements: ")
-    # print ("Count: ", GlobalFriendCount)
-    # print("Occurrences: ", LocationOccurrencesForFriend)
+    print(" ")
+    print('=========================================================')
+    locationOccurrencesForImplementationInheritance = list(set(locationOccurrencesForImplementationInheritance))    
+    print("Total Implementation Inheritance: ")
+    print ("Count: ", GlobalImplementationInheritanceCount)
+    print("Occurrences: ", locationOccurrencesForImplementationInheritance)
+    print(" ")
+    print('=========================================================')
+    locationOccurencesForGlobal = list(set(locationOccurencesForGlobal))
+    print("Total Global Variables: ")
+    print ("Count: ", GlobalGlobalCount)
+    print("Occurrences: ", locationOccurencesForGlobal)
+    print(" ")
+    print('=========================================================')
+    locationOccurrencesForPublic = list(set(locationOccurrencesForPublic))
+    print("Total Public Variables: ")
+    print ("Count: ", GlobalPublicCount)
+    print("Occurrences: ", locationOccurrencesForPublic)
+    print(" ")
+    print('=========================================================')
+    locationOccurrencesForSwitch = list(set(locationOccurrencesForSwitch))
+    print("Total switch Statements: ")
+    print ("Count: ", GlobalSwitchCount)
+    print("Occurrences: ", locationOccurrencesForSwitch)
+    print(" ")
+    print('=========================================================')
+    locationOccurrencesForFriend = list(set(locationOccurrencesForFriend))
+    print("Total Friend Statements: ")
+    print ("Count: ", GlobalFriendCount)
+    print("Occurrences: ", locationOccurrencesForFriend)
+    
     return headers,source,issueCountArr,issueLocationArr
