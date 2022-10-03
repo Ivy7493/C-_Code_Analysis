@@ -39,7 +39,6 @@ def executeProgram(request):
         'countArr':countArr,
         'occurArr':occurArr,
     }
-    print("====== WHORE 2")
     return render(request,'fileSelect/fileDisplay.html',context)
 
 def viewReport(request):
