@@ -2,6 +2,7 @@ import os #need this in order to read in infomation.
 
 def findRawLocation(issue,rawHeaders,rawSource,source,header):
     rawLocations = []
+    print("Yessssssssss")
     print(issue)
     for x in issue:
         data = x.split('-')

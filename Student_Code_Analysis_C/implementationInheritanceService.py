@@ -75,6 +75,7 @@ def analyzeImplementationInheritance(file,source,headers):
                                         #print(extractedName,"Has declaration found within in it: ", currentCppLine + 1) #if length > 1 then there is tuff in here if its not { or }
                                         locationOccuration.append(finalLine + '.h' +  "-" + str(currentLineInHeader)) #append the .h declaration location
                                         locationOccuration.append(finalLine + '.cpp' +  "-" + str(currentCppLine)) #append the .cpp declaration location
+                                        locationOccuration.append('#' + '-' + str(currentLine))
                                         break;
                                     currentCppLine = currentCppLine + 1
 
@@ -87,4 +88,5 @@ def analyzeImplementationInheritance(file,source,headers):
                             
                 currentLineInHeader = currentLineInHeader+1
             return list(set(locationOccuration))
+        currentLine += 1;
     return []
