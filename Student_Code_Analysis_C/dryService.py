@@ -73,6 +73,3 @@ def analyzeDRY(headers,source):
     thread.start()
     thread.join()
     print(list(set(thresholdPoints)))
-                
-    
-            
