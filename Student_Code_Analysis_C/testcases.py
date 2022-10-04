@@ -1,7 +1,7 @@
 import unittest
 
 from numpy import append
-from parserService import getFiles
+from parserService import getFiles,findRawLocation
 from friendService import analyzeFriend
 from globalService import analyzeGlobalVariables
 from switchService import analyzeSwitch
@@ -34,6 +34,23 @@ class TestClass(unittest.TestCase):
                 check = True;
 
         self.assertEqual(check,True)
+
+    def test_canTargetRawLocation(self):
+        headers,source,rawHeader,rawSource = getFiles("testsrc" + os.sep + "parseTest" + os.sep + "Test4")
+        check = False;
+        locations = []
+        for x in source:
+            tempLocation = analyzeGlobalVariables(source[x])
+            print(tempLocation)
+            if(len(tempLocation) > 0):
+                for y in tempLocation:
+                    locations.append(x + '-' + str(y))
+                print("what we had before:")
+                print(locations)
+                newLocations = findRawLocation(locations,rawHeader,rawSource,source,headers)
+                print('And After')
+                print(newLocations)
+                self.assertEqual(newLocations,['rawLocation.cpp-5', 'rawLocation.cpp-6'])
 
 
 
@@ -192,16 +209,37 @@ class TestClass(unittest.TestCase):
 
 #==============================IMPLEMENTATION TESTING SECTION============================================
 
-#def test_canFindImplementationInheader():
- #   testFilePath = "testsrc" + os.sep + 'inheritanceTest' #os.path.dirname(__file__) + os.sep + 
- #   headers,source = getFiles(testFilePath)
-#  totalCount = []
-#   for x  in headers:
-#       impLine = analyzeImplementationInheritance(headers[x],source,headers)
-#       for y in impLine:
-#           totalCount.append(y)
-#
-#    impLine = list(set(totalCount))
+    #test to find implementation inheritance in Header
+    def test_canFindImplementationInheader(self):
+        testFilePath = "testsrc" + os.sep + 'inheritanceTest' + os.sep + 'Test1' #os.path.dirname(__file__) + os.sep + 
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
+        totalCount = []
+        check = False;
+        for x  in headers:
+            impLine = analyzeImplementationInheritance(headers[x],source,headers)
+        for y in impLine:
+            totalCount.append(y)
+        
+        totalCount = list(set(totalCount))
+        if(len(totalCount) > 0):
+            check = True;
+        self.assertEqual(check,True)
+
+    #test to find implementation inheritance in  cpp
+    def test_canFindImplementationInSource(self):
+        testFilePath = "testsrc" + os.sep + 'inheritanceTest' + os.sep + 'Test2' #os.path.dirname(__file__) + os.sep + 
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
+        totalCount = []
+        check = False;
+        for x  in headers:
+            impLine = analyzeImplementationInheritance(headers[x],source,headers)
+        for y in impLine:
+            totalCount.append(y)
+        totalCount = list(set(totalCount))
+        if(len(totalCount) == 3):
+            check = True;
+        self.assertEqual(check,True)
+
        
 
 
