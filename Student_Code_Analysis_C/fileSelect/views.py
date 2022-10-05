@@ -1,3 +1,4 @@
+from fileinput import filename
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from listings.pathForm import getPath
@@ -46,16 +47,30 @@ def viewReport(request):
     return render(request,'fileSelect/fileDisplay.html',{'title':'File Viewer'})
 
 def displayCode(request):
-    file = request.POST["val"]
+    fileRaw = request.POST["val"]
+    # if ".h" in fileName:
+    #     fileList = request.POST.get("headers")
+    # elif ".cpp" in fileName:
+    #     fileList = request.POST.get("sources")
     # headers,sources,countArr,occurArr = PrscC(os.path.join(folder))
     # context = {
     #     'headers':headers,
     #     'sources':sources,
     #     'countArr':countArr,
     #     'occurArr':occurArr,
+    # }        
+    # for x in fileList:
+    #     print(" ")
+    #     print("Item: ", x)
+    #     for y in fileList[x]:
+    #         print(y)
+            
+    # context = {
+    #     'fileList':fileList,
+    #     'fileName':fileName,
     # }
+    file = fileRaw.split(',')
     for line in file:
-        print(line)
+        print(line) 
         
-    print(file)
     return render(request,'fileSelect/displayCode.html',{'file':file})

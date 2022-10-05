@@ -8,7 +8,7 @@
                     <li class="list-group-item list-group-item-light">
                         <form method = "post">
                             {% csrf_token %}
-                            <button type="submit" value = "{{ val }}" name = 'val' formaction="displayCode/">{{ key }}</button>
+                            <button type="submit" value = '{{ val }}' name = 'val' formaction="displayCode/">{{ key }}</button>
                         </form>
                     </li>
                 {% endfor %}
