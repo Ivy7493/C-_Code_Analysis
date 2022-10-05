@@ -1,9 +1,11 @@
 {% extends 'fileSelect/base.html'%}
 {% block content %}
-    {% for file in fileLocations%}
+    <!--{% for file in fileLocations%}
         <h1>{{ file.other }}</h1>
         <p>File location: {{ file.filelocation }}</p>
-    {% endfor %}
+    {% endfor %}-->
+    <h1> Welcome to the code smells analyzer!</h1>
+    <h2>Please paste in the file path for the source code you would like to analyze</h2>
     <form action = "executeProgram/" method = "POST" novalidate>
         {% csrf_token %}
         {{ form }}

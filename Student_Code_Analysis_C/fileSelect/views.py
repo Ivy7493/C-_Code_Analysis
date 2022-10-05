@@ -48,29 +48,6 @@ def viewReport(request):
 
 def displayCode(request):
     fileRaw = request.POST["val"]
-    # if ".h" in fileName:
-    #     fileList = request.POST.get("headers")
-    # elif ".cpp" in fileName:
-    #     fileList = request.POST.get("sources")
-    # headers,sources,countArr,occurArr = PrscC(os.path.join(folder))
-    # context = {
-    #     'headers':headers,
-    #     'sources':sources,
-    #     'countArr':countArr,
-    #     'occurArr':occurArr,
-    # }        
-    # for x in fileList:
-    #     print(" ")
-    #     print("Item: ", x)
-    #     for y in fileList[x]:
-    #         print(y)
-            
-    # context = {
-    #     'fileList':fileList,
-    #     'fileName':fileName,
-    # }
     file = fileRaw.split(',')
-    for line in file:
-        print(line) 
         
     return render(request,'fileSelect/displayCode.html',{'file':file})
