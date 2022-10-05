@@ -44,3 +44,18 @@ def executeProgram(request):
 def viewReport(request):
     print("here")
     return render(request,'fileSelect/fileDisplay.html',{'title':'File Viewer'})
+
+def displayCode(request):
+    file = request.POST["val"]
+    # headers,sources,countArr,occurArr = PrscC(os.path.join(folder))
+    # context = {
+    #     'headers':headers,
+    #     'sources':sources,
+    #     'countArr':countArr,
+    #     'occurArr':occurArr,
+    # }
+    for line in file:
+        print(line)
+        
+    print(file)
+    return render(request,'fileSelect/displayCode.html',{'file':file})
