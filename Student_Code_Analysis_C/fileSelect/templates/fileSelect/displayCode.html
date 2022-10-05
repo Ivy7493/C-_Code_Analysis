@@ -1,11 +1,11 @@
 {% extends 'fileSelect/base.html'%}
 {% block content %}
     <h1>HERE WE ARE</h1>
-    <ul>
-        {% for line in file.items %}
-            {{ line }}
+    <ol>
+        {% for line in file %}
+            <li>{{ line }}</li>
         {% endfor %}
-    </ul>
+    </ol>
     
     <form action = "fileDisplay.html">
         {% csrf_token %}
