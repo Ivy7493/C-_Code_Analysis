@@ -2,8 +2,6 @@ import os #need this in order to read in infomation.
 
 def findRawLocation(issue,rawHeaders,rawSource,source,header):
     rawLocations = []
-    print("Yessssssssss")
-    print(issue)
     for x in issue:
         data = x.split('-')
         workingFile = []
@@ -61,6 +59,7 @@ def getFiles(path):
                 elif('.h' in f):
                     headerList[f]=source_lines
                     rawHeaderList[f] = rawSourceLines
+                source.close()
                 
     
     # for x in cppList:
