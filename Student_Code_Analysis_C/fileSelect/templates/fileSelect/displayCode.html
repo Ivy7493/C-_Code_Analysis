@@ -1,0 +1,14 @@
+{% extends 'fileSelect/base.html'%}
+{% block content %}
+    <h1>HERE WE ARE</h1>
+    <ul>
+        {% for line in file.items %}
+            {{ line }}
+        {% endfor %}
+    </ul>
+    
+    <form action = "fileDisplay.html">
+        {% csrf_token %}
+        <input type = "submit" value = "Return">
+    </form>
+{% endblock content%}

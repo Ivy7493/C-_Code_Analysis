@@ -2,27 +2,37 @@
 {% block content %}
     <h1>View Files</h1>
     <div id = "display-filenames" class = "row" >
-        <div class = "col-md-4">
+        <div class = "col-sm">
             <ul>
                 {% for key,val in headers.items %}
                     <li class="list-group-item list-group-item-light">
-                        <a href = "#">
-                            {{ key }}
-                        </a>
+                        <form method = "post">
+                            {% csrf_token %}
+                            <button type="submit" value = "{{ val }}" name = 'val' formaction="displayCode/">{{ key }}</button>
+                        </form>
                     </li>
                 {% endfor %}
             </ul>
         </div>
-        <div class = "col-md-4">
+        <div class = "col-sm">
             <ul>
                 {% for key,val in sources.items %}
                     <li  class="list-group-item list-group-item-light">
-                        <a href = "#">
-                            {{ key }}
-                        </a>
+                        <form method="post">
+                            {% csrf_token %}
+                            <button type="submit" value = '{{ val }}' name = 'val' formaction="displayCode/">{{ key }}</button>
+                        </form>
                     </li>
                 {% endfor %}
             </ul>
+        </div>
+        <div id = "display-div"class = "col-sm">
+            <h2>
+                Here is where stuff should display
+            </h2>
+            {% for line in key %}
+                <p>{{ line }}</p>
+            {% endfor %}
         </div>
     </div>
     
