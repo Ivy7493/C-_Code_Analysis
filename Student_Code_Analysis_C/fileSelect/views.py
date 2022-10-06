@@ -5,8 +5,8 @@ from listings.pathForm import getPath
 from django.urls import reverse
 from ProcessController import ProcessController as PrscC
 import os
-import json
 from ast import literal_eval
+from persistentService import saveData,getData
 
 def fileSelectHome(request):
     
@@ -17,7 +17,8 @@ def fileSelectHome(request):
 
 def executeProgram(request):
     folder = request.POST["filePath"]
-    headers,sources,countArr,occurArr = PrscC(os.path.join(folder))
+    headers,sources,occurArr = PrscC(os.path.join(folder))
+    saveData('issues',occurArr)
     context = {
         'title':'File Viewer',
         'headers':headers,
@@ -32,5 +33,7 @@ def viewReport(request):
 def displayCode(request):
     fileRaw = request.POST["val"]
     file = literal_eval(fileRaw)
-    
+    issues = getData("issues")[0]
+    for x in issues:
+        print(x)
     return render(request,'fileSelect/displayCode.html',{'file':file})
