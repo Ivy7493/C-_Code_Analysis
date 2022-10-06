@@ -3,7 +3,6 @@ THRESH_SHORT = 3 # minimum number of permitted characters before considered shor
 def analyzeGlobalVariables(file):
     currentLine = 0; #used to track the line of the file
     locationOccurations = [];
-    globalCount = 0
     scopeCount = 0;
   
 

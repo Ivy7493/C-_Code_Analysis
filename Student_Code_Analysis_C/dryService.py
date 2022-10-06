@@ -9,6 +9,9 @@ scoreThreshold = 0.8
 reduceChar = ["int ", "float ", "string ", "double ", "auto ",
 "char ", "const ", "static ", "vector", "()", ";", "{", "}"]
 
+buzzWords = ['Vector2f','Vector2', 'int', 'float','string', 'double',
+            "auto"]
+
 thresholdPoints = []
 
 def analyze(headers,source):

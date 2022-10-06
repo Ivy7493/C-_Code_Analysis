@@ -1,6 +1,4 @@
 import unittest
-
-from numpy import append
 from parserService import getFiles,findRawLocation
 from friendService import analyzeFriend
 from globalService import analyzeGlobalVariables
@@ -29,7 +27,6 @@ class TestClass(unittest.TestCase):
         check = False;
         for x in source:
             tempLocation = analyzeGlobalVariables(source[x])
-            print(tempLocation)
             if(len(tempLocation) == 0):
                 check = True;
 
@@ -41,15 +38,10 @@ class TestClass(unittest.TestCase):
         locations = []
         for x in source:
             tempLocation = analyzeGlobalVariables(source[x])
-            print(tempLocation)
             if(len(tempLocation) > 0):
                 for y in tempLocation:
                     locations.append(x + '-' + str(y))
-                print("what we had before:")
-                print(locations)
                 newLocations = findRawLocation(locations,rawHeader,rawSource,source,headers)
-                print('And After')
-                print(newLocations)
                 self.assertEqual(newLocations,['rawLocation.cpp-5', 'rawLocation.cpp-6'])
 
 
@@ -62,7 +54,6 @@ class TestClass(unittest.TestCase):
         check = False;
         for x in headers:
             tempLocation = analyzeFriend(headers[x])
-            print(tempLocation)
             if(len(tempLocation) > 0):
                 check = True;
 
@@ -75,7 +66,6 @@ class TestClass(unittest.TestCase):
         check = False;
         for x in headers:
             tempLocation = analyzeFriend(headers[x])
-            print(tempLocation)
             if(len(tempLocation) > 2):
                 check = True;
 
@@ -87,7 +77,6 @@ class TestClass(unittest.TestCase):
         check = False;
         for x in headers:
             tempLocation = analyzeFriend(headers[x])
-            print(tempLocation)
             if(len(tempLocation) > 1):
                 check = True;
 
@@ -103,13 +92,11 @@ class TestClass(unittest.TestCase):
         check = False;
         for x in source:
             tempLocation = analyzeGlobalVariables(source[x])
-            print(tempLocation)
             if(len(tempLocation) > 0):
                 check = True;
             
         for x in headers:
             tempLocation = analyzeGlobalVariables(headers[x])
-            print(tempLocation)
             if(len(tempLocation) > 0):
                 check = True;
         self.assertEqual(check,True)
@@ -121,13 +108,10 @@ class TestClass(unittest.TestCase):
         check = False;
         for x in source:
             tempLocation = analyzeGlobalVariables(source[x])
-            print(tempLocation)
             if(len(tempLocation) < 2 and len(tempLocation) > 0):
                 check = True;
-            
         for x in headers:
             tempLocation = analyzeGlobalVariables(headers[x])
-            print(tempLocation)
             if(len(tempLocation) < 2 and len(tempLocation) > 0):
                 check = True;
         self.assertEqual(check,True)
@@ -143,7 +127,6 @@ class TestClass(unittest.TestCase):
 
         for x in source:
             tempLocation = analyzePublicMembers(source[x])
-            print(tempLocation)
             if( len(tempLocation) > 0):
                 checkOne = True;
          
@@ -184,7 +167,7 @@ class TestClass(unittest.TestCase):
         self.assertEqual(checkTwo,True)
 
     #==================================Switch Tool Section========================#
-    def test_publicFunctionsAreOkay(self):
+    def test_switchTest(self):
         testFilePath = "testsrc" + os.sep + 'SwitchTest' #os.path.dirname(__file__) + os.sep + 
         headers,source,rawHeader,rawSource = getFiles(testFilePath)
         checkTwo = False;
@@ -206,6 +189,41 @@ class TestClass(unittest.TestCase):
                 checkTwo = True;
 
         self.assertEqual(checkTwo,True)
+
+    def test_switchFalsePostive(self):
+        testFilePath = "testsrc" + os.sep + 'SwitchTest' + os.sep + 'Test1' #os.path.dirname(__file__) + os.sep + 
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
+        checkTwo = False;
+
+        for x in source:
+            tempLocation = analyzeSwitch(source[x])
+            if(len(tempLocation) > 0):
+                self.assertEqual(True,False)
+
+        self.assertEqual(True,True)
+
+    #Test to see if we can find multiple different switch statements in same file
+    def test_switchFindMultipleSameFile(self):
+        testFilePath = "testsrc" + os.sep + 'SwitchTest' + os.sep + 'Test2' #os.path.dirname(__file__) + os.sep + 
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
+        checkTwo = False;
+        totalCount = 0;
+        for x in source:
+            tempLocation = analyzeSwitch(source[x])
+            totalCount += len(tempLocation)
+
+        self.assertEqual(totalCount,2)
+    #Test to see if we can find multiple different switch statements in different file structures
+    def test_switchFindMultipleDifferentFile(self):
+        testFilePath = "testsrc" + os.sep + 'SwitchTest' + os.sep + 'Test3' #os.path.dirname(__file__) + os.sep + 
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
+        checkTwo = False;
+        totalCount = 0;
+        for x in source:
+            tempLocation = analyzeSwitch(source[x])
+            totalCount += len(tempLocation)
+
+        self.assertEqual(totalCount,2)
 
 #==============================IMPLEMENTATION TESTING SECTION============================================
 
@@ -239,6 +257,39 @@ class TestClass(unittest.TestCase):
         if(len(totalCount) == 3):
             check = True;
         self.assertEqual(check,True)
+
+            #test to find implementation inheritance in  cpp
+    def test_ImplementationInSourceFalsePostive(self):
+        testFilePath = "testsrc" + os.sep + 'inheritanceTest' + os.sep + 'Test3' #os.path.dirname(__file__) + os.sep + 
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
+        totalCount = []
+        check = False;
+        for x  in headers:
+            impLine = analyzeImplementationInheritance(headers[x],source,headers)
+        for y in impLine:
+            totalCount.append(y)
+        totalCount = list(set(totalCount))
+        self.assertEqual(len(totalCount),0)
+
+        #test to see if we can find multiple dimenisions of inheritance
+    def test_ImplementationInheritanceMultiDimeninsonal(self):
+        testFilePath = "testsrc" + os.sep + 'inheritanceTest' + os.sep + 'Test4' #os.path.dirname(__file__) + os.sep + 
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
+        totalCount = []
+        check = False;
+        for x  in headers:
+            impLine = analyzeImplementationInheritance(headers[x],source,headers)
+            jcounter = 0;
+            for j in impLine:
+                if '#' in j:
+                    impLine[jcounter] = impLine[jcounter].replace('#', x)
+                jcounter += 1;
+            for y in impLine:
+                totalCount.append(y)
+               
+
+        totalCount = list(set(totalCount))
+        self.assertEqual(len(totalCount),7)
 
        
 
