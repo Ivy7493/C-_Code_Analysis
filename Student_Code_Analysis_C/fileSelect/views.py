@@ -6,27 +6,11 @@ from django.urls import reverse
 from ProcessController import ProcessController as PrscC
 import os
 
-
-fileLocations = [
-    {
-        'filelocation':'src',
-        'other':'other1'
-    },
-    {
-        'filelocation':'gameSourcecode',
-        'other':'other2'
-    }
-]
-
 def fileSelectHome(request):
     
     form = getPath()
-    context = {
-        'fileLocations':fileLocations,
-        'form':form
-    }
    
-    return render(request,'fileSelect/fileSelectHome.html',context)
+    return render(request,'fileSelect/fileSelectHome.html',{'form':form})
 
 
 def executeProgram(request):
