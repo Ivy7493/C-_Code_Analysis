@@ -5,6 +5,20 @@ from listings.pathForm import getPath
 from django.urls import reverse
 from ProcessController import ProcessController as PrscC
 import os
+from django.db import models
+import json
+from ast import literal_eval
+
+class AnalysisInformation(models.Model):
+    first_name = models.CharField(
+        max_length=100
+    )
+    last_name = models.CharField(
+        max_length=100
+    )
+    job_title = models.CharField(
+        max_length=200
+    )
 
 def fileSelectHome(request):
     
@@ -24,14 +38,17 @@ def executeProgram(request):
         'countArr':countArr,
         'occurArr':occurArr,
     }
+            
     return render(request,'fileSelect/fileDisplay.html',context)
 
 def viewReport(request):
-    print("here")
     return render(request,'fileSelect/fileDisplay.html',{'title':'File Viewer'})
 
 def displayCode(request):
     fileRaw = request.POST["val"]
-    file = fileRaw.split(',')
-        
+    file = literal_eval(fileRaw)
+    
+    for x in file:
+        print(x)
+    
     return render(request,'fileSelect/displayCode.html',{'file':file})
