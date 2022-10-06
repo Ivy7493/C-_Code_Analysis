@@ -6,7 +6,6 @@ from switchService import analyzeSwitch
 from publicMemberService import analyzePublicMembers
 from implementationInheritanceService import analyzeImplementationInheritance
 from dryService import analyzeDRY
-from persistentService import saveData,getData
 
 def ProcessController(fileName):
     headers,source,rawHeaders,rawSource = getFiles(fileName)
@@ -128,5 +127,4 @@ def ProcessController(fileName):
     locationOccurrencesForFriend = list(set(locationOccurrencesForFriend))
     #print("Total Friend Statements: ")
     #print("Occurrences: ", locationOccurrencesForFriend)
-    
     return rawHeaders,rawSource,issueLocationArr
