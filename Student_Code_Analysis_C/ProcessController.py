@@ -6,6 +6,7 @@ from switchService import analyzeSwitch
 from publicMemberService import analyzePublicMembers
 from implementationInheritanceService import analyzeImplementationInheritance
 from dryService import analyzeDRY
+from persistentService import saveData,getData
 
 def ProcessController(fileName):
     headers,source,rawHeaders,rawSource = getFiles(fileName)
@@ -14,14 +15,15 @@ def ProcessController(fileName):
     locationOccurrencesForSwitch = []
     locationOccurrencesForFriend = []
     locationOccurencesForGlobal = []
-    GlobalGlobalCount = 0;
+
+    #------------------DRY TOOL---------------------------------------#
+    locationOccurencesForDRY = analyzeDRY(headers,source)
     for x in headers:
         #-----------------Global Variable tool--------------------------------------#
         try:
             globalVariableLocation = []
             globalVariablelocation = analyzeGlobalVariables(headers[x])
             globalVariablelocation = list(set(globalVariableLocation))
-            fileGlobalVariable = len(globalVariablelocation)
             for member in globalVariablelocation:
                 locationOccurencesForGlobal.append(x + '-' + str(member))
         except:
@@ -31,7 +33,6 @@ def ProcessController(fileName):
         try:
             fileFriendLocation = analyzeFriend(headers[x])
             fileFriendLocation = list(set(fileFriendLocation))
-            fileFriendCount = len(fileFriendLocation)
             for member in fileFriendLocation:
                 locationOccurrencesForFriend.append(x + '-' + str(member))
         except:
@@ -41,7 +42,6 @@ def ProcessController(fileName):
         try:
             fileSwitchLocation = analyzeSwitch(headers[x])
             fileSwitchLocation = list(set(fileSwitchLocation))
-            fileSwitchCount = len(fileSwitchLocation)
             for member in fileSwitchLocation:
                 locationOccurrencesForSwitch.append(x + '-' + str(member))
         except:
@@ -51,7 +51,6 @@ def ProcessController(fileName):
         try:
             publicDataMemberLocation = analyzePublicMembers(headers[x])
             publicDataMemberLocation = list(set(publicDataMemberLocation))
-            filePublicDataMember = len(publicDataMemberLocation)
             for member in publicDataMemberLocation:
                 locationOccurrencesForPublic.append(x + '-' + str(member))
         except:
@@ -67,27 +66,17 @@ def ProcessController(fileName):
                 jcounter += 1;
 
             impLine = list(set(impLine))
-            impCount = len(impLine)
         except:
             print("Implementation Error")
         for member in impLine:
             locationOccurrencesForImplementationInheritance.append(member)
 
-        #------------------DRY TOOL---------------------------------------#
-    #print('---->1')
-    locationOccurencesForDRY = analyzeDRY(headers,source)
-    #print('---->2')
+   
     for x in source:
-      
-        ##print('---------------------')
-        ##print("For File: ", x)
-        ##print('---------------------')
-
         #-----------------Global Variable tool--------------------------------------#
         try:
             globalVariableLocation = analyzeGlobalVariables(source[x])
             globalVariableLocation = list(set(globalVariableLocation))
-            fileGlobalVariable = len(globalVariableLocation)
         except:
             print("global source error")
         for member in globalVariableLocation:
@@ -97,13 +86,11 @@ def ProcessController(fileName):
         try:
             fileSwitchLocation = analyzeSwitch(source[x])
             fileSwitchLocation = list(set(fileSwitchLocation))
-            fileSwitchCount = len(fileSwitchLocation)
-            ##print("Number of switch statements: ",fileSwitchCount)
-            ##print("line of Occurrences: ", fileSwitchLocation)
         except:
             print("switch source error")
         for member in fileSwitchLocation:
             locationOccurrencesForSwitch.append(x + '-' + str(member))
+
 
 
     #======================Raw Location Test===============================#
@@ -116,10 +103,8 @@ def ProcessController(fileName):
     #print(list(set(rawInheritanceLocations)))
 
     #-----------------------TOTAL SECTION--------------------------------#
-    issueLocationArr = [list(set(locationOccurrencesForImplementationInheritance)),locationOccurencesForGlobal,list(set(locationOccurrencesForPublic)),list(set(locationOccurrencesForSwitch)),list(set(locationOccurrencesForFriend))]
-    issueCountArr = [len(list(set(locationOccurrencesForImplementationInheritance))),len(list(set(locationOccurencesForGlobal))),len(list(set(locationOccurrencesForPublic))),len(list(set(locationOccurrencesForSwitch))),len(list(set(locationOccurrencesForFriend)))]
-    #print(" ")
-    #print('=========================================================')
+    issueLocationArr = [list(set(rawInheritanceLocations)),list(set(rawGlobalLocations)),list(set(rawPublicLocations)),list(set(rawSwitchLocations)),list(set(rawFriendLocations))]
+    print('=========================================================')
     locationOccurrencesForImplementationInheritance = list(set(locationOccurrencesForImplementationInheritance))    
     #print("Total Implementation Inheritance: ")
     #print("Occurrences: ", locationOccurrencesForImplementationInheritance)
@@ -144,4 +129,4 @@ def ProcessController(fileName):
     #print("Total Friend Statements: ")
     #print("Occurrences: ", locationOccurrencesForFriend)
     
-    return rawHeaders,rawSource,issueCountArr,issueLocationArr
+    return rawHeaders,rawSource,issueLocationArr
