@@ -30,7 +30,6 @@ def fileSelectHome(request):
 def executeProgram(request):
     folder = request.POST["filePath"]
     headers,sources,countArr,occurArr = PrscC(os.path.join(folder))
-    print("WHORE !")
     context = {
         'title':'File Viewer',
         'headers':headers,
@@ -47,8 +46,5 @@ def viewReport(request):
 def displayCode(request):
     fileRaw = request.POST["val"]
     file = literal_eval(fileRaw)
-    
-    for x in file:
-        print(x)
     
     return render(request,'fileSelect/displayCode.html',{'file':file})
