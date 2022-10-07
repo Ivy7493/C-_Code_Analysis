@@ -19,6 +19,8 @@ def executeProgram(request):
     folder = request.POST["filePath"]
     headers,sources,occurArr = PrscC(os.path.join(folder))
     saveData('issues',occurArr)
+    saveData('headers',headers)
+    saveData('sources',sources)
     context = {
         'title':'File Viewer',
         'headers':headers,
@@ -31,9 +33,30 @@ def viewReport(request):
     return render(request,'fileSelect/fileDisplay.html',{'title':'File Viewer'})
 
 def displayCode(request):
-    fileRaw = request.POST["val"]
-    file = literal_eval(fileRaw)
-    issues = getData("issues")[0]
-    for x in issues:
-        print(x)
-    return render(request,'fileSelect/displayCode.html',{'file':file})
+    print("Hello?")
+    fileName = request.POST["key"]
+    print(fileName)
+    file =[];
+    if ".h" in fileName:
+        file = getData('headers')[fileName]
+    elif ".cpp" in fileName:
+        file = getData("sources")[fileName]
+    issues = getData("issues")
+    linesOfIssues = []
+    for typeOfProblem in issues:
+        for fileIssues in typeOfProblem:
+            temp = fileIssues.split('-')
+            if(temp[0] == fileName):
+                linesOfIssues.append(int(temp[1]))
+    print("Issue lines for file:" )
+    lineStatus = [False] * len(file)
+    for x in linesOfIssues:
+        lineStatus[x] = True
+    
+    context = {
+        'file':file,
+        'lineStatus':lineStatus,
+        'fileName': fileName
+    }
+    print(linesOfIssues)
+    return render(request,'fileSelect/displayCode.html',context)
