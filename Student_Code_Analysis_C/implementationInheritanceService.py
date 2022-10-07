@@ -29,7 +29,7 @@ def analyzeImplementationInheritance(file,source,headers):
             currentLineInHeader = 0;
             for x in baseClassFile:
                 # if( 'virtual' in x and '=' in x and '0' in x):
-                if(("("  in x and ")" in x) and ("void" in x or "int" in x or "double" in x or "string" in x or "auto" in x or "char" in x or "bool" in x or "float" in x)):
+                if(("("  in x and ")" in x) and ("void" in x or "int" in x or "double" in x or "string" in x or "auto" in x or "char" in x or "bool" in x or "float" in x or "*" in x or "const" in x or "::" in x)):
                     ##print("passed 1")
                     if('=' not in x and '0' not in x):
                         ##print("passed 2")

@@ -8,7 +8,7 @@
                     <li class="list-group-item list-group-item-light">
                         <form method = "post">
                             {% csrf_token %}
-                            <button id="buttonList" type="submit" value = '{{ val }}' name = 'val' formaction="displayCode/">{{ key }}</button>
+                            <button id="buttonList" type="submit" value = '{{ key }}' name = 'key' formaction="displayCode/">{{ key }}</button>
                         </form>
                     </li>
                 {% endfor %}
@@ -20,7 +20,7 @@
                     <li class="list-group-item list-group-item-light">
                         <form method="post">
                             {% csrf_token %}
-                            <button id="buttonList" type="submit" value = '{{ val }}' name = 'val' formaction="displayCode/">{{ key }}</button>
+                            <button id="buttonList" type="submit" value = '{{ key }}' name = 'key' formaction="displayCode/">{{ key }}</button>
                         </form>
                     </li>
                 {% endfor %}
