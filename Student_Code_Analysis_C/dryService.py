@@ -5,7 +5,7 @@ from threading import Thread #WE NEED MORE POWER BOSS
 
 
 #settings
-scoreThreshold = 0.8
+scoreThreshold = 0.6
 reduceChar = ["int ", "float ", "string ", "double ", "auto ",
 "char ", "const ", "static ", "vector", "()", ";", "{", "}"]
 
@@ -44,7 +44,7 @@ def analyze(headers,source):
                         #outputBlock += '\n';
                         tempCounter += 1;
                     fileScopes.append(outputBlock)
-                    fileScopeSplits.append(str(startScope) + '-' + str(endScope))
+                    fileScopeSplits.append(str(startScope) + '@' + str(endScope))
 
             currentLine += 1
         for y in fileScopes:
@@ -65,14 +65,18 @@ def analyze(headers,source):
                         #print("fixedScore: ", fixedScore)
                         lineIndex = fileScopes.index(y)
                         lineIndex2 = fileScopes.index(j)
-                        output = x + '-' + fileScopeSplits[lineIndex] + '#' + fileScopeSplits[lineIndex2]
+                        output = x + '-' + fileScopeSplits[lineIndex]
+                        output2 = x + '-' + fileScopeSplits[lineIndex2]
                         locationOccurance.append(output)
-    #print("Extracted:: ")
-    #print(locationOccurance)
+                        locationOccurance.append(output2)
+    thresholdPoints = locationOccurance
     return locationOccurance;
     
 def analyzeDRY(headers,source):
-    thread = Thread(target=analyze, args=(headers,source))
-    thread.start()
-    thread.join()
-    print(list(set(thresholdPoints)))
+    #thread = Thread(target=analyze, args=(headers,source))
+    #thread.start()
+    #thread.join()
+    test = list(set(analyze(headers,source)))
+    print("DRY LOCATIONS FOUND")
+    print(test)
+    return test

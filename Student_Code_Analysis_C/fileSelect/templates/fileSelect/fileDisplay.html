@@ -1,8 +1,47 @@
 {% extends 'fileSelect/base.html'%}
 {% block content %}
-    <h1>View Files</h1>
     <div class = "row" >
-        <div class = "col-sm">
+        <div id = "display-div"class = "col-sm-4">
+            <h2>
+                Here Are the issues that were found in the file:
+            </h2>
+            <table class = "table">
+                <tr><th>Code smell</th><th>Occurence Location</th></tr>
+                <tr><td>Use of Implementation Inheritance</td>
+                    <td>
+                        {% for issueOccur in implementationIssues%}
+                            {{ issueOccur }}
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr><td>Use of Global Variables</td>
+                    <td>
+                        {% for issueOccur in globalVarIssues%}
+                            {{ issueOccur }}
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr><td>Use of Public data members</td>
+                    <td>
+                    {% for issueOccur in publicDataIssues%}
+                        {{ issueOccur }}
+                    {% endfor %}
+                </td></tr>
+                <tr><td>Use of Switch case</td>
+                    <td>
+                    {% for issueOccur in switchIssues%}
+                        {{ issueOccur }}
+                    {% endfor %}
+                </td></tr>
+                <tr><td>Use of Friend keyword</td>
+                    <td>
+                    {% for issueOccur in friendIssues%}
+                        {{ issueOccur }}
+                    {% endfor %}
+                </td></tr>
+            </table>
+        </div>
+        <div class = "col-sm-4">
             <ul>
                 {% for key,val in headers.items %}
                     <li class="list-group-item list-group-item-light">
@@ -14,7 +53,7 @@
                 {% endfor %}
             </ul>
         </div>
-        <div class = "col-sm">
+        <div class = "col-sm-4">
             <ul>
                 {% for key,val in sources.items %}
                     <li class="list-group-item list-group-item-light">
@@ -26,14 +65,7 @@
                 {% endfor %}
             </ul>
         </div>
-        <div id = "display-div"class = "col-sm">
-            <h2>
-                Here is where stuff should display
-            </h2>
-            {% for line in key %}
-                <p>{{ line }}</p>
-            {% endfor %}
-        </div>
+        
     </div>
     
 {% endblock content%}

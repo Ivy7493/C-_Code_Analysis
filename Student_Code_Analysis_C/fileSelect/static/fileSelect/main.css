@@ -119,6 +119,10 @@ ol {
   list-style-type: none;
 }
 
+th {
+  color:#ffffff
+}
+
 ol li { display: block; }
 
 ol li:before { 

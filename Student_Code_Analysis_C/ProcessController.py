@@ -14,9 +14,11 @@ def ProcessController(fileName):
     locationOccurrencesForSwitch = []
     locationOccurrencesForFriend = []
     locationOccurencesForGlobal = []
-
+    locationOccurencesForDRY = []
     #------------------DRY TOOL---------------------------------------#
     locationOccurencesForDRY = analyzeDRY(headers,source)
+    print("First!")
+    print(locationOccurencesForDRY)
     for x in headers:
         #-----------------Global Variable tool--------------------------------------#
         try:
@@ -65,10 +67,11 @@ def ProcessController(fileName):
                 jcounter += 1;
 
             impLine = list(set(impLine))
+            for member in impLine:
+                locationOccurrencesForImplementationInheritance.append(member)
         except:
             print("Implementation Error")
-        for member in impLine:
-            locationOccurrencesForImplementationInheritance.append(member)
+        
 
    
     for x in source:
@@ -98,11 +101,12 @@ def ProcessController(fileName):
     rawFriendLocations = findRawLocation(locationOccurrencesForFriend,rawHeaders,rawSource,source,headers)
     rawPublicLocations = findRawLocation(locationOccurrencesForPublic,rawHeaders,rawSource,source,headers)
     rawInheritanceLocations = findRawLocation(locationOccurrencesForImplementationInheritance,rawHeaders,rawSource,source,headers)
+    rawDRYLocations = findRawLocation(locationOccurencesForDRY,rawHeaders,rawSource,source,headers)
     print("====================HERE=====================")
-    print(list(set(rawInheritanceLocations)))
+    print(list(set(rawDRYLocations)))
 
     #-----------------------TOTAL SECTION--------------------------------#
-    issueLocationArr = [list(set(rawInheritanceLocations)),list(set(rawGlobalLocations)),list(set(rawPublicLocations)),list(set(rawSwitchLocations)),list(set(rawFriendLocations))]
+    issueLocationArr = [list(set(rawInheritanceLocations)),list(set(rawGlobalLocations)),list(set(rawPublicLocations)),list(set(rawSwitchLocations)),list(set(rawFriendLocations)),list(set(rawDRYLocations))]
     print('=========================================================')
     locationOccurrencesForImplementationInheritance = list(set(locationOccurrencesForImplementationInheritance))    
     print("Total Implementation Inheritance: ")
@@ -127,4 +131,7 @@ def ProcessController(fileName):
     locationOccurrencesForFriend = list(set(locationOccurrencesForFriend))
     print("Total Friend Statements: ")
     print("Occurrences: ", locationOccurrencesForFriend)
+    locationOccurencesForDRY = list(set(locationOccurencesForDRY))
+    print("Total DRY Sections: ")
+    print("Occurrences: ", locationOccurencesForDRY)
     return rawHeaders,rawSource,issueLocationArr
