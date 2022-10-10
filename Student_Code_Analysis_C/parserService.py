@@ -6,18 +6,51 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
         data = x.split('-')
         workingFile = []
         lineInQuestion = ""
+        endLineInQuestion = ""
+        isRangeInput = False;
         if('.cpp' in data[0]):
             workingFile = rawSource[data[0]]
             lineInQuestion = source[data[0]]
-            lineInQuestion = lineInQuestion[int(data[1])]
+            if('@' in data[1]):
+                isRangeInput = True;
+                points = data[1].split("@")
+                #print("YAAAASSSS POINTS", points)
+                #print("And the len of file: ", len(lineInQuestion))
+                endLineInQuestion = lineInQuestion[int(points[1])]
+                #print("IS this okay? ", int(points[1]))
+                #print("How about this? ", lineInQuestion[int(points[1])])  
+                lineInQuestion = lineInQuestion[int(points[0])] #beginning points
+                
+            else:
+                lineInQuestion = lineInQuestion[int(data[1])]
         elif('.h' in data[0]):
             workingFile = rawHeaders[data[0]]
             lineInQuestion = header[data[0]][int(data[1])] 
         counter = 0;
-        for y in workingFile:
-            if(lineInQuestion in y):
-                rawLocations.append(data[0] + '-' + str(counter))
-            counter += 1;
+        found = [False,False]
+        pos1 = 0
+        pos2 = 0
+        if(isRangeInput):
+            for y in workingFile:
+                if(lineInQuestion in y):
+                    found[0] = True;
+                    pos1 = counter
+                    tempIndex = workingFile.index(y)
+                    while(endLineInQuestion not in workingFile[tempIndex]):
+                        tempIndex += 1;
+                    found[1] = True;
+                    pos2 = tempIndex;
+                if(found[0] and found[1]):
+                    #print("Check to see if this is okay?")
+                    #print(data[0] + '-' + str(pos1) + '@' + str(pos2))
+                    rawLocations.append(data[0] + '-' + str(pos1) + '@' + str(pos2))
+                    break;
+                counter += 1
+        else:    
+            for y in workingFile:
+                if(lineInQuestion in y):
+                    rawLocations.append(data[0] + '-' + str(counter))
+                counter += 1;
 
     return rawLocations
         

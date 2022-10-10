@@ -31,7 +31,7 @@ def analyzeImplementationInheritance(file,source,headers):
                 # if( 'virtual' in x and '=' in x and '0' in x):
                 if(("("  in x and ")" in x) and ("void" in x or "int" in x or "double" in x or "string" in x or "auto" in x or "char" in x or "bool" in x or "float" in x or "*" in x or "const" in x or "::" in x)):
                     ##print("passed 1")
-                    if('=' not in x and '0' not in x):
+                    if('= 0' not in x or "=0" not in x): 
                         ##print("passed 2")
                         isPureVirtual = False
                         cleanX = x.rstrip()
@@ -56,6 +56,8 @@ def analyzeImplementationInheritance(file,source,headers):
                         extractedType = ""
                         extractedTypeEnd = x.find(" ")
                         extractedType = x[0:extractedTypeEnd]
+                        #print("Type Extracted: ")
+                        #print(extractedType)
                         if(extractedType == "virtual"):
                             tempCurrentLine = ""
                             counter =  extractedTypeEnd + 1
@@ -65,19 +67,41 @@ def analyzeImplementationInheritance(file,source,headers):
                             extractedType = tempCurrentLine
                         currentCppLine = 0 #variable to keep track of the current line in the cpp file
                         for y in baseClassSource: # for every line in the cpp file seach
-                            if(extractedName in y and extractedType in y and "(" in y and ")" in y): #if the function name is in the line and () are in the line, it is a function delcaration;
+                            if(extractedName in y and extractedType in y and "(" in y and ")" in y and '~' not in y): #if the function name is in the line and () are in the line, it is a function delcaration;
                                 currentCppLine = baseClassSource.index(y); #Find the index of the line at which the function was found
                                 ##print("Found cpp Declaration at: ", currentCppLine + 1) ##print it for now for debugging
+                                #====================================
+                                #========New Section Check============#
+
+                                copyBlockStart = currentCppLine #start of copy block
+                                CopyBlock = False # need to check if we can copy because of inheritance
+                                scopeCheck = 1;
+                                scopeOut = False; #"}" not in baseClassSource[currentCppLine] and scopeOut
                                 while("}" not in baseClassSource[currentCppLine]): #While the current cpp line isnt } , we still in the delcaration
-                                    ##print("current Line to check:",baseClassSource[currentCppLine] )
-                                    ##print("Line Length: ", len(baseClassSource[currentCppLine].strip()))
-                                    if((len(baseClassSource[currentCppLine].strip()) > 1 and baseClassSource[currentCppLine].strip() != "}" and baseClassSource[currentCppLine].strip() != "{") and currentCppLine != baseClassSource.index(y)):
+                                    if(scopeOut == False):
+                                        scopeCheck -= 1;
+                                        scopeOut = True;
+                                    print("CurrentLine: ", baseClassSource[currentCppLine])
+                                    if '{' in baseClassSource[currentCppLine]:
+                                        scopeCheck += 1;
+                                        print("Found {  in line increaseing scope")
+                                    if '}' in baseClassSource[currentCppLine]:
+                                        scopeCheck -= 1;
+                                        print("Found }  in line decreasing scope scope")
+                                    print("CurrentScope: ", scopeCheck)
+                                    if((len(baseClassSource[currentCppLine].strip()) > 1 and baseClassSource[currentCppLine].strip() != "}" and baseClassSource[currentCppLine].strip() != "{") and currentCppLine != baseClassSource.index(y) and CopyBlock == False):
+                                        CopyBlock = True;
                                         #print(extractedName,"Has declaration found within in it: ", currentCppLine + 1) #if length > 1 then there is tuff in here if its not { or }
                                         locationOccuration.append(finalLine + '.h' +  "-" + str(currentLineInHeader)) #append the .h declaration location
-                                        locationOccuration.append(finalLine + '.cpp' +  "-" + str(currentCppLine)) #append the .cpp declaration location
                                         locationOccuration.append('#' + '-' + str(currentLine))
+                                        #break;
+                                    if('}' in baseClassSource[currentCppLine] and scopeCheck == 0):
                                         break;
                                     currentCppLine = currentCppLine + 1
+                                print("Okay we out now")
+                                if(CopyBlock):
+                                    #print("Line to Append: ", finalLine + '.cpp' +  "-" + str(copyBlockStart) + '@' + str(currentCppLine))
+                                    locationOccuration.append(finalLine + '.cpp' +  "-" + str(copyBlockStart)+ '@' + str(currentCppLine)) #append the .cpp declaration location
 
 
 
