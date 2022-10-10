@@ -21,11 +21,18 @@ def executeProgram(request):
     saveData('issues',occurArr)
     saveData('headers',headers)
     saveData('sources',sources)
+    
     context = {
         'title':'File Viewer',
         'headers':headers,
         'sources':sources,
+        'implementationIssues':occurArr[0],
+        'globalVarIssues':occurArr[1],
+        'publicDataIssues':occurArr[2],
+        'switchIssues':occurArr[3],
+        'friendIssues':occurArr[4],
     }
+    
     
     return render(request,'fileSelect/fileDisplay.html',context)
 
