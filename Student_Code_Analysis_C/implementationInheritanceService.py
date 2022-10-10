@@ -81,14 +81,14 @@ def analyzeImplementationInheritance(file,source,headers):
                                     if(scopeOut == False):
                                         scopeCheck -= 1;
                                         scopeOut = True;
-                                    print("CurrentLine: ", baseClassSource[currentCppLine])
+                                    #print("CurrentLine: ", baseClassSource[currentCppLine])
                                     if '{' in baseClassSource[currentCppLine]:
                                         scopeCheck += 1;
-                                        print("Found {  in line increaseing scope")
+                                        #print("Found {  in line increaseing scope")
                                     if '}' in baseClassSource[currentCppLine]:
                                         scopeCheck -= 1;
-                                        print("Found }  in line decreasing scope scope")
-                                    print("CurrentScope: ", scopeCheck)
+                                        #print("Found }  in line decreasing scope scope")
+                                    #print("CurrentScope: ", scopeCheck)
                                     if((len(baseClassSource[currentCppLine].strip()) > 1 and baseClassSource[currentCppLine].strip() != "}" and baseClassSource[currentCppLine].strip() != "{") and currentCppLine != baseClassSource.index(y) and CopyBlock == False):
                                         CopyBlock = True;
                                         #print(extractedName,"Has declaration found within in it: ", currentCppLine + 1) #if length > 1 then there is tuff in here if its not { or }
@@ -98,7 +98,7 @@ def analyzeImplementationInheritance(file,source,headers):
                                     if('}' in baseClassSource[currentCppLine] and scopeCheck == 0):
                                         break;
                                     currentCppLine = currentCppLine + 1
-                                print("Okay we out now")
+                                # print("Okay we out now")
                                 if(CopyBlock):
                                     #print("Line to Append: ", finalLine + '.cpp' +  "-" + str(copyBlockStart) + '@' + str(currentCppLine))
                                     locationOccuration.append(finalLine + '.cpp' +  "-" + str(copyBlockStart)+ '@' + str(currentCppLine)) #append the .cpp declaration location
