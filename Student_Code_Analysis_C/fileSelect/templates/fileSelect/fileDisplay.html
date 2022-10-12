@@ -39,6 +39,12 @@
                         {{ issueOccur }}
                     {% endfor %}
                 </td></tr>
+                <tr><td> potentional DRY violation </td>
+                    <td>
+                    {% for issueOccur in dryIssues%}
+                        {{ issueOccur }}
+                    {% endfor %}
+                </td></tr>
             </table>
         </div>
         <div class = "col-sm-4">
