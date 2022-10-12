@@ -7,12 +7,12 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
         workingFile = []
         lineInQuestion = ""
         endLineInQuestion = ""
-        isRangeInput = False;
+        isRangeInput = False
         if('.cpp' in data[0]):
             workingFile = rawSource[data[0]]
             lineInQuestion = source[data[0]]
             if('@' in data[1]):
-                isRangeInput = True;
+                isRangeInput = True
                 points = data[1].split("@")
                 #print("YAAAASSSS POINTS", points)
                 #print("And the len of file: ", len(lineInQuestion))
@@ -26,35 +26,62 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
         elif('.h' in data[0]):
             workingFile = rawHeaders[data[0]]
             lineInQuestion = header[data[0]][int(data[1])] 
-        counter = 0;
+        counter = 0
         found = [False,False]
         pos1 = 0
         pos2 = 0
         if(isRangeInput):
             for y in workingFile:
                 if(lineInQuestion in y):
-                    found[0] = True;
+                    found[0] = True
                     pos1 = counter
                     tempIndex = workingFile.index(y)
                     while(endLineInQuestion not in workingFile[tempIndex]):
-                        tempIndex += 1;
-                    found[1] = True;
-                    pos2 = tempIndex;
+                        tempIndex += 1
+                    found[1] = True
+                    pos2 = tempIndex
                 if(found[0] and found[1]):
                     #print("Check to see if this is okay?")
                     #print(data[0] + '-' + str(pos1) + '@' + str(pos2))
                     rawLocations.append(data[0] + '-' + str(pos1) + '@' + str(pos2))
-                    break;
+                    break
                 counter += 1
         else:    
             for y in workingFile:
                 if(lineInQuestion in y):
                     rawLocations.append(data[0] + '-' + str(counter))
-                counter += 1;
+                counter += 1
 
     return rawLocations
         
 
+def parseIndents(files):
+    newFiles = files
+   
+    for file in files:
+        indentCount = 0
+       # print(file)
+        for x in files[file]:
+            if "}" in x:
+                indentCount -= 1
+            if indentCount>0:
+                for i in range(indentCount):
+                   # print("in the x forloop and i forloop: ",x)
+                    try:
+                        newFiles[file][files[file].index(x)] = '$' + newFiles[file][files[file].index(x)]  #newFiles[file][files[file].index(x)]
+                    except:
+                        lol = 4
+                        #print("That line kinda deaded")
+                    #print(newFiles[file][files[file].index(x)], "printed stuff")# = '->' + newFiles[file][file.index(x)]
+            if "{" in x:
+                indentCount += 1
+            if('case' in x and ':' in x):
+                indentCount +=1
+            if('break;' in x):  
+                indentCount -= 1
+            
+
+    return newFiles
 
 
 

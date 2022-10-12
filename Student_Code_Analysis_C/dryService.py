@@ -5,9 +5,9 @@ from threading import Thread #WE NEED MORE POWER BOSS
 
 
 #settings
-scoreThreshold = 0.6
+scoreThreshold = 0.75
 reduceChar = ["int ", "float ", "string ", "double ", "auto ",
-"char ", "const ", "static ", "vector", "()", ";", "{", "}"]
+"char ", "const ", "static ", "vector", "()", ";", "{", "}", "->", '::']
 
 buzzWords = ['Vector2f','Vector2', 'int', 'float','string', 'double',
             "auto"]

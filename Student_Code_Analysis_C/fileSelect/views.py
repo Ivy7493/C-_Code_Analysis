@@ -31,6 +31,7 @@ def executeProgram(request):
         'publicDataIssues':occurArr[2],
         'switchIssues':occurArr[3],
         'friendIssues':occurArr[4],
+        'dryIssues' : occurArr[5]
     }
     
     
@@ -50,33 +51,52 @@ def displayCode(request):
         file = getData("sources")[fileName]
     issues = getData("issues")
     linesOfIssues = []
+    lineColours = []
     for typeOfProblem in issues:
+        colorClass = ""
+        if(issues.index(typeOfProblem) == 0): #Implementation
+            colorClass = "bg-primary"
+        elif(issues.index(typeOfProblem) == 1): #Global
+            colorClass = "bg-secondary"
+        elif(issues.index(typeOfProblem) == 2): #Public
+            colorClass = "table-danger"
+        elif(issues.index(typeOfProblem) == 3): #Switch
+            colorClass = "bg-danger"
+        elif(issues.index(typeOfProblem) == 4): #Friend
+            colorClass = "bg-warning"
+        elif(issues.index(typeOfProblem) == 5): #DRY
+            colorClass = 'table-success'
         for fileIssues in typeOfProblem:
             tempSplit = fileIssues.split('-')
             if(tempSplit[0] == fileName):
-                print("Start::::::::::")
-                print("Range Extracted: ", tempSplit[1])
+                #print("Start::::::::::")
+                #print("Range Extracted: ", tempSplit[1])
                 if('@' in tempSplit[1]):
-                    print("Range Deticated!")
+                    #print("Range Deticated!")
                     data = tempSplit[1].split('@')
-                    print("Range SPlit: ")
-                    print(data[0])
-                    print(data[1])
+                    #print("Range SPlit: ")
+                    #print(data[0])
+                    #print(data[1])
                     counter = int(data[0])
                     end = int(data[1])
                     while(counter != end):
                         linesOfIssues.append(counter)
+                        lineColours.append(colorClass)
                         counter += 1;
                 else:
                     linesOfIssues.append(int(tempSplit[1]))
+                    lineColours.append(colorClass)
     print("Issue lines for file:" )
     lineStatus = [False] * len(file)
+    convertedColour = [""]*len(file)
     for x in linesOfIssues:
         lineStatus[x] = True
+        convertedColour[x] = lineColours.pop(0)
     
     context = {
         'file':file,
         'lineStatus':lineStatus,
+        'lineColour': convertedColour,
         'fileName': fileName
     }
     print(linesOfIssues)
