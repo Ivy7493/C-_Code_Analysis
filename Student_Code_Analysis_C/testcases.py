@@ -61,7 +61,7 @@ class TestClass(unittest.TestCase):
 
     #test to see if the word friend does not mess with the test
     def test_FalsePostiveFriend(self):
-        testFilePath = "testsrc" + os.sep + 'FriendTest' #os.path.dirname(__file__) + os.sep + 
+        testFilePath = "testsrc" + os.sep + 'FriendTest' + os.sep + 'test1' #os.path.dirname(__file__) + os.sep + 
         headers,source,rawHeader,rawSource = getFiles(testFilePath)
         check = False;
         for x in headers:
@@ -72,7 +72,7 @@ class TestClass(unittest.TestCase):
         self.assertEqual(check,False)
 
     def test_CanFindMultipleFriends(self):
-        testFilePath = "testsrc" + os.sep + 'FriendTest' #os.path.dirname(__file__) + os.sep + 
+        testFilePath = "testsrc" + os.sep + 'FriendTest' + os.sep + "test2" #os.path.dirname(__file__) + os.sep + 
         headers,source,rawHeader,rawSource = getFiles(testFilePath)
         check = False;
         for x in headers:

@@ -16,7 +16,7 @@ def analyzeImplementationInheritance(file,source,headers):
     baseClassFile =[]
     isPureVirtual = True;
     for line in file:
-        if(("private"in line or "protected" in line or "public" in line) and "class" in line):
+        if(("private"in line or "protected" in line or "public" in line) and "class" in line and ':' in line):
             cleanline = line.rstrip()
             lastSpacePos = cleanline.rfind(' ')
             finalLine = cleanline[lastSpacePos+1:]

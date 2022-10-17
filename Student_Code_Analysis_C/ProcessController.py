@@ -104,8 +104,8 @@ def ProcessController(fileName):
     rawDRYLocations = findRawLocation(locationOccurencesForDRY,rawHeaders,rawSource,source,headers)
     print("====================HERE=====================")
     print(list(set(rawDRYLocations)))
-    rawHeaders = parseIndents(rawHeaders)
-    rawSource = parseIndents(rawSource)
+    #rawHeaders = parseIndents(rawHeaders)
+    #rawSource = parseIndents(rawSource)
 
     #-----------------------TOTAL SECTION--------------------------------#
     issueLocationArr = [list(set(rawInheritanceLocations)),list(set(rawGlobalLocations)),list(set(rawPublicLocations)),list(set(rawSwitchLocations)),list(set(rawFriendLocations)),list(set(rawDRYLocations))]

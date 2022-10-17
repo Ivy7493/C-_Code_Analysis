@@ -15,10 +15,8 @@ buzzWords = ['Vector2f','Vector2', 'int', 'float','string', 'double',
 thresholdPoints = []
 
 def analyze(headers,source):
-    print("Hello")
     locationOccurance = []
     for x in source:
-        print("we working with: ", x)
         bracketCount = 0;
         copyScope = False;
         startScope = 0;
@@ -77,6 +75,4 @@ def analyzeDRY(headers,source):
     #thread.start()
     #thread.join()
     test = list(set(analyze(headers,source)))
-    print("DRY LOCATIONS FOUND")
-    print(test)
     return test

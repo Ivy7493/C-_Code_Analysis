@@ -2,28 +2,12 @@
 {% block content %}
 {% load my_tags %}
     <h1>{{fileName}}</h1>
-    <table style="width:200%" class = "table table-striped table-dark">
+    <pre data-line="1-2,5,9-20" class="line-numbers" tabindex="0">
         {% for line in file %}
-            {% with forloop.counter0 as ourCount %}
-                <!-- Ok 'my_tags' is not a registered tag library. Must be one of: admin_list admin_modify admin_urls cache i18n l10n log static tz
-              shoot lemme google it--> 
-                {% if lineStatus|get_by_index:ourCount %}
-                    <tr  class = '{{lineColour|get_by_index:ourCount}}'><td>{{ourCount}}</td><td>
-                    {%for tabs in line|countTabs %}
-                        &emsp;&emsp;
-                    {% endfor %}
-                    {{line|replaceTabs}}</td></tr>
-                {% else %}
-                    <tr  class = "table-default"><td>{{ourCount}}</td><td>
-                    {%for tabs in line|countTabs %}
-                        &emsp;&emsp;
-                    {% endfor %}
-                    {{line|replaceTabs}}</td></tr>
-                {% endif %}
-            {% endwith %}
+           <code class ="language-cpp">{{line}}</code>
         {% endfor %}
-        
-</table>
+        </code>    
+    </pre>
     
     <form action = "fileDisplay.html">
         {% csrf_token %}

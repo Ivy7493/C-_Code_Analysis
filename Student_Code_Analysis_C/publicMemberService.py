@@ -21,7 +21,7 @@ def analyzePublicMembers(file):
             underPublic = True; #we set the under public variable to True
         if(("private:"in line or "protected:" in line) and underClass ):
             underPublic = False;
-        if(("(" not in line and ")" not in line) and ("int" in line or "double" in line or "string" in line or "auto" in line or "char" in line or "bool" in line or "float" in line) and underPublic):
+        if(("(" not in line and ")" not in line) and ("int" in line or "double" in line or "string" in line or "auto" in line or "char" in line or "bool" in line or "float" in line or 'Vector' in line or 'vector' in line) and underPublic):
             locationOccuration.append(currentLine)
         currentLine= currentLine + 1;
     return locationOccuration

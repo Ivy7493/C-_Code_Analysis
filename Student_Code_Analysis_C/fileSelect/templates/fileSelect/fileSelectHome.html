@@ -6,9 +6,6 @@
     {% endfor %}-->
     <h1> Welcome to the code smells analyzer!</h1>
     <h2>Please paste in the file path for the source code you would like to analyze</h2>
-    <form action = "executeProgram/" method = "POST" novalidate>
-        {% csrf_token %}
-        {{ form }}
-        <input type = "submit" value = "OK">
-    </form>
+    <button name="button" type="submit" class = "btn" onclick="location.href='{% url "executeProgram"  %}'">Start Analysis</button>
+
 {% endblock content%}
