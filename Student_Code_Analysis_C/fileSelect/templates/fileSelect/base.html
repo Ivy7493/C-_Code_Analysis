@@ -33,6 +33,29 @@
                 <div>
                     <h3> &nbsp; Code_Snitch</h3>
                 </div>
+                <div>
+                    <script>
+                        function GetFullScreenElement(){
+                            return document.fullscreenElement
+                                || document.webkitFullscreenElement
+                                || document.mozFullscreenElement
+                                || document.msFullscreenElement
+                        }
+
+                        function ToggleFullScreen(){
+                            if (GetFullScreenElement()){
+                                document.exitFullscreen();
+                            }
+                            else{
+                                document.documentElement.requestFullscreen().catch(console.log)
+                            }
+                        }
+                        document.addEventListener("dblclick", () =>{
+                            ToggleFullScreen();
+                            });
+        
+                    </script>
+                </div>
             </nav>
         </div>
 
