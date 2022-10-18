@@ -30,8 +30,21 @@ def select_folder():
     return root.folder_path
 
 
+def navBarLaunch(request):
+    saveData("folder","")
+    return executeProgram(request)
+
+
 def executeProgram(request):
-    folder = getData("folder")
+    buttonVal = ""
+    try:
+        buttonVal = request.POST["folderName"]
+    except:
+        print("do not need to restart");
+
+    folder = ""
+    if(buttonVal != "restart"):
+        folder = getData("folder")
     if(folder == ""):
         with concurrent.futures.ThreadPoolExecutor() as executor:
             future = executor.submit(select_folder)
@@ -76,7 +89,11 @@ def viewReport(request):
     return render(request,'fileSelect/fileDisplay.html',{'title':'File Viewer'})
 
 def displayCode(request):
-    fileName = request.POST["key"]
+    try:
+        fileName = request.POST["key"]
+    except:
+        print('no filename provided')
+        
     issueId = ""
     try:
         issueId = request.POST["issue"]

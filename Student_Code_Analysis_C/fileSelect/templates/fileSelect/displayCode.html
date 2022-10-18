@@ -2,6 +2,10 @@
 {% block content %}
 {% load my_tags %}
     <h1>{{fileName}}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button formaction='../../executeProgram/' type="submit" value="" name="folderName" class = "button-23" >RETURN</button>
+    </form> 
     <div>
         <pre data-line='{{highlight}}' class="line-numbers language-cpp" style = '--color: var(--{{issue}});' tabindex="0">
             <code>
@@ -10,10 +14,4 @@
         </pre>
 
     </div>
-  
-    
-    <form action = "fileDisplay.html">
-        {% csrf_token %}
-        <input type = "submit" value = "Return">
-    </form>
 {% endblock content%}
