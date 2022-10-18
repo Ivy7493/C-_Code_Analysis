@@ -5,7 +5,7 @@ def analyzeFriend(file):
     underClass = False;
     scope = 0;
     for x in file:
-        print("We working with line: ", x)
+        #  print("We working with line: ", x)
         if('{' in x):
             scope += 1;
         if('}' in x):

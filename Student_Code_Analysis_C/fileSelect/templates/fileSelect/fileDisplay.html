@@ -8,6 +8,7 @@
                 {% for issueOccur in implementationIssues%}
                     <form method = "post">
                         {% csrf_token %}
+                        <input type="hidden" name="issue" value="implementation">
                         <button id="buttonList" type="submit" value = '{{ issueOccur }}' name = 'key' formaction="displayCode/">{{ issueOccur }}</button>
                     </form>
                 {% endfor %}
@@ -20,6 +21,7 @@
                     {% for issueOccur in globalVarIssues%}
                         <form method = "post">
                             {% csrf_token %}
+                            <input type="hidden" name="issue" value="global">
                             <button id="buttonList" type="submit" value = '{{ issueOccur }}' name = 'key' formaction="displayCode/">{{ issueOccur }}</button>
                         </form>
                     {% endfor %}
@@ -32,6 +34,7 @@
                     {% for issueOccur in publicDataIssues%}
                         <form method = "post">
                             {% csrf_token %}
+                            <input type="hidden" name="issue" value="publicData">
                             <button id="buttonList" type="submit" value = '{{ issueOccur }}' name = 'key' formaction="displayCode/">{{ issueOccur }}</button>
                         </form>
                     {% endfor %}
@@ -44,6 +47,7 @@
                     {% for issueOccur in switchIssues%}
                         <form method = "post">
                             {% csrf_token %}
+                            <input type="hidden" name="issue" value="switch">
                             <button id="buttonList" type="submit" value = '{{ issueOccur }}' name = 'key' formaction="displayCode/">{{ issueOccur }}</button>
                         </form>
                     {% endfor %}
@@ -57,6 +61,7 @@
                     {% for issueOccur in friendIssues%}
                         <form method = "post">
                             {% csrf_token %}
+                            <input type="hidden" name="issue" value="friend">
                             <button id="buttonList" type="submit" value = '{{ issueOccur }}' name = 'key' formaction="displayCode/">{{ issueOccur }}</button>
                         </form>
                     {% endfor %}
@@ -69,6 +74,7 @@
                     {% for issueOccur in dryIssues%}
                         <form method = "post">
                             {% csrf_token %}
+                            <input type="hidden" name="issue" value="dry">
                             <button id="buttonList" type="submit" value = '{{ issueOccur }}' name = 'key' formaction="displayCode/">{{ issueOccur }}</button>
                         </form>
                     {% endfor %}

@@ -12,6 +12,7 @@ from tkinter import *
 import concurrent.futures
 
 def fileSelectHome(request):
+    saveData('folder',"")
     form = getPath()
     return render(request,'fileSelect/fileSelectHome.html',{'form':form})
 
@@ -19,19 +20,25 @@ def fileSelectHome(request):
 def select_folder():
     root = Tk()
     root.withdraw()
-    root.folder_path = filedialog.askdirectory()
+    
+    os.system('''/usr/bin/osascript -e 'tell app "Finder" to set frontmost of process "Python" to true' ''')
+    ttl = 'Select File'
+    root.attributes("-topmost",1)
+    
+    root.folder_path = filedialog.askdirectory(parent=root,title=ttl)
     root.destroy()
     return root.folder_path
 
 
 def executeProgram(request):
-    folder = ""
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        future = executor.submit(select_folder)
-        folder = future.result()
-        print(folder)
+    folder = getData("folder")
     if(folder == ""):
-        return;
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            future = executor.submit(select_folder)
+            folder = future.result()
+            saveData('folder',folder)
+        print(folder)
+
     headers,sources,occurArr = PrscC(os.path.join(folder))
     saveData('issues',occurArr)
     saveData('headers',headers)
@@ -70,13 +77,20 @@ def viewReport(request):
 
 def displayCode(request):
     fileName = request.POST["key"]
-    print(fileName)
-    file =[];
+    issueId = ""
+    try:
+        issueId = request.POST["issue"]
+    except:
+        issueId = "allIssues"
+        print("Caught Empty issueID")
+        
+    file =[]
     if ".h" in fileName:
         file = getData('headers')[fileName]
     elif ".cpp" in fileName:
         file = getData("sources")[fileName]
     issues = getData("issues")
+    allIssuesArray = []
     linesOfIssues = []
     lineColours = []
     for typeOfProblem in issues:
@@ -113,11 +127,34 @@ def displayCode(request):
                 else:
                     linesOfIssues.append(int(tempSplit[1]))
                     lineColours.append(colorClass)
+        allIssuesArray.append(linesOfIssues) 
+        linesOfIssues = []
     #print("Issue lines for file:" )
     lineStatus = [False] * len(file)
     convertedColour = [""]*len(file)
     totalString = ""
-    for x in linesOfIssues:
+    key = 0
+    if(issueId == "implementation"):
+        key = 0
+    elif(issueId == "global"):
+        key = 1
+    elif(issueId == "publicData"):
+        key = 2
+    elif(issueId == "switch"):
+        key = 3
+    elif(issueId == "friend"):
+        key = 4
+    elif(issueId == "dry"):
+        key = 5
+    elif(issueId == "allIssues"):
+        tempArray = []
+        for x in allIssuesArray:
+            for y in x:
+                tempArray.append(y)
+        allIssuesArray.append(tempArray)
+        key = 6
+       
+    for x in allIssuesArray[key]:
         lineStatus[x] = True
         convertedColour[x] = lineColours.pop(0)
     locationArray  = ""
@@ -135,6 +172,7 @@ def displayCode(request):
         'lineColour': convertedColour,
         'fileName': fileName,
         'totalString': totalString,
-        'highlight': locationArray
+        'highlight': locationArray,
+        'issue': issueId
     }
     return render(request,'fileSelect/displayCode.html',context)

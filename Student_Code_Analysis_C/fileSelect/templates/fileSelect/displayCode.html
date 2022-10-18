@@ -2,11 +2,15 @@
 {% block content %}
 {% load my_tags %}
     <h1>{{fileName}}</h1>
-    <pre data-line='{{highlight}}' class="line-numbers language-cpp" tabindex="0">
-        <code >
-            {{totalString}}
-        </code>
-    </pre>
+    <div>
+        <pre data-line='{{highlight}}' class="line-numbers language-cpp" style = '--color: var(--{{issue}});' tabindex="0">
+            <code>
+                {{totalString}}
+            </code>
+        </pre>
+
+    </div>
+  
     
     <form action = "fileDisplay.html">
         {% csrf_token %}

@@ -1,7 +1,15 @@
+html {
+  margin: 0px;
+  height: 100%;
+  width: 100%;
+}
+
 body {
-background: #000000;
+background:linear-gradient(60deg,rgb(105, 243, 105),rgb(44, 53, 32),rgb(20, 18, 18));
 color: #9e9999;
 margin-top: 5rem;
+height: 3000px;
+background-repeat: no-repeat;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -43,7 +51,7 @@ font-weight: 500;
 background: #ffffff;
 padding: 10px 20px;
 border: 2px solid #08a84d;
-border-radius: 3px;
+border-radius: 5px;
 margin-bottom: 20px;
 }
 
@@ -129,3 +137,5 @@ ol li:before {
   content: counter(item) "  | "; 
   counter-increment: item;
 }
+
+
