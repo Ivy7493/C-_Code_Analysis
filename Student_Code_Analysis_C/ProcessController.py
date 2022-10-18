@@ -122,7 +122,7 @@ def ProcessController(fileName):
     # print('=========================================================')
     locationOccurrencesForPublic = list(set(locationOccurrencesForPublic))
     # print("Total Public Variables: ")
-    # print("Occurrences: ", locationOccurrencesForPublic)
+    #print("Occurrences: ", locationOccurrencesForPublic)
     # print(" ")
     # print('=========================================================')
     locationOccurrencesForSwitch = list(set(locationOccurrencesForSwitch))

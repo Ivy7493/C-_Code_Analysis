@@ -2,11 +2,10 @@
 {% block content %}
 {% load my_tags %}
     <h1>{{fileName}}</h1>
-    <pre data-line="1-2,5,9-20" class="line-numbers" tabindex="0">
-        {% for line in file %}
-           <code class ="language-cpp">{{line}}</code>
-        {% endfor %}
-        </code>    
+    <pre data-line='{{highlight}}' class="line-numbers language-cpp" tabindex="0">
+        <code >
+            {{totalString}}
+        </code>
     </pre>
     
     <form action = "fileDisplay.html">

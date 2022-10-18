@@ -1,6 +1,7 @@
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
+from django.test import TestCase
 from numpy import append
 from listings.pathForm import getPath
 from ProcessController import ProcessController as PrscC
@@ -115,15 +116,25 @@ def displayCode(request):
     #print("Issue lines for file:" )
     lineStatus = [False] * len(file)
     convertedColour = [""]*len(file)
+    totalString = ""
     for x in linesOfIssues:
         lineStatus[x] = True
         convertedColour[x] = lineColours.pop(0)
-    
+    locationArray  = ""
+
+    counter = 0;
+    for x in lineStatus:
+        if(x):
+            locationArray = locationArray + ',' + str((counter + 1))
+        counter += 1;
+    for x in file:
+        totalString += x;
     context = {
         'file':file,
         'lineStatus':lineStatus,
         'lineColour': convertedColour,
-        'fileName': fileName
+        'fileName': fileName,
+        'totalString': totalString,
+        'highlight': locationArray
     }
-    print(linesOfIssues)
     return render(request,'fileSelect/displayCode.html',context)
