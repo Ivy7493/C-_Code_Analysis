@@ -22,10 +22,19 @@
 
     <body>
         <div>
-            <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+            <nav class="navbar customBar navbar-expand-md fixed-top">
+                <div>
+                    <img
+                    class="logo"
+                    src="../../static/fileSelect/logo.png"
+                    alt="Wits Logo"
+                    height = "90"
+                    />
+                </div>
                 <div>
                     <form method="post">
                         {% csrf_token %}
+                        &nbsp;
                         <button formaction='../../executeProgram/' type="submit" value="restart" name="folderName"
                             class="button-23">Start Analysis</button>
                     </form>
@@ -61,9 +70,9 @@
 
         <div>
             <main role="main" class="container">
-                    <div>
-                        {% block content %}{% endblock %}
-                    </div>
+                <div>
+                    {% block content %}{% endblock %}
+                </div>
             </main>
         </div>
 

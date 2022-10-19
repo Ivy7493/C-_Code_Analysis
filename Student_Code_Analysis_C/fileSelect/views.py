@@ -46,6 +46,7 @@ def executeProgram(request):
     if(buttonVal != "restart"):
         folder = getData("folder")
     if(folder == ""):
+        print("this hit ======================")
         with concurrent.futures.ThreadPoolExecutor() as executor:
             future = executor.submit(select_folder)
             folder = future.result()

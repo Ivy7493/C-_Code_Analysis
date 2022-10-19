@@ -4,7 +4,7 @@ from friendService import analyzeFriend
 from globalService import analyzeGlobalVariables
 from switchService import analyzeSwitch
 from publicMemberService import analyzePublicMembers
-from implementationInheritanceService import analyzeImplementationInheritance
+from implementationInheritanceService import analyzeImplementationInheritance, hasImplementationInCpp
 from dryService import analyzeDRY
 
 def ProcessController(fileName):
@@ -19,6 +19,7 @@ def ProcessController(fileName):
     locationOccurencesForDRY = analyzeDRY(headers,source)
     print("First!")
     print(locationOccurencesForDRY)
+    print('----testing Section-----')
     for x in headers:
         #-----------------Global Variable tool--------------------------------------#
         try:
@@ -111,8 +112,8 @@ def ProcessController(fileName):
     issueLocationArr = [list(set(rawInheritanceLocations)),list(set(rawGlobalLocations)),list(set(rawPublicLocations)),list(set(rawSwitchLocations)),list(set(rawFriendLocations)),list(set(rawDRYLocations))]
     print('=========================================================')
     locationOccurrencesForImplementationInheritance = list(set(locationOccurrencesForImplementationInheritance))    
-    # print("Total Implementation Inheritance: ")
-    # print("Occurrences: ", locationOccurrencesForImplementationInheritance)
+    print("Total Implementation Inheritance: ")
+    print("Occurrences: ", locationOccurrencesForImplementationInheritance)
     # print(" ")
     # print('=========================================================')
     locationOccurencesForGlobal = list(set(locationOccurencesForGlobal))

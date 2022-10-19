@@ -1,116 +1,135 @@
 
+def hasImplementationInCpp(functionType,functionName,cppFile):
+    #print("function Name: ", functionName)
+    #print("function Type: ", functionType)
+    functionStart = -1;
+    implementationFound = False;
+    for line in cppFile: #Run through all lines
+        if((functionName in line) and (functionType in line) and ("(" in line and ")" in line )): #if we find the function okay cool
+            functionStart = cppFile.index(line) #getting where it starts
+            currentLine = functionStart;
+            scope = 0;
+            scopeProtect = True;
+            while('}' not in cppFile[currentLine] and (scope != 0 or scopeProtect)):
+                if(scopeProtect and "{" in cppFile[currentLine]): #used to ge through first line
+                    scopeProtect = False;
+                #///Deals with determining if implementation has occured in file
+                if(len(cppFile[currentLine].strip()) > 1 and cppFile[currentLine].strip() != "}" and cppFile[currentLine].strip() != "{") and currentLine != cppFile.index(line):
+                    implementationFound = True;
 
-from operator import truediv
-from sys import implementation
+                if('{' in cppFile[currentLine]):
+                    scope += 1;
+                if('}' in cppFile[currentLine]):
+                    scope -= 1;
+                currentLine +=1;
+            functionEnd = currentLine;
+            if(implementationFound):
+                #print("status: ", implementationFound)
+                #print("range: ", str(functionStart) + '@' + str(functionEnd))
+                return str(functionStart) + '@' + str(functionEnd)
+    return ""
+                
 
+def hasImplementationInHeader(headerFile,fileName):
+    locationOccuration = []
+    for line in headerFile:
+        if(("("  in line and ")" in line) and ("void" in line or "int" in line or "double" in line or "string" in line or "auto" in line or "char" in line or "bool" in line or "float" in line or "*" in line or "const" in line or "::" in line)):
+            if('= 0' not in line or "=0" not in line): 
+                        nextline = headerFile[headerFile.index(line)+1]
+                        if(('{'in line or '}' in line)or ('{' in nextline and '(' not in nextline and ')' not in nextline)):
+                            locationOccuration.append(fileName +  "-" + str(headerFile.index(line)))
+
+    print("Location Occurs for header: ", locationOccuration)
+    return locationOccuration
+
+
+def extractAllFunctionsFromClass(headerFile):
+    print("Name of Header: ", headerFile)
+    functionNames = []
+    functionTypes = []
+    functionPositions = []
+    for line in headerFile:
+        if(("("  in line and ")" in line) and ("void" in line or "int" in line or "double" in line or "string" in line or "auto" in line or "char" in line or "bool" in line or "float" in line or "*" in line or "const" in line or "::" in line)):
+            functionNameEnd = line.find('(') - 1 # we need the functions name out of the header to search for in the cpp
+            extractedName = ""
+            for y in range(functionNameEnd,0, -1):
+                if(line[y] != " "):
+                    extractedName = line[y] + extractedName
+                elif(line[y] == " "):
+                    break;
+            print("Extracted Function Name: ",extractedName)
+
+            #=====The following deals with extracting types from functions incase of overloading
+            extractedType = ""
+            extractedTypeEnd = line.find(" ")
+            extractedType = line[0:extractedTypeEnd]
+            #print("Type Extracted: ")
+            #print(extractedType)
+            if(extractedType == "virtual"):
+                tempCurrentLine = ""
+                counter =  extractedTypeEnd + 1
+                while(line[counter] != " "):
+                    tempCurrentLine = tempCurrentLine + line[counter]
+                    counter+=1
+                extractedType = tempCurrentLine
+            functionNames.append(extractedName)
+            functionTypes.append(extractedType)
+            functionPositions.append(headerFile.index(line))
+    return functionNames,functionTypes,functionPositions
 
 
 
 def analyzeImplementationInheritance(file,source,headers):
-    publicCount = 0;
-    scopeCount = 0;
-    implementationCount = 0;
-    locationOccuration =[];
-    currentLine = 0;
-    finalLine = ''
-    baseClassFile =[]
-    isPureVirtual = True;
+    newLocationOccuration = []
+    currentLine = 0
+    extractClassName = ''
     for line in file:
+
+        #This checks to see whether a class inherits from a base class and then finds the base class
+
         if(("private"in line or "protected" in line or "public" in line) and "class" in line and ':' in line):
             cleanline = line.rstrip()
             lastSpacePos = cleanline.rfind(' ')
-            finalLine = cleanline[lastSpacePos+1:]
-            #print('Class is inherited from', finalLine)
-            baseClassFile;
+            extractClassName = cleanline[lastSpacePos+1:]
+            canFindCpp = True
+            baseClassHeaderFile = []
+            baseClassSourceFile = []
+
             try:
-                baseClassFile = headers[finalLine+'.h']
+                baseClassHeaderFile = headers[extractClassName+'.h']
             except:
-                return []
-            currentLineInHeader = 0;
-            for x in baseClassFile:
-                # if( 'virtual' in x and '=' in x and '0' in x):
-                if(("("  in x and ")" in x) and ("void" in x or "int" in x or "double" in x or "string" in x or "auto" in x or "char" in x or "bool" in x or "float" in x or "*" in x or "const" in x or "::" in x)):
-                    ##print("passed 1")
-                    if('= 0' not in x or "=0" not in x): 
-                        ##print("passed 2")
-                        isPureVirtual = False
-                        cleanX = x.rstrip()
-                        nextline = baseClassFile[baseClassFile.index(x)+1]
-                        ##print(x)
-                        if(('{'in x or '}' in x)or '{' in nextline):
-                            ##print("passed 3")
-                            locationOccuration.append(finalLine + '.h' +  "-" + str(currentLineInHeader))
-                        #This section is to do with the cpp exploration of a header
-                        try:
-                            baseClassSource = source[finalLine + '.cpp'] #we now get the cpp file to see if there is a declaration in there
-                        except:
-                            return locationOccuration
-                        functionNameEnd = x.find('(') - 1 # we need the functions name out of the header to search for in the cpp
-                        extractedName = ""
-                        for y in range(functionNameEnd,0, -1):
-                            if(x[y] != " "):
-                                extractedName = x[y] + extractedName
-                            elif(x[y] == " "):
-                                break;
-                        #=====The following deals with extracting types from functions incase of overloading
-                        extractedType = ""
-                        extractedTypeEnd = x.find(" ")
-                        extractedType = x[0:extractedTypeEnd]
-                        #print("Type Extracted: ")
-                        #print(extractedType)
-                        if(extractedType == "virtual"):
-                            tempCurrentLine = ""
-                            counter =  extractedTypeEnd + 1
-                            while(x[counter] != " "):
-                                tempCurrentLine = tempCurrentLine + x[counter]
-                                counter+=1
-                            extractedType = tempCurrentLine
-                        currentCppLine = 0 #variable to keep track of the current line in the cpp file
-                        for y in baseClassSource: # for every line in the cpp file seach
-                            if(extractedName in y and extractedType in y and "(" in y and ")" in y and '~' not in y): #if the function name is in the line and () are in the line, it is a function delcaration;
-                                currentCppLine = baseClassSource.index(y); #Find the index of the line at which the function was found
-                                ##print("Found cpp Declaration at: ", currentCppLine + 1) ##print it for now for debugging
-                                #====================================
-                                #========New Section Check============#
+                continue
+            try:
+                 baseClassSourceFile = source[extractClassName + '.cpp']
+            except:
+                canFindCpp = False;
 
-                                copyBlockStart = currentCppLine #start of copy block
-                                CopyBlock = False # need to check if we can copy because of inheritance
-                                scopeCheck = 1;
-                                scopeOut = False; #"}" not in baseClassSource[currentCppLine] and scopeOut
-                                while("}" not in baseClassSource[currentCppLine]): #While the current cpp line isnt } , we still in the delcaration
-                                    if(scopeOut == False):
-                                        scopeCheck -= 1;
-                                        scopeOut = True;
-                                    #print("CurrentLine: ", baseClassSource[currentCppLine])
-                                    if '{' in baseClassSource[currentCppLine]:
-                                        scopeCheck += 1;
-                                        #print("Found {  in line increaseing scope")
-                                    if '}' in baseClassSource[currentCppLine]:
-                                        scopeCheck -= 1;
-                                        #print("Found }  in line decreasing scope scope")
-                                    #print("CurrentScope: ", scopeCheck)
-                                    if((len(baseClassSource[currentCppLine].strip()) > 1 and baseClassSource[currentCppLine].strip() != "}" and baseClassSource[currentCppLine].strip() != "{") and currentCppLine != baseClassSource.index(y) and CopyBlock == False):
-                                        CopyBlock = True;
-                                        #print(extractedName,"Has declaration found within in it: ", currentCppLine + 1) #if length > 1 then there is tuff in here if its not { or }
-                                        locationOccuration.append(finalLine + '.h' +  "-" + str(currentLineInHeader)) #append the .h declaration location
-                                        locationOccuration.append('#' + '-' + str(currentLine))
-                                        #break;
-                                    if('}' in baseClassSource[currentCppLine] and scopeCheck == 0):
-                                        break;
-                                    currentCppLine = currentCppLine + 1
-                                # print("Okay we out now")
-                                if(CopyBlock):
-                                    #print("Line to Append: ", finalLine + '.cpp' +  "-" + str(copyBlockStart) + '@' + str(currentCppLine))
-                                    locationOccuration.append(finalLine + '.cpp' +  "-" + str(copyBlockStart)+ '@' + str(currentCppLine)) #append the .cpp declaration location
+            headerLocations = hasImplementationInHeader(baseClassHeaderFile,extractClassName + '.h')
+            print("HeaderLocations")
+            print(headerLocations)
+            if(len(headerLocations) > 0):
+                for x in headerLocations:
+                    newLocationOccuration.append(x)
+    
+            if(not canFindCpp):
+                continue
 
+            functionNames,functionTypes,functionPositions = extractAllFunctionsFromClass(baseClassHeaderFile)
 
+            # this checks to see whether there is implementation in the base class
+            
+            for i in range(len(functionNames)):
+                fixedLocations = hasImplementationInCpp(functionTypes[i],functionNames[i],baseClassSourceFile)
+                if(len(fixedLocations) > 0):
+                    currentLineInHeader = functionPositions[i]
+                    tempLocation = extractClassName + '.cpp' + '-' + fixedLocations
+                    tempLocationHeader = extractClassName + '.h' +'-' + str(currentLineInHeader)
+                    tempLocationOGFile = '#' + '-' + str(currentLine)
+                    newLocationOccuration.append(tempLocation)
+                    newLocationOccuration.append(tempLocationHeader)
+                    newLocationOccuration.append(tempLocationOGFile)
 
-                           # currentCppLine = currentCppLine + 1
+        currentLine += 1
+    return list(set(newLocationOccuration))
 
-
-
-                            
-                currentLineInHeader = currentLineInHeader+1
-            return list(set(locationOccuration))
-        currentLine += 1;
-    return []
+        

@@ -6,7 +6,7 @@ html {
 }
 
 body {
-background:linear-gradient(60deg,rgb(7, 7, 252),rgb(255, 255, 255),rgb(255, 255, 7));
+background:linear-gradient(60deg,rgb(255, 255, 255),rgb(12, 36, 255),rgb(255, 255, 7));
 color: #9e9999;
 margin-top: 10rem;
 height: 3000px;
@@ -38,7 +38,7 @@ margin: 0;
 }
 
 .bg-steel {
-background-color: #67a466;
+background-color: #656565;
 }
 
 .site-header .navbar-nav .nav-link {
@@ -340,4 +340,19 @@ h1 { color: #111;
 .top-left{
   top: 0;
   right: 100%;
+}
+
+.customBar{
+  background-color: rgb(101, 100, 100);
+  border-radius: 5px;
+}
+
+.arrow{
+  position:relative;
+  padding: 10px;
+  
+}
+.logoMain{
+  position:center;
+  width:20%;
 }

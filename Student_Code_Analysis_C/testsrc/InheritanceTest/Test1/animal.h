@@ -1,4 +1,4 @@
-class animal:
+class animal
 {
     public:
     void walk(){
