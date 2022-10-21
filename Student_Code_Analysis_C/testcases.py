@@ -28,7 +28,7 @@ class TestClass(unittest.TestCase):
         for x in source:
             tempLocation = analyzeGlobalVariables(source[x])
             if(len(tempLocation) == 0):
-                check = True;
+                check = True
 
         self.assertEqual(check,True)
 
