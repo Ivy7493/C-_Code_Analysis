@@ -4,7 +4,7 @@ from friendService import analyzeFriend
 from globalService import analyzeGlobalVariables
 from switchService import analyzeSwitch
 from publicMemberService import analyzePublicMembers
-from implementationInheritanceService import analyzeImplementationInheritance, hasImplementationInCpp
+from implementationInheritanceService import analyzeImplementationInheritance
 from dryService import analyzeDRY
 
 def ProcessController(fileName):
