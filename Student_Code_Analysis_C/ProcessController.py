@@ -60,7 +60,7 @@ def ProcessController(fileName):
 
         #------------------Implementation Inheritance---------------------#
         try:
-            impLine = analyzeImplementationInheritance(headers[x],source,headers)
+            impLine = analyzeImplementationInheritance(headers[x],source,headers,x)
             jcounter = 0;
             for j in impLine:
                 if '#' in j:

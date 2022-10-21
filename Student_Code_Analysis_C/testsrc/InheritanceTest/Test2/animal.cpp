@@ -7,5 +7,5 @@ void animal::walk(){
 }
 
 int animal::ReturnAge(){
-    
+    return 7;
 }

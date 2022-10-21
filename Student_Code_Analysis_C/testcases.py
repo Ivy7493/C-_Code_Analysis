@@ -234,14 +234,12 @@ class TestClass(unittest.TestCase):
         totalCount = []
         check = False;
         for x  in headers:
-            impLine = analyzeImplementationInheritance(headers[x],source,headers)
+            impLine = analyzeImplementationInheritance(headers[x],source,headers,x)
         for y in impLine:
             totalCount.append(y)
         
         totalCount = list(set(totalCount))
-        if(len(totalCount) > 0):
-            check = True;
-        self.assertEqual(check,True)
+        self.assertEqual(len(totalCount),3)
 
     #test to find implementation inheritance in  cpp
     def test_canFindImplementationInSource(self):
@@ -250,13 +248,14 @@ class TestClass(unittest.TestCase):
         totalCount = []
         check = False;
         for x  in headers:
-            impLine = analyzeImplementationInheritance(headers[x],source,headers)
+            impLine = analyzeImplementationInheritance(headers[x],source,headers,x)
         for y in impLine:
             totalCount.append(y)
         totalCount = list(set(totalCount))
-        if(len(totalCount) == 3):
-            check = True;
-        self.assertEqual(check,True)
+
+        #if(len(totalCount) == 1): #HERE CHECK OUT OUT
+         #   check = True;
+        self.assertEqual(len(totalCount),4)
 
             #test to find implementation inheritance in  cpp
     def test_ImplementationInSourceFalsePostive(self):
@@ -265,7 +264,7 @@ class TestClass(unittest.TestCase):
         totalCount = []
         check = False;
         for x  in headers:
-            impLine = analyzeImplementationInheritance(headers[x],source,headers)
+            impLine = analyzeImplementationInheritance(headers[x],source,headers,x)
         for y in impLine:
             totalCount.append(y)
         totalCount = list(set(totalCount))
@@ -278,7 +277,7 @@ class TestClass(unittest.TestCase):
         totalCount = []
         check = False;
         for x  in headers:
-            impLine = analyzeImplementationInheritance(headers[x],source,headers)
+            impLine = analyzeImplementationInheritance(headers[x],source,headers,x)
             jcounter = 0;
             for j in impLine:
                 if '#' in j:
@@ -289,17 +288,8 @@ class TestClass(unittest.TestCase):
                
 
         totalCount = list(set(totalCount))
-        self.assertEqual(len(totalCount),7)
+        self.assertEqual(len(totalCount),6)
 
-       
-
-
-
-
-
-    
-
-            
 
 if __name__ == '__main__':
     unittest.main()
