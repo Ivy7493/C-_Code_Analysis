@@ -10,48 +10,29 @@
               {% for key,val in headers.items %}
               <form method="post">
                 {% csrf_token %}
-                <button
-                  id="buttonList"
-                  type="submit"
-                  value="{{ key }}"
-                  name="key"
-                  formaction="displayCode/"
-                >
+                <button id="buttonList" type="submit" value="{{ key }}" name="key" formaction="displayCode/">
                   {{ key }}
                 </button>
               </form>
               {% endfor %}
-            </div>
-            <div class="col-9">
-              <h2>Source</h2>
-              {% for key,val in sources.items %}
-              <form method="post">
-                {% csrf_token %}
-                <button
-                  id="buttonList"
-                  type="submit"
-                  value="{{ key }}"
-                  name="key"
-                  formaction="displayCode/"
-                >
-                  {{ key }}
-                </button>
-              </form>
-              {% endfor %}
-            </div>
-          </div>
-        </div>
-      </div>
-    <div class="p-2 bg-light border">
-      <button
-        name="button"
-        data-toggle="collapse"
-        data-target="#inheritanceIssues"
-        aria-expanded="false"
-        aria-controls="inheritanceIssues"
-        type="button"
-        class="p-2 btn btn-primary"
-      >
+              </div>
+              <div class="col-9">
+                <h2>Source</h2>
+                {% for key,val in sources.items %}
+                <form method="post">
+                  {% csrf_token %}
+                  <button id="buttonList" type="submit" value="{{ key }}" name="key" formaction="displayCode/">
+                    {{ key }}
+                  </button>
+                </form>
+                {% endfor %}
+              </div>
+              </div>
+              </div>
+              </div>
+              <div class="p-2 bg-light border">
+                <button name="button" data-toggle="collapse" data-target="#inheritanceIssues" aria-expanded="false"
+                  aria-controls="inheritanceIssues" type="button" class="p-2 btn btn-primary">
         Implementation Inheritance {{ implementationIssues|length }}
       </button>
       <div class="col-sm-4 collapse" id="inheritanceIssues">
@@ -74,15 +55,8 @@
     </div>
 
     <div class="p-2 bg-light border">
-      <button
-        name="button"
-        data-toggle="collapse"
-        data-target="#globalVariableIssues"
-        aria-expanded="false"
-        aria-controls="globalVariableIssues"
-        type="button"
-        class="p-2 btn btn-secondary"
-      >
+      <button name="button" data-toggle="collapse" data-target="#globalVariableIssues" aria-expanded="false"
+        aria-controls="globalVariableIssues" type="button" class="p-2 btn btn-secondary">
         Global Variables {{ globalVarIssues|length }}
       </button>
       <div class="col-sm-4 collapse" id="globalVariableIssues">
@@ -90,30 +64,17 @@
         <form method="post">
           {% csrf_token %}
           <input type="hidden" name="issue" value="global" />
-          <button
-            id="buttonList"
-            type="submit"
-            value="{{ issueOccur }}"
-            name="key"
-            formaction="displayCode/"
-          >
+          <button id="buttonList" type="submit" value="{{ issueOccur }}" name="key" formaction="displayCode/">
             {{ issueOccur }}
           </button>
         </form>
         {% endfor %}
       </div>
     </div>
-
+    
     <div class="p-2 bg-light border">
-      <button
-        name="button"
-        data-toggle="collapse"
-        data-target="#publicDataIssues"
-        aria-expanded="false"
-        aria-controls="publicDataIssues"
-        type="button"
-        class="p-2 btn table-danger"
-      >
+      <button name="button" data-toggle="collapse" data-target="#publicDataIssues" aria-expanded="false"
+        aria-controls="publicDataIssues" type="button" class="p-2 btn table-danger">
         Public Data Members {{ publicDataIssues|length }}
       </button>
       <div class="col-sm-4 collapse" id="publicDataIssues">
@@ -121,30 +82,16 @@
         <form method="post">
           {% csrf_token %}
           <input type="hidden" name="issue" value="publicData" />
-          <button
-            id="buttonList"
-            type="submit"
-            value="{{ issueOccur }}"
-            name="key"
-            formaction="displayCode/"
-          >
+          <button id="buttonList" type="submit" value="{{ issueOccur }}" name="key" formaction="displayCode/">
             {{ issueOccur }}
           </button>
         </form>
         {% endfor %}
       </div>
     </div>
-
     <div class="p-2 bg-light border">
-      <button
-        name="button"
-        data-toggle="collapse"
-        data-target="#switchIssues"
-        aria-expanded="false"
-        aria-controls="switchIssues"
-        type="button"
-        class="p-2 btn btn-danger"
-      >
+      <button name="button" data-toggle="collapse" data-target="#switchIssues" aria-expanded="false"
+        aria-controls="switchIssues" type="button" class="p-2 btn btn-danger">
         Switch Statements {{ switchIssues|length }}
       </button>
       <div class="col-sm-4 collapse" id="switchIssues">
@@ -152,30 +99,17 @@
         <form method="post">
           {% csrf_token %}
           <input type="hidden" name="issue" value="switch" />
-          <button
-            id="buttonList"
-            type="submit"
-            value="{{ issueOccur }}"
-            name="key"
-            formaction="displayCode/"
-          >
+          <button id="buttonList" type="submit" value="{{ issueOccur }}" name="key" formaction="displayCode/">
             {{ issueOccur }}
           </button>
         </form>
         {% endfor %}
       </div>
     </div>
-
+    
     <div class="p-2 bg-light border">
-      <button
-        name="button"
-        data-toggle="collapse"
-        data-target="#friendIssues"
-        aria-expanded="false"
-        aria-controls="friendIssues"
-        type="button"
-        class="p-2 btn bg-warning"
-      >
+      <button name="button" data-toggle="collapse" data-target="#friendIssues" aria-expanded="false"
+        aria-controls="friendIssues" type="button" class="p-2 btn bg-warning">
         Friend Keyword {{ friendIssues|length }}
       </button>
       <div class="col-sm-4 collapse" id="friendIssues">
@@ -183,30 +117,17 @@
         <form method="post">
           {% csrf_token %}
           <input type="hidden" name="issue" value="friend" />
-          <button
-            id="buttonList"
-            type="submit"
-            value="{{ issueOccur }}"
-            name="key"
-            formaction="displayCode/"
-          >
+          <button id="buttonList" type="submit" value="{{ issueOccur }}" name="key" formaction="displayCode/">
             {{ issueOccur }}
           </button>
         </form>
         {% endfor %}
       </div>
     </div>
-
+    
     <div class="p-2 bg-light border">
-      <button
-        name="button"
-        data-toggle="collapse"
-        data-target="#dryIssues"
-        aria-expanded="false"
-        aria-controls="dryIssues"
-        type="button"
-        class="p-2 btn table-success"
-      >
+      <button name="button" data-toggle="collapse" data-target="#dryIssues" aria-expanded="false" aria-controls="dryIssues"
+        type="button" class="p-2 btn table-success">
         Dry Violations {{ dryIssues|length }}
       </button>
       <div class="col-sm-4 collapse" id="dryIssues">
@@ -214,13 +135,7 @@
         <form method="post">
           {% csrf_token %}
           <input type="hidden" name="issue" value="dry" />
-          <button
-            id="buttonList"
-            type="submit"
-            value="{{ issueOccur }}"
-            name="key"
-            formaction="displayCode/"
-          >
+          <button id="buttonList" type="submit" value="{{ issueOccur }}" name="key" formaction="displayCode/">
             {{ issueOccur }}
           </button>
         </form>

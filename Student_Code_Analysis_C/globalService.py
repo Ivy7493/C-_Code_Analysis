@@ -12,7 +12,7 @@ def analyzeGlobalVariables(file):
             scopeCount = scopeCount + 1
         if("}" in line):
             scopeCount = scopeCount - 1
-        if(('int' in line) or ('bool' in line) or ('string' in line) or ('float' in line) or ('double' in line) or ('auto' in line) or ('char' in line)):
+        if(len(line) >= 4 and " " in line and (('(' not in line and ')' not in line) or ('=' in line and '(' in line)) and "#include" not in line and len(line.split(" ")) >= 2 and ("namespace" not in line)):
             if(scopeCount <= 0 and (('(' not in line) or (')' not in line))):
                 locationOccurations.append(currentLine)
         currentLine = currentLine + 1

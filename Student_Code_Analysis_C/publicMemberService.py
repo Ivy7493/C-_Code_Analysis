@@ -6,6 +6,7 @@ def analyzePublicMembers(file):
     underPublic = False;
     locationOccuration =[];
     currentLine = 0;
+    roundScope = 0;
 
     for line in file:
         if("{" in line): #we inc for open scope
@@ -21,7 +22,11 @@ def analyzePublicMembers(file):
             underPublic = True; #we set the under public variable to True
         if(("private:"in line or "protected:" in line) and underClass ):
             underPublic = False;
-        if(("(" not in line and ")" not in line) and ("int" in line or "double" in line or "string" in line or "auto" in line or "char" in line or "bool" in line or "float" in line or 'Vector' in line or 'vector' in line) and underPublic):
+        if('('in line):
+            roundScope+=1
+        if(')'in line):
+            roundScope-=1
+        if((len(line) >= 4 and " " in line and (('(' not in line and ')' not in line) or ('='in line and '(' in line and "virtual" not in line)) and len(line.split(" ")) >= 2) and underPublic and roundScope <= 0):
             locationOccuration.append(currentLine)
-        currentLine= currentLine + 1;
+        currentLine= currentLine + 1
     return locationOccuration
