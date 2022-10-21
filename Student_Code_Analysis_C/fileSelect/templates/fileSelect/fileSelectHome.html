@@ -1,14 +1,24 @@
-{% extends 'fileSelect/base.html'%}
-{% block content %}
-    <!--{% for file in fileLocations%}
+{% extends 'fileSelect/base.html'%} {% block content %}
+<!--{% for file in fileLocations%}
         <h1>{{ file.other }}</h1>
         <p>File location: {{ file.filelocation }}</p>
     {% endfor %}-->
-    <h1> Welcome to the code smells analyzer!</h1>
-    <h2>Please paste in the file path for the source code you would like to analyze</h2>
-    <form action = "executeProgram/" method = "POST" novalidate>
-        {% csrf_token %}
-        {{ form }}
-        <input type = "submit" value = "OK">
-    </form>
+<div>
+  <div style="text-align: center;">
+    <img class="logoMain" src="../../static/fileSelect/logo.png" alt="Wits logo" />
+  </div>
+  <h1>Welcome to Code_Snitch</h1>
+  <div class="row">
+    <div class="col-sm-auto">
+      <h2>
+        Press the menu at the top left of the screen at anytime to start a new
+        analysis
+      </h2>
+    </div>
+    <div class="col-sm-auto">
+      <img class="arrow" src="../../static/fileSelect/Arrow.png" alt="Direction Arrow" />
+    </div>
+  </div>
+</div>
+
 {% endblock content%}

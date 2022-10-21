@@ -1,3 +1,5 @@
+#include "animal.h"
+
 class Dog : private animal
 {
     public:

@@ -19,6 +19,7 @@ def ProcessController(fileName):
     locationOccurencesForDRY = analyzeDRY(headers,source)
     print("First!")
     print(locationOccurencesForDRY)
+    print('----testing Section-----')
     for x in headers:
         #-----------------Global Variable tool--------------------------------------#
         try:
@@ -59,7 +60,7 @@ def ProcessController(fileName):
 
         #------------------Implementation Inheritance---------------------#
         try:
-            impLine = analyzeImplementationInheritance(headers[x],source,headers)
+            impLine = analyzeImplementationInheritance(headers[x],source,headers,x)
             jcounter = 0;
             for j in impLine:
                 if '#' in j:
@@ -104,36 +105,36 @@ def ProcessController(fileName):
     rawDRYLocations = findRawLocation(locationOccurencesForDRY,rawHeaders,rawSource,source,headers)
     print("====================HERE=====================")
     print(list(set(rawDRYLocations)))
-    rawHeaders = parseIndents(rawHeaders)
-    rawSource = parseIndents(rawSource)
+    #rawHeaders = parseIndents(rawHeaders)
+    #rawSource = parseIndents(rawSource)
 
     #-----------------------TOTAL SECTION--------------------------------#
     issueLocationArr = [list(set(rawInheritanceLocations)),list(set(rawGlobalLocations)),list(set(rawPublicLocations)),list(set(rawSwitchLocations)),list(set(rawFriendLocations)),list(set(rawDRYLocations))]
     print('=========================================================')
     locationOccurrencesForImplementationInheritance = list(set(locationOccurrencesForImplementationInheritance))    
-    # print("Total Implementation Inheritance: ")
-    # print("Occurrences: ", locationOccurrencesForImplementationInheritance)
+    print("Total Implementation Inheritance: ")
+    #print("Occurrences: ", locationOccurrencesForImplementationInheritance)
     # print(" ")
     # print('=========================================================')
-    locationOccurencesForGlobal = list(set(locationOccurencesForGlobal))
+    #locationOccurencesForGlobal = list(set(locationOccurencesForGlobal))
     # print("Total Global Variables: ")
     # print("Occurrences: ", locationOccurencesForGlobal)
     # print(" ")
     # print('=========================================================')
-    locationOccurrencesForPublic = list(set(locationOccurrencesForPublic))
+    #locationOccurrencesForPublic = list(set(locationOccurrencesForPublic))
     # print("Total Public Variables: ")
-    # print("Occurrences: ", locationOccurrencesForPublic)
+    #print("Occurrences: ", locationOccurrencesForPublic)
     # print(" ")
     # print('=========================================================')
-    locationOccurrencesForSwitch = list(set(locationOccurrencesForSwitch))
+    #locationOccurrencesForSwitch = list(set(locationOccurrencesForSwitch))
     # print("Total switch Statements: ")
     # print("Occurrences: ", locationOccurrencesForSwitch)
     # print(" ")
     # print('=========================================================')
-    locationOccurrencesForFriend = list(set(locationOccurrencesForFriend))
+    #locationOccurrencesForFriend = list(set(locationOccurrencesForFriend))
     # print("Total Friend Statements: ")
     # print("Occurrences: ", locationOccurrencesForFriend)
-    locationOccurencesForDRY = list(set(locationOccurencesForDRY))
+    #locationOccurencesForDRY = list(set(locationOccurencesForDRY))
     # print("Total DRY Sections: ")
     # print("Occurrences: ", locationOccurencesForDRY)
     return rawHeaders,rawSource,issueLocationArr

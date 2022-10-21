@@ -2,7 +2,8 @@
 
 
 void animal::walk(){
-    int b = 7;
+    this->hasBones();
+    this->returnBones();
 }
 
 int animal::ReturnAge(){

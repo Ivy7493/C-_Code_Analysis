@@ -1,77 +1,235 @@
-{% extends 'fileSelect/base.html'%}
-{% block content %}
-    <div class = "row" >
-        <div id = "display-div"class = "col-sm-4">
-            <h2>
-                Here Are the issues that were found in the file:
-            </h2>
-            <table class = "table">
-                <tr><th>Code smell</th><th>Occurence Location</th></tr>
-                <tr><td>Use of Implementation Inheritance</td>
-                    <td>
-                        {% for issueOccur in implementationIssues%}
-                            {{ issueOccur }}
-                        {% endfor %}
-                    </td>
-                </tr>
-                <tr><td>Use of Global Variables</td>
-                    <td>
-                        {% for issueOccur in globalVarIssues%}
-                            {{ issueOccur }}
-                        {% endfor %}
-                    </td>
-                </tr>
-                <tr><td>Use of Public data members</td>
-                    <td>
-                    {% for issueOccur in publicDataIssues%}
-                        {{ issueOccur }}
-                    {% endfor %}
-                </td></tr>
-                <tr><td>Use of Switch case</td>
-                    <td>
-                    {% for issueOccur in switchIssues%}
-                        {{ issueOccur }}
-                    {% endfor %}
-                </td></tr>
-                <tr><td>Use of Friend keyword</td>
-                    <td>
-                    {% for issueOccur in friendIssues%}
-                        {{ issueOccur }}
-                    {% endfor %}
-                </td></tr>
-                <tr><td> potentional DRY violation </td>
-                    <td>
-                    {% for issueOccur in dryIssues%}
-                        {{ issueOccur }}
-                    {% endfor %}
-                </td></tr>
-            </table>
+{% extends 'fileSelect/base.html'%} {% block content %}
+<div class="row">
+  <div class="col-sm-auto d-grid gap-4">
+    <div class="p-2 bg-light border">
+        <button name="button"data-toggle="collapse"data-target="#allIssues"aria-expanded="false"aria-controls="allIssues"type="button"class="p-2 btn">All Issues</button>
+        <div class="col-sm-4 collapse" id="allIssues">
+          <div class="row">
+            <div class="col-9">
+              <h2>Headers</h2>
+              {% for key,val in headers.items %}
+              <form method="post">
+                {% csrf_token %}
+                <button
+                  id="buttonList"
+                  type="submit"
+                  value="{{ key }}"
+                  name="key"
+                  formaction="displayCode/"
+                >
+                  {{ key }}
+                </button>
+              </form>
+              {% endfor %}
+            </div>
+            <div class="col-9">
+              <h2>Source</h2>
+              {% for key,val in sources.items %}
+              <form method="post">
+                {% csrf_token %}
+                <button
+                  id="buttonList"
+                  type="submit"
+                  value="{{ key }}"
+                  name="key"
+                  formaction="displayCode/"
+                >
+                  {{ key }}
+                </button>
+              </form>
+              {% endfor %}
+            </div>
+          </div>
         </div>
-        <div class = "col-sm-4">
-            <ul>
-                {% for key,val in headers.items %}
-                    <li class="list-group-item list-group-item-light">
-                        <form method = "post">
-                            {% csrf_token %}
-                            <button id="buttonList" type="submit" value = '{{ key }}' name = 'key' formaction="displayCode/">{{ key }}</button>
-                        </form>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div class = "col-sm-4">
-            <ul>
-                {% for key,val in sources.items %}
-                    <li class="list-group-item list-group-item-light">
-                        <form method="post">
-                            {% csrf_token %}
-                            <button id="buttonList" type="submit" value = '{{ key }}' name = 'key' formaction="displayCode/">{{ key }}</button>
-                        </form>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-        
+      </div>
+    <div class="p-2 bg-light border">
+      <button
+        name="button"
+        data-toggle="collapse"
+        data-target="#inheritanceIssues"
+        aria-expanded="false"
+        aria-controls="inheritanceIssues"
+        type="button"
+        class="p-2 btn btn-primary"
+      >
+        Implementation Inheritance {{ implementationIssues|length }}
+      </button>
+      <div class="col-sm-4 collapse" id="inheritanceIssues">
+        {% for issueOccur in implementationIssues%}
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="issue" value="implementation" />
+          <button
+            id="buttonList"
+            type="submit"
+            value="{{ issueOccur }}"
+            name="key"
+            formaction="displayCode/"
+          >
+            {{ issueOccur }}
+          </button>
+        </form>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="p-2 bg-light border">
+      <button
+        name="button"
+        data-toggle="collapse"
+        data-target="#globalVariableIssues"
+        aria-expanded="false"
+        aria-controls="globalVariableIssues"
+        type="button"
+        class="p-2 btn btn-secondary"
+      >
+        Global Variables {{ globalVarIssues|length }}
+      </button>
+      <div class="col-sm-4 collapse" id="globalVariableIssues">
+        {% for issueOccur in globalVarIssues%}
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="issue" value="global" />
+          <button
+            id="buttonList"
+            type="submit"
+            value="{{ issueOccur }}"
+            name="key"
+            formaction="displayCode/"
+          >
+            {{ issueOccur }}
+          </button>
+        </form>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="p-2 bg-light border">
+      <button
+        name="button"
+        data-toggle="collapse"
+        data-target="#publicDataIssues"
+        aria-expanded="false"
+        aria-controls="publicDataIssues"
+        type="button"
+        class="p-2 btn table-danger"
+      >
+        Public Data Members {{ publicDataIssues|length }}
+      </button>
+      <div class="col-sm-4 collapse" id="publicDataIssues">
+        {% for issueOccur in publicDataIssues%}
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="issue" value="publicData" />
+          <button
+            id="buttonList"
+            type="submit"
+            value="{{ issueOccur }}"
+            name="key"
+            formaction="displayCode/"
+          >
+            {{ issueOccur }}
+          </button>
+        </form>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="p-2 bg-light border">
+      <button
+        name="button"
+        data-toggle="collapse"
+        data-target="#switchIssues"
+        aria-expanded="false"
+        aria-controls="switchIssues"
+        type="button"
+        class="p-2 btn btn-danger"
+      >
+        Switch Statements {{ switchIssues|length }}
+      </button>
+      <div class="col-sm-4 collapse" id="switchIssues">
+        {% for issueOccur in switchIssues%}
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="issue" value="switch" />
+          <button
+            id="buttonList"
+            type="submit"
+            value="{{ issueOccur }}"
+            name="key"
+            formaction="displayCode/"
+          >
+            {{ issueOccur }}
+          </button>
+        </form>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="p-2 bg-light border">
+      <button
+        name="button"
+        data-toggle="collapse"
+        data-target="#friendIssues"
+        aria-expanded="false"
+        aria-controls="friendIssues"
+        type="button"
+        class="p-2 btn bg-warning"
+      >
+        Friend Keyword {{ friendIssues|length }}
+      </button>
+      <div class="col-sm-4 collapse" id="friendIssues">
+        {% for issueOccur in friendIssues%}
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="issue" value="friend" />
+          <button
+            id="buttonList"
+            type="submit"
+            value="{{ issueOccur }}"
+            name="key"
+            formaction="displayCode/"
+          >
+            {{ issueOccur }}
+          </button>
+        </form>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="p-2 bg-light border">
+      <button
+        name="button"
+        data-toggle="collapse"
+        data-target="#dryIssues"
+        aria-expanded="false"
+        aria-controls="dryIssues"
+        type="button"
+        class="p-2 btn table-success"
+      >
+        Dry Violations {{ dryIssues|length }}
+      </button>
+      <div class="col-sm-4 collapse" id="dryIssues">
+        {% for issueOccur in dryIssues%}
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="issue" value="dry" />
+          <button
+            id="buttonList"
+            type="submit"
+            value="{{ issueOccur }}"
+            name="key"
+            formaction="displayCode/"
+          >
+            {{ issueOccur }}
+          </button>
+        </form>
+        {% endfor %}
+      </div>
     </div>
     
+    
+  </div>
+</div>
+
 {% endblock content%}

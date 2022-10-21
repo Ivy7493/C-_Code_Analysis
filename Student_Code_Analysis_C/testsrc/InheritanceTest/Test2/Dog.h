@@ -1,4 +1,6 @@
-class Dog : private animal
+#include "animal.h"
+
+class Dog : public animal
 {
     public:
         void bark();
