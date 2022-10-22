@@ -116,7 +116,6 @@ def analyzeImplementationInheritance(file,source,headers,passedFileName):
     newLocationOccurrences = []
     currentLine = 0
     extractClassName = ''
-
     #OG FILE FOR CHECUSAGE
     originalFile = passedFileName.split('.')[0]
     originalHeader = file
@@ -130,14 +129,14 @@ def analyzeImplementationInheritance(file,source,headers,passedFileName):
 
 
     output,outputLocation = extractImplementationTree(file,headers,source,passedFileName);
-    print("=========REEEEEEEEEEEEEE ==========")
+    print("=========Start Of Analysis ==========")
     print(outputLocation)
     output.append(originalFile)
     globalInheritanceList = []
     globalFileName = []
     globalInheritanceListLocations = []
     protect = True
-    print("The Tree we got back: ", output)
+    print("Inheritance Tree Detected: ", output)
 
     if(len(output) == 1):
         return []
@@ -163,11 +162,11 @@ def analyzeImplementationInheritance(file,source,headers,passedFileName):
                 print("extracted functions: ", baseFunctionNames )
                 for usedFunction in globalInheritanceList:
                     if usedFunction in baseFunctionNames:
-                        print(usedFunction, " is present");
+                       # print(usedFunction, " is present");
                         isImplementedCpp = hasImplementationPresent(" ", usedFunction, source[output[0] + '.cpp'])
                         if(len(isImplementedCpp) > 0):
-                            print("Current Outputs!")
-                            print(output[0])
+                            #print("Current Outputs!")
+                            #print(output[0])
                             newLocationOccurrences.append(output[0] + '.cpp' + '-' + isImplementedCpp)
                             newLocationOccurrences.append(output[0] + '.h' + '-' + str(baseFunctionPositions[baseFunctionNames.index(usedFunction)]))
             #======================================================================#
@@ -187,30 +186,23 @@ def analyzeImplementationInheritance(file,source,headers,passedFileName):
                         for issue in resultCPP:
                             newLocationOccurrences.append(issue)  
                     if(len(resultHeader) > 0):
-                        #print("What we appending: ")
-                        #print(str(outputLocation[output.index(node)]))
                         newLocationOccurrences.append(str(outputLocation[output.index(node) -1]))
-                        #newLocationOccurrences.append(globalFileName[globalInheritanceList.index(function) - 1] + '-' + str(globalInheritanceListLocations[globalInheritanceList.index(function) - 1]))
-
-                        #print("SAFE !")
                         for issue in resultHeader:
                             newLocationOccurrences.append(issue)
-                    #print("And for the function declaration: ")
-                    #print(globalFileName[globalInheritanceList.index(function)] + '-' + str(globalInheritanceListLocations[globalInheritanceList.index(function)]))
-                    #newLocationOccurrences.append(globalFileName[globalInheritanceList.index(function)] + '-' + str(globalInheritanceListLocations[globalInheritanceList.index(function)]))
-                    
-                
+                       
             for i in range(len(functionNames)):
                 if len(hasImplementationPresent(functionTypes[i],functionNames[i],nodeHeader)) > 0:
-                    print("YES we found some implementation in header", functionNames[i])
+                    #print("YES we found some implementation in header", functionNames[i])
                     globalInheritanceList.append(functionNames[i])
                     globalInheritanceListLocations.append(functionPositions[i])
+                    print(f'adding ' + functionNames[i] + " to list from " + node)
                     globalFileName.append(node + '.h')
 
                 elif len(hasImplementationPresent(functionTypes[i],functionNames[i], nodeCPP)) > 0:
-                    print("YES we found some implementation in CPP", functionNames[i])
+                    #print("YES we found some implementation in CPP", functionNames[i])
                     globalInheritanceList.append(functionNames[i])
                     globalInheritanceListLocations.append(functionPositions[i])
+                    print(f'adding ' + functionNames[i] + " to list from " + node)
                     globalFileName.append(node + '.cpp')
         holder = []
        
