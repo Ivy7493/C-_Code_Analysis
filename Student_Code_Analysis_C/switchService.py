@@ -31,20 +31,26 @@ def analyzeType(headers,sources):
         for file in type:
             enumScopeCount = 0 
             for line in type[file]:
-                if "enum" in line and not "=" in line and line.find("enum")==0:
+                if "enum" in line and line.find("enum")==0:
                     enumScopeCount +=1
                     counter =type[file].index(line)
                     enumProtect = False;
                     tempString = ""
-                    while '}' not in type[file][counter] and enumScopeCount!=0:
-                        counter+=1
-                        tempString = tempString + type[file][counter]
-                        if '}' in line:
-                            enumScopeCount-=1
-                        
-                    tempString = tempString.strip('{')
-                    tempStringNoScope = tempString.strip('}')
-                    tempList = tempStringNoScope.split(',')
+                    tempList = []
+                    if('{' in  line and '}' in line):
+                        workingString = line[line.find("{")+1:line.rfind('}')]
+                        tempList = workingString.split(',')
+                    else:
+                        while '}' not in type[file][counter] and enumScopeCount!=0:
+                            counter+=1
+                            tempString = tempString + type[file][counter]
+                            if '}' in line:
+                                enumScopeCount-=1
+                            
+                        tempString = tempString.strip('{')
+                        tempStringNoScope = tempString.strip('}')
+                        tempList = tempStringNoScope.split(',')
+                
                     for enumDatum in tempList:
                         tempString = tempString.strip('{')
                         tempStringNoScope = tempString.strip('}')
@@ -76,8 +82,6 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
             try:
                 extractedName = fileName.split('.')[0]
                 passedFile = headers[extractedName + '.h']
-                print("DO we find the file?")
-                print(passedFile)
                 output,outputlocation = extractTypeTree(passedFile,headers,fileName)
                 output.append(extractedName)
                 types = ['.h','.cpp']
@@ -97,8 +101,8 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
                             except:
                                 print("file ", inheritance + type, " Doesnt exist" )
                         fileListName.append(inheritance + type)
-                print("we should look at these files")
-                print(fileListName)
+                #print("we should look at these files")
+                #print(fileListName)
             except:
                 print("No header file for ", fileName)
             for retrievedFile in fileList:
@@ -131,6 +135,12 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
                                 if(Extracted in typeData):
                                     print("YAAAS QUEEN THIS IS NOT GOOD PROGRAMMING !!!")
                                     print('we found a switch statement on type code')
+                                    while( '}' not in file[tempCounter]):
+                                        tempCounter += 1
+                                    locationOccurence.append(str(startBlock) + '@' + str(tempCounter))
+                                elif(Extracted == "True" or Extracted == "False"):
+                                    print("YAAAS QUEEN THIS IS NOT GOOD PROGRAMMING !!!")
+                                    print('we found a switch statement on type code [BOOL EDITION]')
                                     while( '}' not in file[tempCounter]):
                                         tempCounter += 1
                                     locationOccurence.append(str(startBlock) + '@' + str(tempCounter))
