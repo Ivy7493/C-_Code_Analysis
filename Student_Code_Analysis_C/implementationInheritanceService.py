@@ -131,7 +131,7 @@ def analyzeImplementationInheritance(file,source,headers,passedFileName):
                         if(len(aretheyUsed) > 0):
                             for item in headerLocations:
                                 newLocationOccurrences.append(item)
-                            print(headerFunctionPositions[i])
+                            # print(headerFunctionPositions[i])
                             newLocationOccurrences.append(extractClassName + '.h' + '-' + str(headerFunctionPositions[i]))
                             for item in aretheyUsed:
                                 newLocationOccurrences.append(item)

@@ -2,10 +2,11 @@
 from parserService import getFiles,findRawLocation, parseIndents
 from friendService import analyzeFriend
 from globalService import analyzeGlobalVariables
-from switchService import analyzeSwitch
+from switchService import analyzeSwitch,analyzeType
 from publicMemberService import analyzePublicMembers
 from implementationInheritanceService import analyzeImplementationInheritance
 from dryService import analyzeDRY
+
 
 def ProcessController(fileName):
     headers,source,rawHeaders,rawSource = getFiles(fileName)
@@ -15,11 +16,13 @@ def ProcessController(fileName):
     locationOccurrencesForFriend = []
     locationOccurencesForGlobal = []
     locationOccurencesForDRY = []
+    typeData = analyzeType(headers,source)
     #------------------DRY TOOL---------------------------------------#
     locationOccurencesForDRY = analyzeDRY(headers,source)
-    print("First!")
-    print(locationOccurencesForDRY)
-    print('----testing Section-----')
+    # print("First!")
+    # print(locationOccurencesForDRY)
+    # print('----testing Section-----')
+    
     for x in headers:
         #-----------------Global Variable tool--------------------------------------#
         try:
@@ -42,7 +45,7 @@ def ProcessController(fileName):
 
         #------------------Switch Tool------------------------------#
         try:
-            fileSwitchLocation = analyzeSwitch(headers[x])
+            fileSwitchLocation = analyzeSwitch(headers[x],headers,source,typeData,x)
             fileSwitchLocation = list(set(fileSwitchLocation))
             for member in fileSwitchLocation:
                 locationOccurrencesForSwitch.append(x + '-' + str(member))
@@ -86,11 +89,11 @@ def ProcessController(fileName):
             locationOccurencesForGlobal.append(x + '-' + str(member))
 
         #------------------Switch Tool------------------------------#
-        try:
-            fileSwitchLocation = analyzeSwitch(source[x])
-            fileSwitchLocation = list(set(fileSwitchLocation))
-        except:
-            print("switch source error")
+        #try:
+        fileSwitchLocation = analyzeSwitch(source[x],headers,source,typeData,x)
+        fileSwitchLocation = list(set(fileSwitchLocation))
+        #except:
+            #print("switch source error")
         for member in fileSwitchLocation:
             locationOccurrencesForSwitch.append(x + '-' + str(member))
 
@@ -103,16 +106,16 @@ def ProcessController(fileName):
     rawPublicLocations = findRawLocation(locationOccurrencesForPublic,rawHeaders,rawSource,source,headers)
     rawInheritanceLocations = findRawLocation(locationOccurrencesForImplementationInheritance,rawHeaders,rawSource,source,headers)
     rawDRYLocations = findRawLocation(locationOccurencesForDRY,rawHeaders,rawSource,source,headers)
-    print("====================HERE=====================")
-    print(list(set(rawDRYLocations)))
+    # print("====================HERE=====================")
+    # print(list(set(rawDRYLocations)))
     #rawHeaders = parseIndents(rawHeaders)
     #rawSource = parseIndents(rawSource)
 
     #-----------------------TOTAL SECTION--------------------------------#
     issueLocationArr = [list(set(rawInheritanceLocations)),list(set(rawGlobalLocations)),list(set(rawPublicLocations)),list(set(rawSwitchLocations)),list(set(rawFriendLocations)),list(set(rawDRYLocations))]
-    print('=========================================================')
+    # print('=========================================================')
     locationOccurrencesForImplementationInheritance = list(set(locationOccurrencesForImplementationInheritance))    
-    print("Total Implementation Inheritance: ")
+    # print("Total Implementation Inheritance: ")
     #print("Occurrences: ", locationOccurrencesForImplementationInheritance)
     # print(" ")
     # print('=========================================================')
@@ -137,4 +140,5 @@ def ProcessController(fileName):
     #locationOccurencesForDRY = list(set(locationOccurencesForDRY))
     # print("Total DRY Sections: ")
     # print("Occurrences: ", locationOccurencesForDRY)
+    
     return rawHeaders,rawSource,issueLocationArr
