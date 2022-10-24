@@ -12,12 +12,6 @@
         <link rel="stylesheet" type="text/css" href="{% static 'fileSelect/shCore.css' %}" >
         <link rel="stylesheet" type="text/css" href="{% static 'fileSelect/shThemeDefault.css'%}" >
         <link rel="stylesheet" href="{% static 'fileSelect/prism.css'%}" >
-
-        {% if title %}
-            <title>{{ title }}</title> 
-        {% else %}
-            <title> Student Code Analysis</title>
-        {% endif %}
     </head>
 
     <body>
@@ -25,10 +19,9 @@
             <nav class="navbar customBar navbar-expand-md fixed-top">
                 <div>
                     <img
-                    class="logo"
+                    class="logoNav"
                     src="../../static/fileSelect/logo.png"
                     alt="Wits Logo"
-                    height = "90"
                     />
                 </div>
                 <div>
@@ -39,8 +32,8 @@
                             class="button-23">Start Analysis</button>
                     </form>
                 </div>
-                <div>
-                    <h3> &nbsp; Code_Snitch</h3>
+                <div class="page-name-nav">
+                    <h3>Code_Snitch</h3>
                 </div>
                 <div>
                     <script>

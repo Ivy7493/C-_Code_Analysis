@@ -117,8 +117,7 @@ def extractImplementationTree(File, headers, source, fileName):
             #print("What we got back")
             #print(returnedTree)
             returnedTree.append(NextInheritedClass)
-            location.append(fileName + '-' + str(File.index(line)));
-            
+            location.append(fileName + '-' + str(File.index(line)));            
             return returnedTree,location
         elif("class" in line and ':' not in line): #Here when we hit the bottom
             return [],[]
