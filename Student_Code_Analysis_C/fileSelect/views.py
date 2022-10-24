@@ -46,12 +46,12 @@ def executeProgram(request):
     if(buttonVal != "restart"):
         folder = getData("folder")
     if(folder == ""):
-        print("this hit ======================")
+        # print("this hit ======================")
         with concurrent.futures.ThreadPoolExecutor() as executor:
             future = executor.submit(select_folder)
             folder = future.result()
             saveData('folder',folder)
-        print(folder)
+        # print(folder)
 
     headers,sources,occurArr = PrscC(os.path.join(folder))
     saveData('issues',occurArr)

@@ -98,10 +98,10 @@ while True:
         window["-FILE LIST-"].update(fnames)
     if event == "OK":
         try:
-            print(os.path.join(folder))
+            # print(os.path.join(folder))
             headers,sources,countArr,occurArr = PrscC(os.path.join(folder))
-            print(headers.keys())
-            print(sources.keys())
+            # print(headers.keys())
+            # print(sources.keys())
             window["-TOUT-"].Update("Press VIEW to see the report on bad practice")
             window["impText"].Update(str(countArr[0]))
             window["impLocText"].Update(occurArr[0])

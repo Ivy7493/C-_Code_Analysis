@@ -100,17 +100,24 @@ def getFiles(path):
                 source_lines = []
                 rawSourceLines = []
                 code_block = False
+                inLineProtection = False
                 for source_line in source:
                     rawSourceLines.append(source_line)
-                    if('/*' in source_line):
+                    if '/*' in source_line and '*/' in source_line:
+                        inLineProtection = True;
+                    if '/*' in source_line:
                           code_block = True
-                    if('*/' in source_line):
+                    if '*/' in source_line:
                            code_block = False
-                    if( not code_block):
-                        if("*/" in source_line):
+                    if not code_block:
+                        if "*/" in source_line and not inLineProtection:
                             source_lines.append("") # if not in code block, insert line with comments removed         
                         else:
-                            source_lines.append(source_line.split('//')[0].strip()) # if not in code block, insert line with comments removed         
+                            if inLineProtection:
+                                inLineProtection = False;
+                                source_lines.append(source_line.split('/*')[0].strip())
+                            else:    
+                                source_lines.append(source_line.split('//')[0].strip()) # if not in code block, insert line with comments removed         
                           
                 #print(source_lines)
                 if('.cpp' in f):
