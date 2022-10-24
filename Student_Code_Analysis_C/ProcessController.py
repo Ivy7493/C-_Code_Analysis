@@ -61,12 +61,6 @@ def ProcessController(fileName):
         #------------------Implementation Inheritance---------------------#
         try:
             impLine = analyzeImplementationInheritance(headers[x],source,headers,x)
-            jcounter = 0;
-            for j in impLine:
-                if '#' in j:
-                    impLine[jcounter] = impLine[jcounter].replace('#', x)
-                jcounter += 1;
-
             impLine = list(set(impLine))
             for member in impLine:
                 locationOccurrencesForImplementationInheritance.append(member)
