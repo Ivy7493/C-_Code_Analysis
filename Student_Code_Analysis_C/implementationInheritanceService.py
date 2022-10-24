@@ -1,4 +1,7 @@
 
+from numpy import extract
+
+
 def hasImplementationPresent(functionType,functionName,cppFile):
     functionStart = -1
     implementationFound = False
@@ -16,6 +19,7 @@ def hasImplementationPresent(functionType,functionName,cppFile):
                     #///Deals with determining if implementation has occured in file
                     if(len(cppFile[currentLine].strip()) > 1 and cppFile[currentLine].strip() != "}" and cppFile[currentLine].strip() != "{") and currentLine != cppFile.index(line):
                         implementationFound = True
+                        #print("Implementation found for: ",functionName)
 
                     if('{' in cppFile[currentLine]):
                         scope += 1
@@ -40,12 +44,11 @@ def hasImplementationInHeader(headerFile,fileName):
 
 
 def extractAllFunctionsFromClass(headerFile):
-    #print("Name of Header: ", headerFile)
     functionNames = []
     functionTypes = []
     functionPositions = []
     for line in headerFile:
-        if(("("  in line and ")" in line) and ("void" in line or "int" in line or "double" in line or "string" in line or "auto" in line or "char" in line or "bool" in line or "float" in line or "*" in line or "const" in line)):
+        if(("("  in line and ")" in line) and " " in line and len(line.split(" ")) >= 2 and '~' not in line):
             functionNameEnd = line.find('(') - 1 # we need the functions name out of the header to search for in the cpp
             extractedName = ""
             for y in range(functionNameEnd,0, -1):
@@ -58,7 +61,6 @@ def extractAllFunctionsFromClass(headerFile):
             extractedType = ""
             extractedTypeEnd = line.find(" ")
             extractedType = line[0:extractedTypeEnd]
-
             if(extractedType == "virtual"):
                 tempCurrentLine = ""
                 counter =  extractedTypeEnd + 1
@@ -77,94 +79,176 @@ def extractAllFunctionsFromClass(headerFile):
 
 def checkForUsage(functionName,file,fileName):
     locations = []
+    scope = 0
     for line in file:
-        if(functionName in line and '(' in line and ')' in line):
-            locations.append(fileName + '-' + str(file.index(line)))
+        if('{' in line):
+            scope += 1
+        if('}' in line):
+            scope -= 1; 
+        if(functionName in line and '(' in line and ')' in line and (line[line.find(functionName) + len(functionName)] == '(' or line[line.find(functionName) + len(functionName)] == ' (')):
+            if('::' in line and line.find('::') < line.find(functionName) and ' ' in line and line.find(" ") < line.find('::')):
+                continue
+            elif '.h' in fileName and scope <= 1:
+                continue
+            else:
+                locations.append(fileName + '-' + str(file.index(line)))
     return locations
 
 
-def analyzeImplementationInheritance(file,source,headers,passedFileName):
-    newLocationOccurrences = []
-    currentLine = 0
-    extractClassName = ''
-
-    #OG FILE FOR CHECUSAGE
-    originalFile = passedFileName.split('.')[0]
-    originalHeader = file
-    canSearchOGFile = False
-    try:
-        originalCPP = source[originalFile + '.cpp']
-        canSearchOGFile = True
-    except:
-        print("woah cant find the og cpp")
-
-    for line in file:
-
-        #This checks to see whether a class inherits from a base class and then finds the base class
-
+def extractImplementationTree(File, headers, source, fileName):
+    #print("For file: ", fileName)
+    for line in File:
+        #print("Current-Line: ", line)
         if(("private"in line or "protected" in line or "public" in line) and "class" in line and ':' in line):
+            #print("YAAAAS: ", line)
             cleanline = line.rstrip()
             lastSpacePos = cleanline.rfind(' ')
-            extractClassName = cleanline[lastSpacePos+1:]
-            canFindCpp = True
-            baseClassHeaderFile = []
-            baseClassSourceFile = []
-
+            NextInheritedClass = cleanline[lastSpacePos+1:]
             try:
-                baseClassHeaderFile = headers[extractClassName+'.h']
+                #print("We trying to get ", NextInheritedClass + '.h')
+                nextInheritedHeaderFile = headers[NextInheritedClass + '.h']
             except:
-                continue
-            try:
-                 baseClassSourceFile = source[extractClassName + '.cpp']
-            except:
-                canFindCpp = False
+                print("Bugger it got away!")
+            #print("Current Level Extraction: ")
+            #print("Next Class: ",NextInheritedClass)
+            returnedTree = []
+            location = []
+            returnedTree,location = extractImplementationTree(nextInheritedHeaderFile,headers,source,NextInheritedClass + '.h')
+            #print("What we got back")
+            #print(returnedTree)
+            returnedTree.append(NextInheritedClass)
+            location.append(fileName + '-' + str(File.index(line)));            
+            return returnedTree,location
+        elif("class" in line and ':' not in line): #Here when we hit the bottom
+            return [],[]
 
-            headerLocations = hasImplementationInHeader(baseClassHeaderFile,extractClassName + '.h')
-            headerFunctionNames,headerFunctionTypes,headerFunctionPositions = extractAllFunctionsFromClass(baseClassHeaderFile)
-           
-            for i in range(len(headerFunctionNames)):
-                test = hasImplementationPresent(headerFunctionTypes[i],headerFunctionNames[i],baseClassHeaderFile)
 
-                if(len(test) > 0):
-                    if(canSearchOGFile):
-                        aretheyUsed = checkForUsage(headerFunctionNames[i],originalCPP,originalFile + '.cpp')
-                        if(len(aretheyUsed) > 0):
-                            for item in headerLocations:
-                                newLocationOccurrences.append(item)
-                            # print(headerFunctionPositions[i])
-                            newLocationOccurrences.append(extractClassName + '.h' + '-' + str(headerFunctionPositions[i]))
-                            for item in aretheyUsed:
-                                newLocationOccurrences.append(item)
-                            tempLocationOGFile = '#' + '-' + str(currentLine)
-                            newLocationOccurrences.append(tempLocationOGFile)
-           
+def AnalyzeInheritanceChain(chain,source,headers):
+    ImplementedMembers = []
+    for member in chain:
+        #print("We working with: ", member)
+        header = []
+        cpp = []
+
+        #We gonna try get the header and cpp file
+        try:
+            header = headers[member + '.h']
+        except:
+            print("oops couldnt find header")
+        try:
+            cpp = source[member + '.cpp']
+        except:
+            print("Opps couldnt find .cpp")
+
+        #Now that we got the  header  and cpp,  lets extract all functions from header
+        if(header != []): #PS we only do this if we can actually find the header
+            functionNames,functionTypes,functionPositions = extractAllFunctionsFromClass(header)
+            #now we are gonna loop through all function names and only keep those with implementation
+            implementedFunctions = []
+            functionLocations = []
+            functionFileType = []
+            for function in functionNames:
+                if(cpp != []): # PS we can only look for implementation in cpp if there  is a cpp
+                    cppImplementedCheck = hasImplementationPresent(functionTypes[functionNames.index(function)],function,cpp)
+                    if(len(cppImplementedCheck) > 0):
+                        implementedFunctions.append(function)
+                        functionLocations.append(cppImplementedCheck)
+                        functionFileType.append('.cpp')
+                headerImplementationCheck = hasImplementationPresent(functionTypes[functionNames.index(function)],function,header)
+                if(len(headerImplementationCheck) > 0):
+                    implementedFunctions.append(function)
+                    functionLocations.append(headerImplementationCheck)
+                    functionFileType.append('.h')
+            #Now we gonna combine the results for the inheritance object
+            if(len(implementedFunctions) > 0): #PS we only wanna append something if there is something to append
+                entry = {
+                    'class' : member,
+                    'implementedFunctions' : implementedFunctions,
+                    'functionLocations' : functionLocations,
+                    'fileTypes' : functionFileType
+                }
+                ImplementedMembers.append(entry)
+    #print("Inheritance Chain")
+    #print(ImplementedMembers)
+    return ImplementedMembers
+        
+
+def findClassDeclaration(file,className):
+    print("looking in: ",  className)
+    print(file)
+    className = className.lower()
+    for line in file:
+        fixedLine = line.lower()
+        if(className in fixedLine and 'class' in fixedLine and (fixedLine.find('class') < fixedLine.find(className)) and ' ' in fixedLine and fixedLine.find('class') == 0):
+            print("YEEE FOUND IT")
+            return file.index(line)
+
+def checkChainForImplementationInheritance(chain,source,headers):
+    chain = chain[::-1] #reversing using list slicing
+    counter = 1
+    highlights = []
+    # print("Chain for Current Analysis")
+    # print(chain)
+    #print("2======================2")
+    #print(len(chain))
+    linkCounter = 1
+    for link in chain:
+        print("For: ", link['class'])
+        workingChain = chain
+        linkHeader = headers[link['class'] + '.h']
+        print("Linker header changed to")
+        print(link['class'] + '.h')
+        #print(" ")
+        #print(linkHeader)
+        #print(" ","============")
+        #print("POOP")
+        linkcpp = source[link['class'] + '.cpp']
+        for i in range(counter):
+            workingChain.pop(0)
+        for workingLink in workingChain:
+            functions = workingLink['implementedFunctions']
+            functionLocations = workingLink['functionLocations']
+
+            #print(link['class'] + ' has the function scope of : ')
+            #print(functions)
+            for function in functions:
+                resultCPP = checkForUsage(function,linkcpp,link['class'] + '.cpp')
+                resultHeader = checkForUsage(function,linkHeader,link['class'] + '.h')
+                #print("Did we find Implementation?: ")
+                #print(resultHeader)
+               # print(resultCPP)
+                for x in resultHeader:
+                    highlights.append(x)
+                    highlights.append(workingLink['class'] + workingLink['fileTypes'][functions.index(function)] +'-' + functionLocations[functions.index(function)])
+                    print("What header we would be passing: ")
+                    print(linkHeader)
+                    line = findClassDeclaration(linkHeader, link['class'])
+                    print (line)
+                    highlights.append(link['class'] + '.h' + '-' + str(line))
+                
+                for x in resultCPP:
+                    highlights.append(x)
+                    highlights.append(workingLink['class'] + workingLink['fileTypes'][functions.index(function)] + '-' + functionLocations[functions.index(function)])
+                    print("What header we would be passing: ")
+                    print(linkHeader)
+                    line = findClassDeclaration(linkHeader, link['class'])
+                    print (line)
+                    highlights.append(link['class'] + '.h' + '-' + str(line))
+        counter += 1
+        linkCounter+=1
+    return highlights
+        
+
+def analyzeImplementationInheritance(file,source,headers,passedFileName):
+    originalFile = passedFileName.split('.')[0]
+    print("====================== " + passedFileName + " ======================")
+    output,outputLocation = extractImplementationTree(file,headers,source,passedFileName);
+    output.append(originalFile)
+    preChain = AnalyzeInheritanceChain(output,source,headers)
+    results = checkChainForImplementationInheritance(preChain,source,headers)
+    print(results)
+    print('========================================================')
     
-            if(not canFindCpp):
-                continue
-
-            functionNames,functionTypes,functionPositions = extractAllFunctionsFromClass(baseClassHeaderFile)
-
-            # this checks to see whether there is implementation in the base class
-            
-            for i in range(len(functionNames)):
-                fixedLocations = hasImplementationPresent(functionTypes[i],functionNames[i],baseClassSourceFile)
-                if(len(fixedLocations) > 0):
-                    if(canSearchOGFile):
-                        aretheyUsed = checkForUsage(functionNames[i],originalCPP,originalFile + '.cpp')
-                        if(len(aretheyUsed) > 0):
-                            currentLineInHeader = functionPositions[i]
-                            tempLocation = extractClassName + '.cpp' + '-' + fixedLocations
-                            tempLocationHeader = extractClassName + '.h' +'-' + str(currentLineInHeader)
-                            tempLocationOGFile = '#' + '-' + str(currentLine)
-                            newLocationOccurrences.append(tempLocation)
-                            newLocationOccurrences.append(tempLocationHeader)
-                            newLocationOccurrences.append(tempLocationOGFile)
-                            for item in aretheyUsed:
-                                newLocationOccurrences.append(item)
-
-                    #here we need to check if the shit has been implemented in the file
-
-        currentLine += 1
-    return list(set(newLocationOccurrences))
+    return list(set(results))
 
         

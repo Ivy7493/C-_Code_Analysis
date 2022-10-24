@@ -25,7 +25,20 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
                 lineInQuestion = lineInQuestion[int(data[1])]
         elif('.h' in data[0]):
             workingFile = rawHeaders[data[0]]
-            lineInQuestion = header[data[0]][int(data[1])] 
+            lineInQuestion = header[data[0]]
+            if('@' in data[1]):
+                isRangeInput = True
+                points = data[1].split("@")
+                print("HGIURFigferubgiubgroibfifuebboibewb")
+                print(points)
+                #print("YAAAASSSS POINTS", points)
+                #print("And the len of file: ", len(lineInQuestion))
+                endLineInQuestion = lineInQuestion[int(points[1])]
+                #print("IS this okay? ", int(points[1]))
+                #print("How about this? ", lineInQuestion[int(points[1])])  
+                lineInQuestion = lineInQuestion[int(points[0])] #beginning points
+            else:
+                lineInQuestion = header[data[0]][int(data[1])] 
         counter = 0
         found = [False,False]
         pos1 = 0
