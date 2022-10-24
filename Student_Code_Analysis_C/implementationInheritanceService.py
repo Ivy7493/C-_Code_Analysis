@@ -187,21 +187,11 @@ def checkChainForImplementationInheritance(chain,source,headers):
     chain = chain[::-1] #reversing using list slicing
     counter = 1
     highlights = []
-    # print("Chain for Current Analysis")
-    # print(chain)
-    #print("2======================2")
-    #print(len(chain))
     linkCounter = 1
     for link in chain:
         print("For: ", link['class'])
         workingChain = chain
         linkHeader = headers[link['class'] + '.h']
-        print("Linker header changed to")
-        print(link['class'] + '.h')
-        #print(" ")
-        #print(linkHeader)
-        #print(" ","============")
-        #print("POOP")
         linkcpp = source[link['class'] + '.cpp']
         for i in range(counter):
             workingChain.pop(0)
@@ -220,19 +210,13 @@ def checkChainForImplementationInheritance(chain,source,headers):
                 for x in resultHeader:
                     highlights.append(x)
                     highlights.append(workingLink['class'] + workingLink['fileTypes'][functions.index(function)] +'-' + functionLocations[functions.index(function)])
-                    print("What header we would be passing: ")
-                    print(linkHeader)
                     line = findClassDeclaration(linkHeader, link['class'])
-                    print (line)
                     highlights.append(link['class'] + '.h' + '-' + str(line))
                 
                 for x in resultCPP:
                     highlights.append(x)
                     highlights.append(workingLink['class'] + workingLink['fileTypes'][functions.index(function)] + '-' + functionLocations[functions.index(function)])
-                    print("What header we would be passing: ")
-                    print(linkHeader)
                     line = findClassDeclaration(linkHeader, link['class'])
-                    print (line)
                     highlights.append(link['class'] + '.h' + '-' + str(line))
         counter += 1
         linkCounter+=1
@@ -246,6 +230,7 @@ def analyzeImplementationInheritance(file,source,headers,passedFileName):
     output.append(originalFile)
     preChain = AnalyzeInheritanceChain(output,source,headers)
     results = checkChainForImplementationInheritance(preChain,source,headers)
+    print("This Chains Inheritance issues")
     print(results)
     print('========================================================')
     

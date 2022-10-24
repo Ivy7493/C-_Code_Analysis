@@ -15,38 +15,33 @@
                 </button>
               </form>
               {% endfor %}
-              </div>
-              <div class="col-9">
-                <h2>Source</h2>
-                {% for key,val in sources.items %}
-                <form method="post">
-                  {% csrf_token %}
-                  <button id="buttonList" type="submit" value="{{ key }}" name="key" formaction="displayCode/">
-                    {{ key }}
-                  </button>
-                </form>
-                {% endfor %}
-              </div>
-              </div>
-              </div>
-              </div>
-              <div class="p-2 bg-light border">
-                <button name="button" data-toggle="collapse" data-target="#inheritanceIssues" aria-expanded="false"
-                  aria-controls="inheritanceIssues" type="button" class="p-2 btn btn-primary">
-        Implementation Inheritance {{ implementationIssues|length }}
-      </button>
-      <div class="col-sm-4 collapse" id="inheritanceIssues">
-        {% for issueOccur in implementationIssues%}
-        <form method="post">
-          {% csrf_token %}
-          <input type="hidden" name="issue" value="implementation" />
+            </div>
+            <div class="col-9">
+              <h2>Source</h2>
+              {% for key,val in sources.items %}
+              <form method="post">
+                {% csrf_token %}
+                <button id="buttonList" type="submit" value="{{ key }}" name="key" formaction="displayCode/">
+                  {{ key }}
+                </button>
+              </form>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="p-2 bg-light border">
+          <button name="button" data-toggle="collapse" data-target="#inheritanceIssues" aria-expanded="false"
+            aria-controls="inheritanceIssues" type="button" class="p-2 btn btn-primary">
+            Implementation Inheritance {{ implementationIssues|length }}
+          </button>
+          <div class="col-sm-4 collapse" id="inheritanceIssues">
+            {% for issueOccur in implementationIssues%}
+            <form method="post">
+              {% csrf_token %}
+              <input type="hidden" name="issue" value="implementation" />
           <button
-            id="buttonList"
-            type="submit"
-            value="{{ issueOccur }}"
-            name="key"
-            formaction="displayCode/"
-          >
+            id="buttonList"type="submit"value="{{ issueOccur }}"name="key"formaction="displayCode/">
             {{ issueOccur }}
           </button>
         </form>

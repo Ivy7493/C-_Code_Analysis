@@ -6,11 +6,33 @@
         {% csrf_token %}
         <button formaction='../../executeProgram/' type="submit" value="" name="folderName" class = "button-23" >RETURN</button>
     </form> 
-    <div>
-        <pre data-line='{{highlight}}' class="line-numbers language-cpp" style = '--color: var(--{{issue}});' tabindex="0">
-            <code>
-                {{totalString}}
-            </code>
-        </pre>
+    <div class ="row">
+        <div class = "col">
+            <pre data-line='{{highlight}}' class="line-numbers language-cpp" style = '--color: var(--{{issue}});' tabindex="0">
+                <code>
+                    {{totalString}}
+                </code>
+            </pre>
+        </div>
+        <div class ="col">
+            {% if tree %}
+                <h4>Inheritance dependencies</h4>
+            {% for key in tree %}
+            <form method="post">
+                {% csrf_token %}
+                <button class="button-23" data-toggle="collapse" data-target="#{{key}}" aria-expanded="false" aria-controls="{{key}}"
+                    type="button">
+                    {{ key }}
+                </button>
+                <div class="collapse" id="{{key}}">
+                    <button id="buttonList" type="submit" value="{{ key|addCPP }}" name="key" formaction="../displayCode/"class="button-17">{{key|addCPP}}</button>
+                    <button id="buttonList" type="submit" value="{{ key|addH }}" name="key" formaction="../displayCode/"class="button-17">{{key|addH}}</button>
+                    <input type="hidden" name="issue" value="implementation"/>
+                </div>
+            </form>
+            {% endfor %}
+            {% endif %}
+        </div>
     </div>
+   
 {% endblock content%}

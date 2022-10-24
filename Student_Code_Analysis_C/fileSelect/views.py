@@ -1,10 +1,8 @@
 
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
-from django.test import TestCase
-from numpy import append
 from listings.pathForm import getPath
 from ProcessController import ProcessController as PrscC
+from switchService import extractTypeTree
 import os
 from persistentService import saveData,getData
 from tkinter import filedialog
@@ -110,41 +108,19 @@ def displayCode(request):
     issues = getData("issues")
     allIssuesArray = []
     linesOfIssues = []
-    lineColours = []
     for typeOfProblem in issues:
-        colorClass = ""
-        if(issues.index(typeOfProblem) == 0): #Implementation
-            colorClass = "bg-primary"
-        elif(issues.index(typeOfProblem) == 1): #Global
-            colorClass = "bg-secondary"
-        elif(issues.index(typeOfProblem) == 2): #Public
-            colorClass = "table-danger"
-        elif(issues.index(typeOfProblem) == 3): #Switch
-            colorClass = "bg-danger"
-        elif(issues.index(typeOfProblem) == 4): #Friend
-            colorClass = "bg-warning"
-        elif(issues.index(typeOfProblem) == 5): #DRY
-            colorClass = 'table-success'
         for fileIssues in typeOfProblem:
             tempSplit = fileIssues.split('-')
             if(tempSplit[0] == fileName):
-                #print("Start::::::::::")
-                #print("Range Extracted: ", tempSplit[1])
                 if('@' in tempSplit[1]):
-                    #print("Range Deticated!")
                     data = tempSplit[1].split('@')
-                    #print("Range SPlit: ")
-                    #print(data[0])
-                    #print(data[1])
                     counter = int(data[0])
                     end = int(data[1])
                     while(counter != end):
                         linesOfIssues.append(counter)
-                        lineColours.append(colorClass)
                         counter += 1;
                 else:
                     linesOfIssues.append(int(tempSplit[1]))
-                    lineColours.append(colorClass)
         allIssuesArray.append(linesOfIssues) 
         linesOfIssues = []
     #print("Issue lines for file:" )
@@ -174,7 +150,6 @@ def displayCode(request):
        
     for x in allIssuesArray[key]:
         lineStatus[x] = True
-        convertedColour[x] = lineColours.pop(0)
     locationArray  = ""
 
     counter = 0;
@@ -184,13 +159,45 @@ def displayCode(request):
         counter += 1;
     for x in file:
         totalString += x;
+    tree = []
+    try:
+        headers = getData("headers")
+        tempName = fileName.split('.')[0]
+        for x in headers:
+            if(tempName +'.h' == x):
+                print("YUUP we found a match")
+                print(x)
+        currentFileHeader = headers[tempName + '.h']
+        tree,location = extractTypeTree(currentFileHeader,headers,fileName)
+        tree.append(fileName.split(".")[0])
+        print("For file: ", fileName.split(".")[0])
+        print(tree)
+        tree = tree[::-1]
+    except:
+        print("Poo")
+    
+    if(len(tree) == 1):
+        tree = []
+
+
+    for branch in tree:
+        currentNode = tree.index(branch)
+        for next in tree:
+            if tree.index(next) != currentNode:
+                if tree[currentNode]==next:
+                    tree[currentNode]=tree[currentNode] +".h"
+                    next = next+".cpp"
+
+    thereIsTree =False
+    if len(tree) > 0:
+        thereIsTree = True
+            
     context = {
-        'file':file,
-        'lineStatus':lineStatus,
-        'lineColour': convertedColour,
         'fileName': fileName,
         'totalString': totalString,
         'highlight': locationArray,
-        'issue': issueId
+        'tree': tree,
+        'issue': issueId,
+        'thereIsTree':thereIsTree,
     }
     return render(request,'fileSelect/displayCode.html',context)

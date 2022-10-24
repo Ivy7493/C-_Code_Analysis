@@ -16,3 +16,13 @@ def countTabs(l):
 def replaceTabs(l):
     return l.replace('$',"")
 
+@register.filter
+def addCPP(l):
+    return l + '.cpp'
+
+@register.filter
+def addH(l):
+    return l + '.h'
+
+
+
