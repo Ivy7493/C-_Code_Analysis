@@ -37,6 +37,45 @@ def navBarLaunch(request):
 
 
 # This runs when the program needs to display the main issue page /fileDisplay.html
+def removeLastOccurrence(initialString, stringToRemove, inputSize, stringToRemoveSize):
+    initialString = [i for i in initialString]
+    stringToRemove = [i for i in stringToRemove]
+ 
+    # If stringToRemoveSize is greater than inputSize
+    if (stringToRemoveSize > inputSize):
+        return initialString
+ 
+    # Iterate while i is greater than
+    # or equal to 0
+    for i in range(inputSize - stringToRemoveSize, -1, -1):
+        # of stringToRemove has
+        # been found or not
+        flag = 0
+ 
+        # Iterate over the range [0, stringToRemoveSize]
+        for j in range(stringToRemoveSize):
+            # If S[j+1] is not equal to
+            # stringToRemove[j]
+            if (initialString[j + i] != stringToRemove[j]):
+ 
+                # Mark flag true and break
+                flag = 1
+                break
+ 
+        # If occurrence has been found
+        if (flag == 0):
+ 
+            # Delete the subover the
+            # range [i, i+stringToRemoveSize]
+            for j in range(i,inputSize-stringToRemoveSize):
+                initialString[j] = initialString[j + stringToRemoveSize]
+ 
+            # Resize the initialstring
+            initialString = initialString[:inputSize - stringToRemoveSize]
+            break
+ 
+    # Return new string
+    return "".join(initialString)
 
 def executeProgram(request):
     saveData('tree',[])
@@ -81,18 +120,18 @@ def executeProgram(request):
 
     totalDependencies = []
     for headerName in headers:
-        print(headerName)
+        # print(headerName)
         try:
             tree,location = extractTypeTree(headers[headerName],headers,headerName)
-            print(tree)
+            # print(tree)
             tree.append(headerName.split(".")[0])
             totalDependencies.append(tree)
         except:
             print("noneTYpe")
 
-    print("OOOGA BOOOGA: ")
-    print(totalDependencies)
-    print("=================")
+    # print("OOOGA BOOOGA: ")
+    # print(totalDependencies)
+    # print("=================")
     dependencyDiagram=[]
     baseClasses =[]
     firstInstance=True
@@ -103,18 +142,18 @@ def executeProgram(request):
             baseClasses.append(dependency[0])
         for entity in dependency:
                 if dependency.index(entity) + 1 < len(dependency):
-                    print("STAGE 1")
+                    # print("STAGE 1")
                     if not entity in dependencyDictionary:
-                        print("STAGE 2")
+                        # print("STAGE 2")
                         dependencyDictionary[entity] = []
-                        print("STAGE 2.5")
+                        # print("STAGE 2.5")
                         dependencyDictionary[entity].append(dependency[dependency.index(entity) + 1])
-                        print("STAGE 3")
+                        # print("STAGE 3")
                     else:
-                        print("STAGE 4")
+                        # print("STAGE 4")
                         dependencyDictionary[entity].append(dependency[dependency.index(entity) + 1])
-                        print("STAGE 5")
-    print("HOOOOOOOOOOOOOOOOOOOOOOOOOHAAA")
+    #                     print("STAGE 5")
+    # print("HOOOOOOOOOOOOOOOOOOOOOOOOOHAAA")
     for file in dependencyDictionary:
         dependencyDictionary[file] = list(set(dependencyDictionary[file]))
         print("Class: ", file)
@@ -129,24 +168,50 @@ def executeProgram(request):
     print("YOLO")
     print(treeConstruction)
     scopeCount=0
+    lastScope=''
     for x in treeConstruction:
+        
+        print("I want to know what lastscope is always: ",lastScope)
         if '{' in x:
             scopeCount+=1
+            print( "HERE =======",scopeCount)
             if scopeCount==1:
-                fullFile+= '\n'+"<div>"
+                # fullFile+= '\n'+"<div>"
+                lastScope="sep"
             else:
-                fullFile += '\n' + '<ul>'+'\n'+'<li>'
+                print("larger than 1 scope count and in {")
+                fullFile += '\n' + '<ul>'+'\n'
+                if lastScope=="sep":
+                    print("THIS IS WHERE LAST SCOPE IS CHNGED TO TOGETHER: ",scopeCount)
+                    lastScope="together"
+                else:
+                    print("this is where lastscope set to nothing ")
+                    lastScope=""
         if '}' in x:
             scopeCount-=1
             if scopeCount==1:
-                fullFile+= '\n'+"</div>"
+                print(" if in in }")
+                fullFile+= '</ul>'+'\n'+"</div>"
             else:
+                print("else in }")
                 fullFile += '\n' + '</li>'+'</ul>'
-        if '{' not in x and '}' not in x:
-            fullFile+= "\n" + "<li>"+"<a href='#'>"+ x +"</a>"+"</li>"
-    
-    fullFile += '</ul>'
-    fullFile+='</div>' 
+        
+        if '{' not in x and '}' not in x and (lastScope!="sep" and lastScope!="together"and scopeCount!=1):
+            print("Generic statement",x)
+            fullFile+= "<li>"+"<a href='#'>"+ x +"</a>"+"</li>"+"\n"
+        elif'{' not in x and '}' not in x and (lastScope=="sep" and scopeCount==1):
+            print("this only occurs if lastscope=sep and scopecount =1")
+            fullFile+= "<div>"+"\n" + "<li>"+"<a href='#'>"+ x +"</a>"+"</li>"+'\n'+'</div>'
+        elif'{' not in x and '}' not in x and (lastScope=="together" and scopeCount==2):
+            print ("This is where last div is removed from line:", lastScope)
+            fullFile=removeLastOccurrence(fullFile,"</div>",len(fullFile),6)
+            fullFile+= "<li>"+"<a href='#'>"+ x +"</a>"+"</li>"
+            lastScope=""
+        elif '{' not in x and '}' not in x and (lastScope!="sep" and lastScope!="together"and scopeCount==1):
+            print("Generic statement MARK @",x)
+            fullFile+= "<div>"+"<li>"+"<a href='#'>"+ x +"</a>"+"</li>"+"\n"+"</div>"+"\n"
+        print("+",fullFile)
+    print("+",fullFile)
 
     try:
         os.remove(os.path.join('fileSelect','templates','fileSelect','tree.html'))
