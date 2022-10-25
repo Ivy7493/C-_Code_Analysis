@@ -10,12 +10,8 @@ html {
 body {
 background:linear-gradient(60deg,rgb(255, 255, 255),rgb(12, 36, 255),rgb(255, 255, 7));
 color: #9e9999;
-margin-top: 7rem;
-margin-bottom:3rem;
-height: fit-content;
-margin-top: 7rem;
-margin-bottom:3rem;
-height: fit-content;
+margin-top: 5rem;
+height: 3000px;
 background-repeat: no-repeat;
 }
 
@@ -245,7 +241,6 @@ ol li:before {
   width: auto;
 }
 
-
 .button-23:focus-visible {
   box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
   transition: box-shadow .2s;
@@ -277,7 +272,7 @@ ol li:before {
   background-color: #fff;
   border-radius: 24px;
   border-style: none;
-  box-shadow: rgba(0, 0, 0, 0.338) 0 3px 5px -1px,rgba(0, 0, 0, .14) 0 6px 10px 0,rgba(0, 0, 0, .12) 0 1px 18px 0;
+  box-shadow: rgba(0, 0, 0, .2) 0 3px 5px -1px,rgba(0, 0, 0, .14) 0 6px 10px 0,rgba(0, 0, 0, .12) 0 1px 18px 0;
   box-sizing: border-box;
   color: #3c4043;
   cursor: pointer;
@@ -307,11 +302,11 @@ ol li:before {
 
 .button-17:hover {
   background: #F6F9FE;
-  color: #09357e;
+  color: #174ea6;
 }
 
 .button-17:active {
-  box-shadow: 0 4px 4px 0 rgba(60, 64, 67, 0.5), 0 8px 12px 6px rgba(60, 64, 67, 0.573);
+  box-shadow: 0 4px 4px 0 rgb(60 64 67 / 30%), 0 8px 12px 6px rgb(60 64 67 / 15%);
   outline: none;
 }
 
@@ -575,58 +570,4 @@ h3 {
   width: 0;
   left: 50%;
   z-index: -1;
-}
-=======
->>>>>>> 9631e11... fixed all issues button and made inheritance information always display on the right
-.button-23-implementation {
-  background-color: #ffffffa9;
-  border: 1px solid #19191994;
-  border-radius: 8px;
-  box-sizing: border-box;
-  color: #222222;
-  cursor: pointer;
-  display: inline-block;
-  font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1;
-  margin: 0;
-  outline: none;
-  padding: 10px 10px;;
-  position: relative;
-  text-align: center;
-  text-decoration: none;
-  touch-action: manipulation;
-  transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
-  user-select: none;
-  -webkit-user-select: none;
-  width: auto;
-}
-
-
-.button-23-implementation:focus-visible {
-  box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
-  border-radius: 8px;
-  transition: box-shadow .2s;
-}
-
-.button-23-implementation:active {
-  background-color: #F7F7F7;
-  border-color: #000000;
-  border-radius: 8px;
-  transform: scale(.96);
-}
-
-.button-23-implementation:disabled {
-  border-color: #DDDDDD;
-  border-radius: 8px;
-  color: #DDDDDD;
-  cursor: not-allowed;
-  opacity: 1;
-}
-
-.button-23-implementation:hover{
-  background-color: #2222228e;
-  border-radius: 8px;
-  color: #FFFFFF;
 }
