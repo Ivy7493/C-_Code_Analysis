@@ -104,12 +104,8 @@ def checkForUsage(functionName,file,fileName):
 def extractImplementationTree(File, headers, source, fileName):
     #print("For file: ", fileName)
     for line in File:
-        #print("Current-Line: ", line)
-        if(fileName == "Ghost.h"):
-            print(line)
-            print("===========")
         if(("private"in line or "protected" in line or "public" in line) and "class" in line and ':' in line):
-            print("YAAAAS: ", line)
+            #print("YAAAAS: ", line)
             cleanline = line.rstrip()
             lastSpacePos = cleanline.rfind(' ')
             NextInheritedClass = cleanline[lastSpacePos+1:]

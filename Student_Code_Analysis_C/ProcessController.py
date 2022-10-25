@@ -10,8 +10,6 @@ from dryService import analyzeDRY
 
 def ProcessController(fileName):
     headers,source,rawHeaders,rawSource = getFiles(fileName)
-    if "Ghost.h" in headers:
-        print(headers["Ghost.h"])
     locationOccurrencesForImplementationInheritance = []
     locationOccurrencesForPublic = []
     locationOccurrencesForSwitch = []
