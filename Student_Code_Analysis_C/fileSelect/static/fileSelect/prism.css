@@ -20,7 +20,6 @@ pre[class*="language-"] {
   -moz-hyphens: none;
   -ms-hyphens: none;
   hyphens: none;
-  overflow-y: auto;
 }
 :not(pre) > code[class*="language-"],
 pre[class*="language-"] {
@@ -37,11 +36,13 @@ pre[class*="language-"] {
 }
 pre[class*="language-"] {
   border-radius: 0.5em;
-  border: 0.3em solid #26728b;
+  border: 0.3em solid #ff02c8c3;
   box-shadow: 1px 1px 0.5em #000 inset;
   margin: 0.5em 0;
   overflow: auto;
   overflow-y: auto;
+  height: 40rem;
+  width:52rem;
   padding: 1em;
 }
 pre[class*="language-"]::-moz-selection {

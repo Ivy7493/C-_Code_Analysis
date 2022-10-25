@@ -2,15 +2,16 @@ html {
   margin: 0px;
   display: grid;
   place-content: center;
-  height:auto;
+  height: fit-content;
   -webkit-tap-highlight-color: transparent;
 }
 
 body {
 background:linear-gradient(60deg,rgb(255, 255, 255),rgb(12, 36, 255),rgb(255, 255, 7));
 color: #9e9999;
-margin-top: 5rem;
-height: 60rem;
+margin-top: 7rem;
+margin-bottom:3rem;
+height: fit-content;
 background-repeat: no-repeat;
 }
 
@@ -22,6 +23,9 @@ h1, h3, h4, h5, h6 {
 h2{
   color:#080836;
   font:2rem;
+}
+.code-div{
+  height: 100%;
 }
 
 a:link {
