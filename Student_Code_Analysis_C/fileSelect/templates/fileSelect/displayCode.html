@@ -6,32 +6,16 @@
         {% csrf_token %}
         <button formaction='../../executeProgram/' type="submit" value="" name="folderName" class = "button-23" >RETURN</button>
     </form> 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <div class ="row code-div">
-        <div class = "col-sm-9 code-div" style="height:100%;">
-            <pre data-line='{{highlight}}' class="line-numbers language-cpp code-div" style = '--color: var(--{{issue}});' tabindex="0">
-=======
     <div class ="row">
         <div class = "col-sm-9">
             <pre data-line='{{highlight}}' class="line-numbers language-cpp" style = '--color: var(--{{issue}});' tabindex="0">
->>>>>>> 9631e11... fixed all issues button and made inheritance information always display on the right
-=======
-    <div class ="row code-div">
-        <div class = "col-sm-9 code-div" style="height:100%;">
-            <pre data-line='{{highlight}}' class="line-numbers language-cpp code-div" style = '--color: var(--{{issue}});' tabindex="0">
->>>>>>> f68f037... Code adjusted to have scrollbar and page not as large
                 <code >
                     {{totalString}}
                 </code>
             </pre>
         </div>
         <div class ="col-sm-2">
-<<<<<<< HEAD
             {% if totalDependencies %}
-=======
-            {% if tree %}
->>>>>>> 9631e11... fixed all issues button and made inheritance information always display on the right
                 <h4>Inheritance dependencies</h4>
             {%for tree in totalDependencies %}
             <div>
