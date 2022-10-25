@@ -1,7 +1,9 @@
 def extractTypeTree(file,headers,fileName):
     #print("Current-Line: ", line)
     for line in file:
+        print(line)
         if ("private" in line or "protected" in line or "public" in line) and "class" in line and ':' in line:
+            print("we in")
             cleanline = line.rstrip()
             lastSpacePos = cleanline.rfind(' ')
             NextInheritedClass = cleanline[lastSpacePos+1:]
@@ -68,7 +70,7 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
     
     for line in file:
         if("switch" in line and ("(" in line) and ( ")" in line) and ('=' not in line) and ('{' in line or '{' in file[file.index(line) + 1])):
-            print("switch found in: ",fileName)
+            # print("switch found in: ",fileName)
             startPos = line.find("(")
             counter = startPos
             while(line[counter] != ')'):
@@ -116,15 +118,15 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
                     if(temp in sourceLine and (len(sourceLine) > 4 and " " in sourceLine and len(sourceLine.split(" ")) >= 2)):
                         if('=' in sourceLine and (sourceLine.find('=') > sourceLine.find(temp)) and sourceLine.find(temp) != 0):
                             if(not firstReference):
-                                print("WE found Something Cap'n!")
-                                print(sourceLine)
+                                # print("WE found Something Cap'n!")
+                                # print(sourceLine)
                                 firstReference = True; 
                                 cleanLine = sourceLine.rstrip();
                                 startPos = cleanLine.rfind("=")
                                 Extracted = cleanLine[startPos:]
                                 Extracted = Extracted.strip(" ")
-                                print("Extracted Value")
-                                print(Extracted)
+                                # print("Extracted Value")
+                                # print(Extracted)
                                 if('::' in Extracted):
                                     tempStuff = Extracted.split('::')[1]
                                     tempStuff = tempStuff.strip(' ')
@@ -135,8 +137,8 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
                                     tempStuff = tempStuff.strip(' ')
                                     tempStuff = tempStuff.strip(';')
                                     Extracted = tempStuff;
-                                print("After Fixing")
-                                print(Extracted)
+                                # print("After Fixing")
+                                # print(Extracted)
                                 if(Extracted in typeData):
                                     print("YAAAS QUEEN THIS IS NOT GOOD PROGRAMMING !!!")
                                     print('we found a switch statement on type code')

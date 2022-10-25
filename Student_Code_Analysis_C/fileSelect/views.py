@@ -169,26 +169,69 @@ def displayCode(request):
                 print("YUUP we found a match")
                 print(x)
         currentFileHeader = headers[tempName + '.h']
-        TotalDependencies = []
+        totalDependencies = []
         for headerName in headers:
-            tree,location = extractTypeTree(headers[headerName],headers,fileName)
-            print(tree)
-            tree.append(fileName.split(".")[0])
-            TotalDependencies.append(tree)
+            print(headerName)
+            try:
+                tree,location = extractTypeTree(headers[headerName],headers,headerName)
+                print(tree)
+                tree.append(headerName.split(".")[0])
+                totalDependencies.append(tree)
+            except:
+                print("noneTYpe")
 
         print("OOOGA BOOOGA: ")
-        print(TotalDependencies)
+        print(totalDependencies)
         print("=================")
-        print(list(set(TotalDependencies)))
-        tree.append(fileName.split(".")[0])
-        print("For file: ", fileName.split(".")[0])
-        print(tree)
-        tree = tree[::-1]
+        dependencyDiagram=[]
+        baseClasses =[]
+        firstInstance=True
+        dependencyDictionary = {}
+        for dependency in totalDependencies:
+            for entity in dependency:
+                   if dependency.index(entity) + 1 < len(dependency):
+                        print("STAGE 1")
+                        if not entity in dependencyDictionary:
+                            print("STAGE 2")
+                            dependencyDictionary[entity] = []
+                            print("STAGE 2.5")
+                            dependencyDictionary[entity].append(dependency[dependency.index(entity) + 1])
+                            print("STAGE 3")
+                        else:
+                            print("STAGE 4")
+                            dependencyDictionary[entity].append(dependency[dependency.index(entity) + 1])
+                            print("STAGE 5")
+            
+        #     if len(dependency)==2 and firstInstance:
+        #         dependencyDiagram.append(dependency)
+        #         baseClasses.append(dependency[0])
+        #         firstInstance=False;
+        #         print("lendependency = 2")
+        #     elif len(baseClasses)>0:
+        #         print("BUTTTTTTTTTTTTTTTTTTTTTT")
+        #         for nextDependency in totalDependencies:
+        #             print(dependencyDiagram.index(dependency))
+        #             if dependencyDiagram[dependencyDiagram.index(dependency)]!=nextDependency:
+        #                 print("not the same")
+        #                 if dependencyDiagram[totalDependencies.index(dependency)][0]==nextDependency[0]:
+        #                     dependencyDiagram[totalDependencies.index(dependency)].append(dependency[1])
+        # print ("DEPENDENCYDIAGRAM")
+        # print(dependencyDiagram)
+        print("HOOOOOOOOOOOOOOOOOOOOOOOOOHAAA")
+        for file in dependencyDictionary:
+            print("Class: ", file)
+            print(dependencyDictionary[file])    
+                
+        # tree.append(fileName.split(".")[0])
+        # print("For file: ", fileName.split(".")[0])
+        # print(tree)
+        # tree = tree[::-1]
+
     except:
-        print("Poo")
+        print("Pooping out")
     
-    if(len(tree) == 1):
-        tree = []
+    # if(len(tree) == 1):
+    #     tree = []
 
 
     for branch in tree:
@@ -207,7 +250,7 @@ def displayCode(request):
         'fileName': fileName,
         'totalString': totalString,
         'highlight': locationArray,
-        'tree': tree,
+        'totalDependencies': totalDependencies,
         'issue': issueId,
         'thereIsTree':thereIsTree,
     }

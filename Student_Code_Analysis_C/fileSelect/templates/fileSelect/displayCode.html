@@ -15,8 +15,10 @@
             </pre>
         </div>
         <div class ="col">
-            {% if tree %}
+            {% if totalDependencies %}
                 <h4>Inheritance dependencies</h4>
+            {%for tree in totalDependencies %}
+            <div>
             {% for key in tree %}
             <form method="post">
                 {% csrf_token %}
@@ -30,6 +32,8 @@
                     <input type="hidden" name="issue" value="implementation"/>
                 </div>
             </form>
+            {% endfor %}
+            <div>
             {% endfor %}
             {% endif %}
         </div>
