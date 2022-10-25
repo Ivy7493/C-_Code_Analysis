@@ -1,4 +1,4 @@
-# Student-_Code_Analysis
+# Code_Snitch
 TO use this server, pip install the following libraries
 Pysimilar
 Pysimplegui
