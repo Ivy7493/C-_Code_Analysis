@@ -20,6 +20,7 @@ pre[class*="language-"] {
   -moz-hyphens: none;
   -ms-hyphens: none;
   hyphens: none;
+  overflow-y: auto;
 }
 :not(pre) > code[class*="language-"],
 pre[class*="language-"] {
@@ -40,6 +41,7 @@ pre[class*="language-"] {
   box-shadow: 1px 1px 0.5em #000 inset;
   margin: 0.5em 0;
   overflow: auto;
+  overflow-y: auto;
   padding: 1em;
 }
 pre[class*="language-"]::-moz-selection {
@@ -251,4 +253,5 @@ pre[class*="language-"].line-numbers > code {
   padding-right: 0.8em;
   text-align: right;
 }
+
 

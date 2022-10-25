@@ -3,10 +3,10 @@
   <div class="col-sm-auto d-grid gap-4">
     <div class="p-2 bg-light border">
         <button name="button"data-toggle="collapse"data-target="#allIssues"aria-expanded="false"aria-controls="allIssues"type="button"class="p-2 btn">All Issues</button>
-        <div class="col-sm-4 collapse" id="allIssues">
+        <div class="col-sm-auto collapse" id="allIssues">
           <div class="row">
-            <div class="col-9">
-              <h2>Headers</h2>
+            <div class="col-sm-auto">
+              <h2 style="text-shadow:#0000009a;">Headers </h2>
               {% for key,val in headers.items %}
               <form method="post">
                 {% csrf_token %}
@@ -16,8 +16,8 @@
               </form>
               {% endfor %}
             </div>
-            <div class="col-9">
-              <h2>Source</h2>
+            <div class="col-sm-auto">
+              <h2 style="text-shadow:#0000009a;">Source</h2>
               {% for key,val in sources.items %}
               <form method="post">
                 {% csrf_token %}
