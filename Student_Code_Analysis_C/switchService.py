@@ -1,9 +1,9 @@
 def extractTypeTree(file,headers,fileName):
     #print("Current-Line: ", line)
     for line in file:
-        print(line)
+        #print(line)
         if ("private" in line or "protected" in line or "public" in line) and "class" in line and ':' in line:
-            print("we in")
+            #print("we in")
             cleanline = line.rstrip()
             lastSpacePos = cleanline.rfind(' ')
             NextInheritedClass = cleanline[lastSpacePos+1:]
@@ -22,7 +22,7 @@ def extractTypeTree(file,headers,fileName):
             location.append(fileName + '-' + str(file.index(line)));
 
             return returnedTree,location
-        elif("class" in line and ':' not in line): #Here when we hit the bottom
+        elif("class" in line and ':' not in line and line.index('class') == 0): #Here when we hit the bottom
             return [],[]
 
 
