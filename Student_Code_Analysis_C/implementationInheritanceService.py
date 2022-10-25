@@ -1,6 +1,6 @@
 
 from numpy import extract
-
+from switchService import analyzeType
 
 def hasImplementationPresent(functionType,functionName,cppFile):
     functionStart = -1
@@ -217,7 +217,10 @@ def checkChainForImplementationInheritance(chain,source,headers):
                     highlights.append(x)
                     highlights.append(workingLink['class'] + workingLink['fileTypes'][functions.index(function)] + '-' + functionLocations[functions.index(function)])
                     line = findClassDeclaration(linkHeader, link['class'])
+                    lineheader = findClassDeclaration(headers[workingLink['class'] + '.h'],workingLink['class'])
                     highlights.append(link['class'] + '.h' + '-' + str(line))
+                    highlights.append(workingLink['class'] + '.h' + '-' + str(lineheader))
+                
         counter += 1
         linkCounter+=1
     return highlights

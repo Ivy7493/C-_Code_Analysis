@@ -1,5 +1,6 @@
 
 from django.shortcuts import render
+from numpy import append
 from listings.pathForm import getPath
 from ProcessController import ProcessController as PrscC
 from switchService import extractTypeTree
@@ -168,7 +169,17 @@ def displayCode(request):
                 print("YUUP we found a match")
                 print(x)
         currentFileHeader = headers[tempName + '.h']
-        tree,location = extractTypeTree(currentFileHeader,headers,fileName)
+        TotalDependencies = []
+        for headerName in headers:
+            tree,location = extractTypeTree(headers[headerName],headers,fileName)
+            print(tree)
+            tree.append(fileName.split(".")[0])
+            TotalDependencies.append(tree)
+
+        print("OOOGA BOOOGA: ")
+        print(TotalDependencies)
+        print("=================")
+        print(list(set(TotalDependencies)))
         tree.append(fileName.split(".")[0])
         print("For file: ", fileName.split(".")[0])
         print(tree)

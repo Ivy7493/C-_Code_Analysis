@@ -67,7 +67,7 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
     currentLine = 0;
     
     for line in file:
-        if("switch" in line and ("(" in line) and ( ")" in line) and ("int" not in line and "double" not in line and "string" not in line and "auto" not in line and "char" not in line and "bool" not in line and "float" not in line) and ('=' not in line) and ('{' in line or '{' in file[file.index(line) + 1])):
+        if("switch" in line and ("(" in line) and ( ")" in line) and ('=' not in line) and ('{' in line or '{' in file[file.index(line) + 1])):
             print("switch found in: ",fileName)
             startPos = line.find("(")
             counter = startPos
@@ -76,6 +76,8 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
             temp = line[startPos + 1 :counter]
             tempCounter = currentLine;
             startBlock = currentLine;
+            fileList = []
+            fileListName = []
             if('->' in temp):
                 temp = temp[temp.find('->') + 2:]
                 firstReference = False;
@@ -85,8 +87,7 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
                 output,outputlocation = extractTypeTree(passedFile,headers,fileName)
                 output.append(extractedName)
                 types = ['.h','.cpp']
-                fileList = []
-                fileListName = []
+               
                 for type in types:
                     for inheritance in output:
                         if type == '.cpp':
@@ -105,6 +106,10 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
                 #print(fileListName)
             except:
                 print("No header file for ", fileName)
+                fileList.append(file)
+            
+            if(fileList == []):
+                continue
             for retrievedFile in fileList:
                 firstReference = False;
                 for sourceLine in retrievedFile:
@@ -138,7 +143,7 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
                                     while( '}' not in file[tempCounter]):
                                         tempCounter += 1
                                     locationOccurence.append(str(startBlock) + '@' + str(tempCounter))
-                                elif(Extracted == "True" or Extracted == "False"):
+                                elif(Extracted == "true" or Extracted == "false"):
                                     print("YAAAS QUEEN THIS IS NOT GOOD PROGRAMMING !!!")
                                     print('we found a switch statement on type code [BOOL EDITION]')
                                     while( '}' not in file[tempCounter]):

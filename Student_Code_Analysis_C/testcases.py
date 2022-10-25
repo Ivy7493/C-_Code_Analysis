@@ -7,6 +7,7 @@ from publicMemberService import analyzePublicMembers
 from implementationInheritanceService import analyzeImplementationInheritance
 from parserService import getFiles
 import os
+from switchService import analyzeType
 
 class TestClass(unittest.TestCase):
 
@@ -167,63 +168,71 @@ class TestClass(unittest.TestCase):
         self.assertEqual(checkTwo,True)
 
     #==================================Switch Tool Section========================#
-    def test_switchTest(self):
-        testFilePath = "testsrc" + os.sep + 'SwitchTest' #os.path.dirname(__file__) + os.sep + 
-        headers,source,rawHeader,rawSource = getFiles(testFilePath)
-        checkTwo = False;
-        for x in source:
-            tempLocation = analyzeSwitch(source[x])
-            if(len(tempLocation) > 0):
-                checkTwo = True;
-
-        self.assertEqual(checkTwo,True)
-    #This test is to see if swith is used, that is wont be mistaken in a variable
-    def test_switchKeyWord(self):
-        testFilePath = "testsrc" + os.sep + 'SwitchTest' #os.path.dirname(__file__) + os.sep + 
-        headers,source,rawHeader,rawSource = getFiles(testFilePath)
-        checkTwo = False;
-
-        for x in source:
-            tempLocation = analyzeSwitch(source[x])
-            if(len(tempLocation) > 0 and len(tempLocation) < 2):
-                checkTwo = True;
-
-        self.assertEqual(checkTwo,True)
-
-    def test_switchFalsePostive(self):
+    def test_simpleSourceswitchTestBool(self):
         testFilePath = "testsrc" + os.sep + 'SwitchTest' + os.sep + 'Test1' #os.path.dirname(__file__) + os.sep + 
         headers,source,rawHeader,rawSource = getFiles(testFilePath)
         checkTwo = False;
-
+        typeData = analyzeType(headers,source)
         for x in source:
-            tempLocation = analyzeSwitch(source[x])
+            tempLocation = analyzeSwitch(source[x],headers,source,typeData,x) 
+        self.assertEqual(len(tempLocation),1)
+    #This test is to see if swith is used, that is wont be mistaken in a variable
+  
+    def test_simpleSourceswitchFalseEnum(self):
+        testFilePath = "testsrc" + os.sep + 'SwitchTest' + os.sep + 'Test2' #os.path.dirname(__file__) + os.sep + 
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
+        checkTwo = False;
+        typeData = analyzeType(headers,source)
+        for x in source:
+            tempLocation = analyzeSwitch(source[x],headers,source,typeData,x)
             if(len(tempLocation) > 0):
-                self.assertEqual(True,False)
+                self.assertEqual(True,True)
 
         self.assertEqual(True,True)
 
     #Test to see if we can find multiple different switch statements in same file
     def test_switchFindMultipleSameFile(self):
-        testFilePath = "testsrc" + os.sep + 'SwitchTest' + os.sep + 'Test2' #os.path.dirname(__file__) + os.sep + 
-        headers,source,rawHeader,rawSource = getFiles(testFilePath)
-        checkTwo = False;
-        totalCount = 0;
-        for x in source:
-            tempLocation = analyzeSwitch(source[x])
-            totalCount += len(tempLocation)
-
-        self.assertEqual(totalCount,2)
-    #Test to see if we can find multiple different switch statements in different file structures
-    def test_switchFindMultipleDifferentFile(self):
         testFilePath = "testsrc" + os.sep + 'SwitchTest' + os.sep + 'Test3' #os.path.dirname(__file__) + os.sep + 
         headers,source,rawHeader,rawSource = getFiles(testFilePath)
+        typeData = analyzeType(headers,source)
+        tempArray = []
+        for x in source:
+            tempLocation = analyzeSwitch(source[x],headers,source,typeData,x)
+            if(len(tempLocation) > 0):
+                tempArray.append(tempLocation)
+                print("REEEEE =======> (o)")
+        print(tempArray)
+        self.assertEqual(len(tempArray[0]),2)
+
+    #Test to see if we can find multiple different switch statements in different file structures
+    def test_switchFindMultipleDifferentFile(self):
+        testFilePath = "testsrc" + os.sep + 'SwitchTest' + os.sep + 'Test4' #os.path.dirname(__file__) + os.sep + 
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
         checkTwo = False;
         totalCount = 0;
+        typeData = analyzeType(headers,source)
+        print("^^^^^^^^^^^^^^^^^^^^")
+        print(len(source))
+        tempArray = []
         for x in source:
-            tempLocation = analyzeSwitch(source[x])
-            totalCount += len(tempLocation)
+            tempLocation = analyzeSwitch(source[x],headers,source,typeData,x)
+            if(len(tempLocation) > 0):
+                tempArray.append(tempLocation)
 
-        self.assertEqual(totalCount,2)
+        self.assertEqual(len(tempArray),2)
+
+    def test_falsePostive(self):
+        testFilePath = "testsrc" + os.sep + 'SwitchTest' + os.sep + 'Test5' #os.path.dirname(__file__) + os.sep + 
+        headers,source,rawHeader,rawSource = getFiles(testFilePath)
+        checkTwo = False;
+        typeData = analyzeType(headers,source)
+        for x in source:
+            tempLocation = analyzeSwitch(source[x],headers,source,typeData,x)
+            if(len(tempLocation) > 0):
+                self.assertEqual(False,True)
+
+        self.assertEqual(True,True)
+
 
 #==============================IMPLEMENTATION TESTING SECTION============================================
 
@@ -275,14 +284,8 @@ class TestClass(unittest.TestCase):
         testFilePath = "testsrc" + os.sep + 'inheritanceTest' + os.sep + 'Test4' #os.path.dirname(__file__) + os.sep + 
         headers,source,rawHeader,rawSource = getFiles(testFilePath)
         totalCount = []
-        check = False;
         for x  in headers:
             impLine = analyzeImplementationInheritance(headers[x],source,headers,x)
-            jcounter = 0;
-            for j in impLine:
-                if '#' in j:
-                    impLine[jcounter] = impLine[jcounter].replace('#', x)
-                jcounter += 1;
             for y in impLine:
                 totalCount.append(y)
                
