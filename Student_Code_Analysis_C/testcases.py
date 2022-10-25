@@ -248,7 +248,7 @@ class TestClass(unittest.TestCase):
             totalCount.append(y)
         
         totalCount = list(set(totalCount))
-        self.assertEqual(len(totalCount),3)
+        self.assertEqual(len(totalCount),4)
 
     #test to find implementation inheritance in  cpp
     def test_canFindImplementationInSource(self):

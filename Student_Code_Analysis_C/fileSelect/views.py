@@ -34,7 +34,12 @@ def navBarLaunch(request):
     return executeProgram(request)
 
 
+
+
+# This runs when the program needs to display the main issue page /fileDisplay.html
+
 def executeProgram(request):
+    saveData('tree',[])
     buttonVal = ""
     try:
         buttonVal = request.POST["folderName"]
@@ -71,6 +76,87 @@ def executeProgram(request):
                 newList.append(temp[0])
         occurArrFile.append(list(set(newList)))
 
+
+        #=================Running Tree of program======#
+
+    totalDependencies = []
+    for headerName in headers:
+        print(headerName)
+        try:
+            tree,location = extractTypeTree(headers[headerName],headers,headerName)
+            print(tree)
+            tree.append(headerName.split(".")[0])
+            totalDependencies.append(tree)
+        except:
+            print("noneTYpe")
+
+    print("OOOGA BOOOGA: ")
+    print(totalDependencies)
+    print("=================")
+    dependencyDiagram=[]
+    baseClasses =[]
+    firstInstance=True
+    dependencyDictionary = {}
+    baseClasses = []
+    for dependency in totalDependencies:
+        if(len(dependency) == 1):
+            baseClasses.append(dependency[0])
+        for entity in dependency:
+                if dependency.index(entity) + 1 < len(dependency):
+                    print("STAGE 1")
+                    if not entity in dependencyDictionary:
+                        print("STAGE 2")
+                        dependencyDictionary[entity] = []
+                        print("STAGE 2.5")
+                        dependencyDictionary[entity].append(dependency[dependency.index(entity) + 1])
+                        print("STAGE 3")
+                    else:
+                        print("STAGE 4")
+                        dependencyDictionary[entity].append(dependency[dependency.index(entity) + 1])
+                        print("STAGE 5")
+    print("HOOOOOOOOOOOOOOOOOOOOOOOOOHAAA")
+    for file in dependencyDictionary:
+        dependencyDictionary[file] = list(set(dependencyDictionary[file]))
+        print("Class: ", file)
+        print(dependencyDictionary[file])
+        
+    print("And now for the classes that don't inherit fromo another class: ")
+    print(baseClasses)
+    treeConstruction = generateUML(baseClasses,dependencyDictionary,0)
+
+    # ===============================This creates the html reponsible for generating the uml=============
+    fullFile =""
+    print("YOLO")
+    print(treeConstruction)
+    scopeCount=0
+    for x in treeConstruction:
+        if '{' in x:
+            scopeCount+=1
+            if scopeCount==1:
+                fullFile+= '\n'+"<div>"
+            else:
+                fullFile += '\n' + '<ul>'+'\n'+'<li>'
+        if '}' in x:
+            scopeCount-=1
+            if scopeCount==1:
+                fullFile+= '\n'+"</div>"
+            else:
+                fullFile += '\n' + '</li>'+'</ul>'
+        if '{' not in x and '}' not in x:
+            fullFile+= "\n" + "<li>"+"<a href='#'>"+ x +"</a>"+"</li>"
+    
+    fullFile += '</ul>'
+    fullFile+='</div>' 
+
+    try:
+        os.remove(os.path.join('fileSelect','templates','fileSelect','tree.html'))
+    except:
+        print("Not tree html found")
+    
+    with open(os.path.join('fileSelect','templates','fileSelect','tree.html'), "w+") as file:
+        file.write(fullFile)
+
+
     context = {
         'title':'File Viewer',
         'headers':headers,
@@ -82,13 +168,52 @@ def executeProgram(request):
         'friendIssues':occurArrFile[4],
         'dryIssues' : occurArrFile[5]
     }
+
     
     return render(request,'fileSelect/fileDisplay.html',context)
 
-def viewReport(request):
-    return render(request,'fileSelect/fileDisplay.html',{'title':'File Viewer'})
+
+def generateUML(baseClasses,UMLstruct,count):
+    if(count == 0):
+        print('}')
+        temp = getData('tree')
+        temp.append('}')
+        saveData('tree', temp)
+    #print('->',baseClass)
+    for baseClass in baseClasses:
+        if(baseClass in UMLstruct):
+            if(len(UMLstruct[baseClass]) > 0):
+                # print("we in here")
+                print('}')
+                temp = getData('tree')
+                temp.append('}')
+                saveData('tree', temp)
+                for x in UMLstruct[baseClass]:
+                    generateUML([x],UMLstruct,count + 1)
+                    print(x)
+                    temp = getData('tree')
+                    temp.append(x)
+                    saveData('tree',temp)
+                print('{') #old start
+                temp = getData('tree')
+                temp.append('{')
+                saveData('tree', temp)
+        if(count == 0):
+            print(baseClass)
+            temp = getData('tree')
+            temp.append(baseClass)
+            saveData('tree', temp)
+    if(count == 0):
+        print('{')
+        temp = getData('tree')
+        temp.append('{')
+        saveData('tree', temp[::-1])
+        #print(getData('tree'))
+        return getData('tree')
+
 
 def displayCode(request):
+    # saveData('tree',[])   
     try:
         fileName = request.POST["key"]
     except:
@@ -119,7 +244,7 @@ def displayCode(request):
                     end = int(data[1])
                     while(counter != end):
                         linesOfIssues.append(counter)
-                        counter += 1;
+                        counter += 1
                 else:
                     linesOfIssues.append(int(tempSplit[1]))
         allIssuesArray.append(linesOfIssues) 
@@ -153,105 +278,21 @@ def displayCode(request):
         lineStatus[x] = True
     locationArray  = ""
 
-    counter = 0;
+    counter = 0
     for x in lineStatus:
         if(x):
             locationArray = locationArray + ',' + str((counter + 1))
-        counter += 1;
+        counter += 1
     for x in file:
-        totalString += x;
-    tree = []
-    try:
-        headers = getData("headers")
-        tempName = fileName.split('.')[0]
-        for x in headers:
-            if(tempName +'.h' == x):
-                print("YUUP we found a match")
-                print(x)
-        currentFileHeader = headers[tempName + '.h']
-        totalDependencies = []
-        for headerName in headers:
-            print(headerName)
-            try:
-                tree,location = extractTypeTree(headers[headerName],headers,headerName)
-                print(tree)
-                tree.append(headerName.split(".")[0])
-                totalDependencies.append(tree)
-            except:
-                print("noneTYpe")
+        totalString += x     
 
-        print("OOOGA BOOOGA: ")
-        print(totalDependencies)
-        print("=================")
-        dependencyDiagram=[]
-        baseClasses =[]
-        firstInstance=True
-        dependencyDictionary = {}
-        for dependency in totalDependencies:
-            for entity in dependency:
-                   if dependency.index(entity) + 1 < len(dependency):
-                        print("STAGE 1")
-                        if not entity in dependencyDictionary:
-                            print("STAGE 2")
-                            dependencyDictionary[entity] = []
-                            print("STAGE 2.5")
-                            dependencyDictionary[entity].append(dependency[dependency.index(entity) + 1])
-                            print("STAGE 3")
-                        else:
-                            print("STAGE 4")
-                            dependencyDictionary[entity].append(dependency[dependency.index(entity) + 1])
-                            print("STAGE 5")
-            
-        #     if len(dependency)==2 and firstInstance:
-        #         dependencyDiagram.append(dependency)
-        #         baseClasses.append(dependency[0])
-        #         firstInstance=False;
-        #         print("lendependency = 2")
-        #     elif len(baseClasses)>0:
-        #         print("BUTTTTTTTTTTTTTTTTTTTTTT")
-        #         for nextDependency in totalDependencies:
-        #             print(dependencyDiagram.index(dependency))
-        #             if dependencyDiagram[dependencyDiagram.index(dependency)]!=nextDependency:
-        #                 print("not the same")
-        #                 if dependencyDiagram[totalDependencies.index(dependency)][0]==nextDependency[0]:
-        #                     dependencyDiagram[totalDependencies.index(dependency)].append(dependency[1])
-        # print ("DEPENDENCYDIAGRAM")
-        # print(dependencyDiagram)
-        print("HOOOOOOOOOOOOOOOOOOOOOOOOOHAAA")
-        for file in dependencyDictionary:
-            print("Class: ", file)
-            print(dependencyDictionary[file])    
-                
-        # tree.append(fileName.split(".")[0])
-        # print("For file: ", fileName.split(".")[0])
-        # print(tree)
-        # tree = tree[::-1]
+    treeInfo=getData('tree')
 
-    except:
-        print("Pooping out")
-    
-    # if(len(tree) == 1):
-    #     tree = []
-
-
-    for branch in tree:
-        currentNode = tree.index(branch)
-        for next in tree:
-            if tree.index(next) != currentNode:
-                if tree[currentNode]==next:
-                    tree[currentNode]=tree[currentNode] +".h"
-                    next = next+".cpp"
-
-    thereIsTree =False
-    if len(tree) > 0:
-        thereIsTree = True
-            
     context = {
         'fileName': fileName,
         'totalString': totalString,
         'highlight': locationArray,
-        'totalDependencies': totalDependencies,
         'issue': issueId,
-        'thereIsTree':thereIsTree,
+        'treeInfo':treeInfo,
     }
     return render(request,'fileSelect/displayCode.html',context)
