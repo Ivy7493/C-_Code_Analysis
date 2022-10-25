@@ -20,7 +20,6 @@ pre[class*="language-"] {
   -moz-hyphens: none;
   -ms-hyphens: none;
   hyphens: none;
-  overflow-y: auto;
 }
 :not(pre) > code[class*="language-"],
 pre[class*="language-"] {

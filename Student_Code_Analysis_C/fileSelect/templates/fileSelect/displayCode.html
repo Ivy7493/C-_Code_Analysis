@@ -6,9 +6,9 @@
         {% csrf_token %}
         <button formaction='../../executeProgram/' type="submit" value="" name="folderName" class = "button-23" >RETURN</button>
     </form> 
-    <div class ="row">
-        <div class = "col-sm-9">
-            <pre data-line='{{highlight}}' class="line-numbers language-cpp" style = '--color: var(--{{issue}});' tabindex="0">
+    <div class ="row code-div">
+        <div class = "col-sm-9 code-div" style="height:100%;">
+            <pre data-line='{{highlight}}' class="line-numbers language-cpp code-div" style = '--color: var(--{{issue}});' tabindex="0">
                 <code >
                     {{totalString}}
                 </code>

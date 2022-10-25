@@ -2,6 +2,7 @@ html {
   margin: 0px;
   display: grid;
   place-content: center;
+  height: fit-content;
   -webkit-tap-highlight-color: transparent;
 }
 
