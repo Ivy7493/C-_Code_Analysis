@@ -20,6 +20,7 @@ pre[class*="language-"] {
   -moz-hyphens: none;
   -ms-hyphens: none;
   hyphens: none;
+  overflow-y: auto;
 }
 :not(pre) > code[class*="language-"],
 pre[class*="language-"] {
@@ -41,8 +42,11 @@ pre[class*="language-"] {
   margin: 0.5em 0;
   overflow: auto;
   overflow-y: auto;
+<<<<<<< HEAD
   height: 40rem;
   width:52rem;
+=======
+>>>>>>> 9631e11... fixed all issues button and made inheritance information always display on the right
   padding: 1em;
 }
 pre[class*="language-"]::-moz-selection {

@@ -2,16 +2,25 @@ html {
   margin: 0px;
   display: grid;
   place-content: center;
+<<<<<<< HEAD
   height: fit-content;
+=======
+  height:auto;
+>>>>>>> 9631e11... fixed all issues button and made inheritance information always display on the right
   -webkit-tap-highlight-color: transparent;
 }
 
 body {
 background:linear-gradient(60deg,rgb(255, 255, 255),rgb(12, 36, 255),rgb(255, 255, 7));
 color: #9e9999;
+<<<<<<< HEAD
 margin-top: 7rem;
 margin-bottom:3rem;
 height: fit-content;
+=======
+margin-top: 5rem;
+height: 60rem;
+>>>>>>> 9631e11... fixed all issues button and made inheritance information always display on the right
 background-repeat: no-repeat;
 }
 
@@ -430,6 +439,7 @@ h3 {
   margin-left: 0.6rem;
   margin-right: 0.6rem;
 }
+<<<<<<< HEAD
 
 /* This code is taken from https://stackoverflow.com/questions/49809112/create-a-tree-diagram-multiple-parents-with-pure-html-css */
 /* This is for the tree display */
@@ -572,6 +582,8 @@ h3 {
   left: 50%;
   z-index: -1;
 }
+=======
+>>>>>>> 9631e11... fixed all issues button and made inheritance information always display on the right
 .button-23-implementation {
   background-color: #ffffffa9;
   border: 1px solid #19191994;
