@@ -1,7 +1,9 @@
 def extractTypeTree(file,headers,fileName):
     #print("Current-Line: ", line)
     for line in file:
+        #print(line)
         if ("private" in line or "protected" in line or "public" in line) and "class" in line and ':' in line:
+            #print("we in")
             cleanline = line.rstrip()
             lastSpacePos = cleanline.rfind(' ')
             NextInheritedClass = cleanline[lastSpacePos+1:]
@@ -20,13 +22,14 @@ def extractTypeTree(file,headers,fileName):
             location.append(fileName + '-' + str(file.index(line)));
 
             return returnedTree,location
-        elif("class" in line and ':' not in line): #Here when we hit the bottom
+        elif("class" in line and ':' not in line and line.index('class') == 0): #Here when we hit the bottom
             return [],[]
 
 
 def analyzeType(headers,sources):
     combined = [headers,sources]
     enumData = []
+    enumNameData = []
     for type in combined:
         for file in type:
             enumScopeCount = 0 
@@ -50,15 +53,29 @@ def analyzeType(headers,sources):
                         tempString = tempString.strip('{')
                         tempStringNoScope = tempString.strip('}')
                         tempList = tempStringNoScope.split(',')
-                
+
                     for enumDatum in tempList:
                         tempString = tempString.strip('{')
                         tempStringNoScope = tempString.strip('}')
                         tempDatum =enumDatum.split('=')[0]
                         tempDatum=tempDatum.strip(" ")
-                        enumData.append(tempDatum) 
-    return enumData
-
+                        enumData.append(tempDatum)
+                        enumName = ""
+                        if "enum class" in line:
+                            startPos = line.find("enum class") + len("enum class") + 1
+                            endPos = line.find('{')
+                            enumName = line[startPos:endPos]
+                            enumName = enumName.strip()
+                            print("Extracted Enum class Name: ", enumName)
+                        elif "enum" in line:
+                            startPos = line.find("enum") + len("enum") + 1
+                            endPos = line.find('{')
+                            enumName = line[startPos:endPos]
+                            enumName = enumName.strip()
+                            print("Extracted Enum Name: ", enumName)
+                        enumNameData.append(enumName)
+                        
+    return enumData,enumNameData
 
                         
 
@@ -67,8 +84,10 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
     currentLine = 0;
     
     for line in file:
-        if("switch" in line and ("(" in line) and ( ")" in line) and ("int" not in line and "double" not in line and "string" not in line and "auto" not in line and "char" not in line and "bool" not in line and "float" not in line) and ('=' not in line) and ('{' in line or '{' in file[file.index(line) + 1])):
+        if("switch" in line and ("(" in line) and ( ")" in line) and ('=' not in line) and ('{' in line or '{' in file[file.index(line) + 1])):
             print("switch found in: ",fileName)
+            print(line)
+            print("pos: ", str(currentLine))
             startPos = line.find("(")
             counter = startPos
             while(line[counter] != ')'):
@@ -76,26 +95,29 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
             temp = line[startPos + 1 :counter]
             tempCounter = currentLine;
             startBlock = currentLine;
+            fileList = []
+            fileListName = []
             if('->' in temp):
                 temp = temp[temp.find('->') + 2:]
                 firstReference = False;
+            if('.' in temp):
+                temp = temp.split('.')[0]
             try:
                 extractedName = fileName.split('.')[0]
                 passedFile = headers[extractedName + '.h']
                 output,outputlocation = extractTypeTree(passedFile,headers,fileName)
                 output.append(extractedName)
                 types = ['.h','.cpp']
-                fileList = []
-                fileListName = []
+               
                 for type in types:
                     for inheritance in output:
-                        if type == '.cpp':
+                        if type == '.cpp' and (inheritance + type) in sources :
                             try:
                                 fileList.append(sources[inheritance + type])
                             except:
                                 print("file ", inheritance + type, " Doesnt exist" )
                             
-                        elif type == ".h":
+                        elif type == ".h" and (inheritance + type) in headers:
                             try:
                                 fileList.append(headers[inheritance + type])
                             except:
@@ -105,21 +127,33 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
                 #print(fileListName)
             except:
                 print("No header file for ", fileName)
+                fileList.append(file)
+            
+            if(fileList == []):
+                continue
+            print("stage 1")
             for retrievedFile in fileList:
                 firstReference = False;
                 for sourceLine in retrievedFile:
                     if(temp in sourceLine and (len(sourceLine) > 4 and " " in sourceLine and len(sourceLine.split(" ")) >= 2)):
-                        if('=' in sourceLine and (sourceLine.find('=') > sourceLine.find(temp)) and sourceLine.find(temp) != 0):
+                        if(( '=' in sourceLine and sourceLine.find('=') > sourceLine.find(temp) and sourceLine.find(temp) != 0) or (sourceLine.find(temp) != 0 and sourceLine[sourceLine.find(temp) + len(temp)] == ';' and "=" not in sourceLine and sourceLine.count(';') == 1) ):
                             if(not firstReference):
+                                #print("For file: " , fileListName[fileList.index(retrievedFile)])
                                 print("WE found Something Cap'n!")
                                 print(sourceLine)
                                 firstReference = True; 
                                 cleanLine = sourceLine.rstrip();
-                                startPos = cleanLine.rfind("=")
-                                Extracted = cleanLine[startPos:]
-                                Extracted = Extracted.strip(" ")
-                                print("Extracted Value")
-                                print(Extracted)
+                                startPos = 0;
+                                Extracted = ""
+                                if('=' not in cleanLine):
+                                    workingLine = cleanLine.split(" ")
+                                    Extracted = workingLine[0]
+                                elif('=' in cleanLine):
+                                    startPos = cleanLine.rfind("=")
+                                    Extracted = cleanLine[startPos:]
+                                    Extracted = Extracted.strip(" ")
+                                # print("Extracted Value")
+                                # print(Extracted)
                                 if('::' in Extracted):
                                     tempStuff = Extracted.split('::')[1]
                                     tempStuff = tempStuff.strip(' ')
@@ -130,20 +164,37 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
                                     tempStuff = tempStuff.strip(' ')
                                     tempStuff = tempStuff.strip(';')
                                     Extracted = tempStuff;
-                                print("After Fixing")
-                                print(Extracted)
-                                if(Extracted in typeData):
-                                    print("YAAAS QUEEN THIS IS NOT GOOD PROGRAMMING !!!")
-                                    print('we found a switch statement on type code')
-                                    while( '}' not in file[tempCounter]):
-                                        tempCounter += 1
-                                    locationOccurence.append(str(startBlock) + '@' + str(tempCounter))
-                                elif(Extracted == "True" or Extracted == "False"):
-                                    print("YAAAS QUEEN THIS IS NOT GOOD PROGRAMMING !!!")
-                                    print('we found a switch statement on type code [BOOL EDITION]')
-                                    while( '}' not in file[tempCounter]):
-                                        tempCounter += 1
-                                    locationOccurence.append(str(startBlock) + '@' + str(tempCounter))
+                                #print("After Fixing")
+                                #print(Extracted)
+                                #print("Type data")
+                                #print(typeData[0])
+                                #print(typeData[1])
+                                allDataTypes = []
+                                if ('<' in Extracted):
+                                    workingArray = Extracted.split('<')
+                                    allDataTypes.append(workingArray[0])
+                                    allDataTypes.append(workingArray[1][:-1])
+                                if(len(allDataTypes) == 0):
+                                    allDataTypes.append(Extracted)
+                                for value in allDataTypes:
+                                    if(value in typeData[0]):
+                                        #print("YAAAS QUEEN THIS IS NOT GOOD PROGRAMMING !!!")
+                                        #print('we found a switch statement on type code')
+                                        while( '}' not in file[tempCounter]):
+                                            tempCounter += 1
+                                        locationOccurence.append(str(startBlock) + '@' + str(tempCounter))
+                                    elif(value == "true" or value == "false"):
+                                        #print("YAAAS QUEEN THIS IS NOT GOOD PROGRAMMING !!!")
+                                        #print('we found a switch statement on type code [BOOL EDITION]')
+                                        while( '}' not in file[tempCounter]):
+                                            tempCounter += 1
+                                        locationOccurence.append(str(startBlock) + '@' + str(tempCounter))
+                                    elif(value in typeData[1]):
+                                        #print("YAAAS QUEEN THIS IS NOT GOOD PROGRAMMING !!!")
+                                        #print('we found a switch statement on type code [TYPE OF ENUM EDITION]')
+                                        while( '}' not in file[tempCounter]):
+                                            tempCounter += 1
+                                        locationOccurence.append(str(startBlock) + '@' + str(tempCounter))
                                     
                         elif('=' in sourceLine and (sourceLine.find('=') < sourceLine.find(temp))):
                             print("Ignore This")

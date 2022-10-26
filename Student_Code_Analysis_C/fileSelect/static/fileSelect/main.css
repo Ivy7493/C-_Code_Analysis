@@ -34,9 +34,74 @@ a:hover {
   text-decoration: underline;
 }
 
-ul {
-margin: 0;
+ul li{
+  align-items: center;
+  appearance: none;
+  background-color: rgba(255, 255, 255, 0.452);
+  border-radius: 24px;
+  border-style: none;
+  box-shadow: rgba(0, 0, 0, .2) 0 3px 5px -1px,rgba(0, 0, 0, .14) 0 6px 10px 0,rgba(0, 0, 0, .12) 0 1px 18px 0;
+  box-sizing: border-box;
+  color: #3c4043;
+  cursor: pointer;
+  display: inline-flex;
+  fill: currentcolor;
+  font-family: "Google Sans",Roboto,Arial,sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  height: fit-content;
+  justify-content: center;
+  letter-spacing: .25px;
+  line-height: normal;
+  max-width: 100%;
+  overflow: visible;
+  padding: 2px 24px;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+  transition: box-shadow 280ms cubic-bezier(.4, 0, .2, 1),opacity 15ms linear 30ms,transform 270ms cubic-bezier(0, 0, .2, 1) 0ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: auto;
+  will-change: transform,opacity;
+  z-index: 0;
 }
+li{
+  align-items: center;
+  appearance: none;
+  background-color: rgba(255, 255, 255, 0.275);
+  border-radius: 24px;
+  border-style: none;
+  box-shadow: rgba(0, 0, 0, 0.304) 0 3px 5px -1px,rgba(0, 0, 0, .14) 0 6px 10px 0,rgba(0, 0, 0, .12) 0 1px 18px 0;
+  box-sizing: border-box;
+  color: #3c4043;
+  cursor: pointer;
+  display: inline-flex;
+  fill: currentcolor;
+  font-family: "Google Sans",Roboto,Arial,sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  height: fit-content;
+  justify-content: center;
+  letter-spacing: .25px;
+  line-height: normal;
+  max-width: 100%;
+  overflow: visible;
+  padding: 2px 24px;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+  transition: box-shadow 280ms cubic-bezier(.4, 0, .2, 1),opacity 15ms linear 30ms,transform 270ms cubic-bezier(0, 0, .2, 1) 0ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: auto;
+  will-change: transform,opacity;
+  z-index: 0;
+}
+
+
 
 .bg-steel {
 background-color: #656565;
@@ -358,4 +423,146 @@ h3 {
   width: auto;
   margin-left: 0.6rem;
   margin-right: 0.6rem;
+}
+
+/* This code is taken from https://stackoverflow.com/questions/49809112/create-a-tree-diagram-multiple-parents-with-pure-html-css */
+/* This is for the tree display */
+
+.items ul {
+  padding-top: 20px;
+  position: relative;
+}
+
+
+/* Make all children "inline" */
+
+.items li {
+  float: left;
+  text-align: center;
+  list-style-type: none;
+  position: relative;
+  padding: 20px 5px 0 5px;
+}
+
+
+/* Add horizontal connector. Note: they are 2 pseudo-elements */
+
+.items li::before,
+.items li::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 50%;
+  width: 50%;
+  height: 45px;
+  z-index: -1;
+  border-top: 1px solid red;
+}
+
+.items li::after {
+  border-left: 1px solid green;
+  left: 50%;
+  right: auto;
+}
+
+
+/* Remove left and right connector from a single child */
+
+.items li:only-child::after,
+.items li:only-child::before {
+  display: none;
+}
+
+.items li:only-child {
+  padding-top: 0;
+}
+
+
+/* Remove "outer" connector */
+
+.items li:first-child::before,
+.items li:last-child::after {
+  border: 0 none;
+}
+
+
+/* Add back the down connector for last node */
+
+.items li:last-child::before {
+  border-right: 1px solid blue;
+  border-radius: 0 5px 0 0;
+}
+
+
+/* Add curve line to the first child's connector */
+
+.items li:first-child::after {
+  border-radius: 5px 0 0 0;
+}
+
+
+/* Add down connector from parent */
+
+.items ul ul::before {
+  content: '';
+  border-left: 1px solid rgb(0, 4, 121);
+  z-index: -1;
+  height: 20px;
+  position: absolute;
+  top: 2px; /* Changed */
+  left: 50%;
+  width: 0;
+}
+
+
+/* Add cosmetic for each item */
+
+.items li a {
+  font-size: 12px;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.items li a:hover {
+  background-color: #EEE;
+}
+
+
+/* Experimental for multiple parents */
+
+
+/* Add margin for the parents */
+
+.items li a+a {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+
+/* Implement also for the first parent */
+
+.items li a:first-child {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+
+/* 
+- Add "down" connector (vertical line) from each parent 
+- Currently it will also select the single parent
+*/
+
+.items li>a:not(:only-child)::after {
+  content: '';
+  position: absolute;
+  border-right: 1px solid pink;
+  top: 20px;
+  height: 20px;
+  width: 0;
+  left: 50%;
+  z-index: -1;
 }

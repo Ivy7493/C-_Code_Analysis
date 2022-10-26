@@ -15,38 +15,33 @@
                 </button>
               </form>
               {% endfor %}
-              </div>
-              <div class="col-9">
-                <h2>Source</h2>
-                {% for key,val in sources.items %}
-                <form method="post">
-                  {% csrf_token %}
-                  <button id="buttonList" type="submit" value="{{ key }}" name="key" formaction="displayCode/">
-                    {{ key }}
-                  </button>
-                </form>
-                {% endfor %}
-              </div>
-              </div>
-              </div>
-              </div>
-              <div class="p-2 bg-light border">
-                <button name="button" data-toggle="collapse" data-target="#inheritanceIssues" aria-expanded="false"
-                  aria-controls="inheritanceIssues" type="button" class="p-2 btn btn-primary">
-        Implementation Inheritance {{ implementationIssues|length }}
-      </button>
-      <div class="col-sm-4 collapse" id="inheritanceIssues">
-        {% for issueOccur in implementationIssues%}
-        <form method="post">
-          {% csrf_token %}
-          <input type="hidden" name="issue" value="implementation" />
+            </div>
+            <div class="col-9">
+              <h2>Source</h2>
+              {% for key,val in sources.items %}
+              <form method="post">
+                {% csrf_token %}
+                <button id="buttonList" type="submit" value="{{ key }}" name="key" formaction="displayCode/">
+                  {{ key }}
+                </button>
+              </form>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="p-2 bg-light border">
+          <button name="button" data-toggle="collapse" data-target="#inheritanceIssues" aria-expanded="false"
+            aria-controls="inheritanceIssues" type="button" class="p-2 btn btn-primary">
+            Implementation Inheritance {{ implementationIssues|length }}
+          </button>
+          <div class="col-sm-4 collapse" id="inheritanceIssues">
+            {% for issueOccur in implementationIssues%}
+            <form method="post">
+              {% csrf_token %}
+              <input type="hidden" name="issue" value="implementation" />
           <button
-            id="buttonList"
-            type="submit"
-            value="{{ issueOccur }}"
-            name="key"
-            formaction="displayCode/"
-          >
+            id="buttonList"type="submit"value="{{ issueOccur }}"name="key"formaction="displayCode/">
             {{ issueOccur }}
           </button>
         </form>
@@ -142,9 +137,32 @@
         {% endfor %}
       </div>
     </div>
-    
-    
   </div>
+
+  <!-- code taken from https://stackoverflow.com/questions/49809112/create-a-tree-diagram-multiple-parents-with-pure-html-css -->
+
+  {% include 'fileSelect/tree.html' %}
+
+  <!-- <div class="items">
+    <ul>
+      <a href="#" class="">Dagon/a>
+      <li>
+        <a href="#" class="">Dagon</a>
+        <a href="#" class="">Veil of Discord</a>
+        <a href="#" class="">Other Parent Item</a>
+        <ul>
+          <li>
+            <a href="#">Null Talisman</a>
+            <ul>
+              <li><a href="#">Circlet</a></li>
+              <li><a href="#">Mantle of Intelligence</a></li>
+              <li><a href="#">Recipe: Null Talisman</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div> -->
 </div>
 
 {% endblock content%}
