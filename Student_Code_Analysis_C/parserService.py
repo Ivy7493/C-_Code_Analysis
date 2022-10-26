@@ -2,6 +2,7 @@ import os #need this in order to read in infomation.
 
 def findRawLocation(issue,rawHeaders,rawSource,source,header):
     rawLocations = []
+    blackList = []
     for x in issue:
         data = x.split('-')
         workingFile = []
@@ -29,8 +30,6 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
             if('@' in data[1]):
                 isRangeInput = True
                 points = data[1].split("@")
-                print("HGIURFigferubgiubgroibfifuebboibewb")
-                print(points)
                 #print("YAAAASSSS POINTS", points)
                 #print("And the len of file: ", len(lineInQuestion))
                 endLineInQuestion = lineInQuestion[int(points[1])]
@@ -44,11 +43,13 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
         pos1 = 0
         pos2 = 0
         if(isRangeInput):
+            workingFileCounter = 0;
             for y in workingFile:
-                if(lineInQuestion in y):
+                if(lineInQuestion in y and counter not in blackList):
                     found[0] = True
                     pos1 = counter
-                    tempIndex = workingFile.index(y)
+                    tempIndex = counter
+                    blackList.append(tempIndex)
                     while(endLineInQuestion not in workingFile[tempIndex]):
                         tempIndex += 1
                     found[1] = True

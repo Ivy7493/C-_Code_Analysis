@@ -135,5 +135,4 @@ def ProcessController(fileName):
     #locationOccurencesForDRY = list(set(locationOccurencesForDRY))
     # print("Total DRY Sections: ")
     # print("Occurrences: ", locationOccurencesForDRY)
-    
     return rawHeaders,rawSource,issueLocationArr
