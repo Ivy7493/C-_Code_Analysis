@@ -3,11 +3,19 @@ def extractTypeTree(file,headers,fileName):
     for line in file:
         #print(line)
         if ("private" in line or "protected" in line or "public" in line) and "class" in line and ':' in line:
-            #print("we in")
-            cleanline = line.rstrip()
-            lastSpacePos = cleanline.rfind(' ')
-            NextInheritedClass = cleanline[lastSpacePos+1:]
+            print("YAAAAS: ", line)
+            cleanline = line.split(':')[1]
+            cleanline = cleanline.rstrip('}')
+            cleanline = cleanline.rstrip('{')
+            cleanline = cleanline.rstrip()
+            cleanline = cleanline.lstrip()
+            cleanline = cleanline.replace("{","")
+            print("After fixing: ")
+            print(cleanline)            
+            NextInheritedClass = cleanline.split(" ")[1]
             nextInheritedHeaderFile = []
+            print("Next Inherited Class: ")
+            print(NextInheritedClass)
             try:
                 #print("We trying to get ", NextInheritedClass + '.h')
                 nextInheritedHeaderFile = headers[NextInheritedClass + '.h']
@@ -22,7 +30,7 @@ def extractTypeTree(file,headers,fileName):
             location.append(fileName + '-' + str(file.index(line)));
 
             return returnedTree,location
-        elif("class" in line and ':' not in line and line.index('class') == 0): #Here when we hit the bottom
+        elif("class" in line and ':' not in line and line.index('class') == 0 and fileName.split('.')[0].lower() in line.lower()): #Here when we hit the bottom
             return [],[]
 
 
