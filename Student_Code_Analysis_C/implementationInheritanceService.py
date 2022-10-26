@@ -1,23 +1,29 @@
 
 from numpy import extract
-
+from switchService import analyzeType
 
 def hasImplementationPresent(functionType,functionName,cppFile):
     functionStart = -1
     implementationFound = False
+    bigScope = 0;
     for line in cppFile: #Run through all lines
         implementationFound = False
         if((functionName in line) and (functionType in line) and ("(" in line and ")" in line )): #if we find the function okay cool
+            print("We found Function: ", functionName)
             functionStart = cppFile.index(line) #getting where it starts
             currentLine = functionStart
             scope = 0
             scopeProtect = True
             if('{' in line or '{' in cppFile[functionStart+1]):
+                if('{' in line and '}' in line and line.find(line.split(' ')[1]) == line.find(functionName) and "virtual" not in line and (line.find(functionName) < line.find('{')) and (line.find(functionName) < line.rfind('}'))):
+                    return str(functionStart)
                 while('}' not in cppFile[currentLine] and (scope != 0 or scopeProtect)):
                     if(scopeProtect and "{" in cppFile[currentLine]): #used to ge through first line
                         scopeProtect = False
                     #///Deals with determining if implementation has occured in file
                     if(len(cppFile[currentLine].strip()) > 1 and cppFile[currentLine].strip() != "}" and cppFile[currentLine].strip() != "{") and currentLine != cppFile.index(line):
+                        if(functionName == "GetEntity"):
+                            print("we found Implementation we looking for ")
                         implementationFound = True
                         #print("Implementation found for: ",functionName)
 
@@ -98,7 +104,6 @@ def checkForUsage(functionName,file,fileName):
 def extractImplementationTree(File, headers, source, fileName):
     #print("For file: ", fileName)
     for line in File:
-        #print("Current-Line: ", line)
         if(("private"in line or "protected" in line or "public" in line) and "class" in line and ':' in line):
             #print("YAAAAS: ", line)
             cleanline = line.rstrip()
@@ -119,7 +124,7 @@ def extractImplementationTree(File, headers, source, fileName):
             returnedTree.append(NextInheritedClass)
             location.append(fileName + '-' + str(File.index(line)));            
             return returnedTree,location
-        elif("class" in line and ':' not in line): #Here when we hit the bottom
+        elif("class" in line and ':' not in line and line.find('class') == 0): #Here when we hit the bottom
             return [],[]
 
 
@@ -174,34 +179,24 @@ def AnalyzeInheritanceChain(chain,source,headers):
         
 
 def findClassDeclaration(file,className):
-    print("looking in: ",  className)
-    print(file)
+    #print("looking in: ",  className)
+    #print(file)
     className = className.lower()
     for line in file:
         fixedLine = line.lower()
         if(className in fixedLine and 'class' in fixedLine and (fixedLine.find('class') < fixedLine.find(className)) and ' ' in fixedLine and fixedLine.find('class') == 0):
-            print("YEEE FOUND IT")
+            #print("YEEE FOUND IT")
             return file.index(line)
 
 def checkChainForImplementationInheritance(chain,source,headers):
     chain = chain[::-1] #reversing using list slicing
     counter = 1
     highlights = []
-    # print("Chain for Current Analysis")
-    # print(chain)
-    #print("2======================2")
-    #print(len(chain))
     linkCounter = 1
     for link in chain:
         print("For: ", link['class'])
         workingChain = chain
         linkHeader = headers[link['class'] + '.h']
-        print("Linker header changed to")
-        print(link['class'] + '.h')
-        #print(" ")
-        #print(linkHeader)
-        #print(" ","============")
-        #print("POOP")
         linkcpp = source[link['class'] + '.cpp']
         for i in range(counter):
             workingChain.pop(0)
@@ -220,20 +215,17 @@ def checkChainForImplementationInheritance(chain,source,headers):
                 for x in resultHeader:
                     highlights.append(x)
                     highlights.append(workingLink['class'] + workingLink['fileTypes'][functions.index(function)] +'-' + functionLocations[functions.index(function)])
-                    print("What header we would be passing: ")
-                    print(linkHeader)
                     line = findClassDeclaration(linkHeader, link['class'])
-                    print (line)
                     highlights.append(link['class'] + '.h' + '-' + str(line))
                 
                 for x in resultCPP:
                     highlights.append(x)
                     highlights.append(workingLink['class'] + workingLink['fileTypes'][functions.index(function)] + '-' + functionLocations[functions.index(function)])
-                    print("What header we would be passing: ")
-                    print(linkHeader)
                     line = findClassDeclaration(linkHeader, link['class'])
-                    print (line)
+                    lineheader = findClassDeclaration(headers[workingLink['class'] + '.h'],workingLink['class'])
                     highlights.append(link['class'] + '.h' + '-' + str(line))
+                    highlights.append(workingLink['class'] + '.h' + '-' + str(lineheader))
+                
         counter += 1
         linkCounter+=1
     return highlights
@@ -246,6 +238,7 @@ def analyzeImplementationInheritance(file,source,headers,passedFileName):
     output.append(originalFile)
     preChain = AnalyzeInheritanceChain(output,source,headers)
     results = checkChainForImplementationInheritance(preChain,source,headers)
+    print("This Chains Inheritance issues")
     print(results)
     print('========================================================')
     

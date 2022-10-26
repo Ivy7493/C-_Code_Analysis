@@ -1,3 +1,12 @@
-int a = 4;
-a += 1;
-int b = a * 3;
+
+
+
+int main(){
+    bool cool = true;
+    switch(cool){
+        case false:
+        break;
+        case true:
+        break;
+    }
+}

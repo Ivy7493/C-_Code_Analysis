@@ -22,6 +22,7 @@ def ProcessController(fileName):
     # print("First!")
     # print(locationOccurencesForDRY)
     # print('----testing Section-----')
+
     
     for x in headers:
         #-----------------Global Variable tool--------------------------------------#
@@ -134,5 +135,4 @@ def ProcessController(fileName):
     #locationOccurencesForDRY = list(set(locationOccurencesForDRY))
     # print("Total DRY Sections: ")
     # print("Occurrences: ", locationOccurencesForDRY)
-    
     return rawHeaders,rawSource,issueLocationArr
