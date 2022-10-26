@@ -164,14 +164,16 @@ def executeProgram(request):
     treeConstruction = generateUML(baseClasses,dependencyDictionary,0)
 
     # ===============================This creates the html reponsible for generating the uml=============
+    
     fullFile =""
     print("YOLO")
     print(treeConstruction)
     scopeCount=0
     lastScope=''
-    for x in treeConstruction:
-        
+    xFile=''
+    for x in treeConstruction: 
         print("I want to know what lastscope is always: ",lastScope)
+        xFile= x +'.h'
         if '{' in x:
             scopeCount+=1
             print( "HERE =======",scopeCount)
@@ -198,18 +200,21 @@ def executeProgram(request):
         
         if '{' not in x and '}' not in x and (lastScope!="sep" and lastScope!="together"and scopeCount!=1):
             print("Generic statement",x)
-            fullFile+= "<li>"+"<a href='#'>"+ x +"</a>"+"</li>"+"\n"
+            fullFile+= "<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+"name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"+"\n"
+            
         elif'{' not in x and '}' not in x and (lastScope=="sep" and scopeCount==1):
             print("this only occurs if lastscope=sep and scopecount =1")
-            fullFile+= "<div>"+"\n" + "<li>"+"<a href='#'>"+ x +"</a>"+"</li>"+'\n'+'</div>'
+            fullFile+= "<div>"+"\n" + "<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+" name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"+'\n'+'</div>'
+            
         elif'{' not in x and '}' not in x and (lastScope=="together" and scopeCount==2):
             print ("This is where last div is removed from line:", lastScope)
             fullFile=removeLastOccurrence(fullFile,"</div>",len(fullFile),6)
-            fullFile+= "<li>"+"<a href='#'>"+ x +"</a>"+"</li>"
+            fullFile+= "<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+" name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"
             lastScope=""
+        
         elif '{' not in x and '}' not in x and (lastScope!="sep" and lastScope!="together"and scopeCount==1):
             print("Generic statement MARK @",x)
-            fullFile+= "<div>"+"<li>"+"<a href='#'>"+ x +"</a>"+"</li>"+"\n"+"</div>"+"\n"
+            fullFile+= "<div>"+"<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+" name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"+"\n"+"</div>"+"\n"
         print("+",fullFile)
     print("+",fullFile)
 
