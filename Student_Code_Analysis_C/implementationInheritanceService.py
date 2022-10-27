@@ -9,7 +9,7 @@ def hasImplementationPresent(functionType,functionName,cppFile):
     for line in cppFile: #Run through all lines
         implementationFound = False
         if((functionName in line) and (functionType in line) and ("(" in line and ")" in line )): #if we find the function okay cool
-            print("We found Function: ", functionName)
+            #print("We found Function: ", functionName)
             functionStart = cppFile.index(line) #getting where it starts
             currentLine = functionStart
             scope = 0
@@ -207,7 +207,7 @@ def checkChainForImplementationInheritance(chain,source,headers):
     highlights = []
     linkCounter = 1
     for link in chain:
-        print("For: ", link['class'])
+        #print("For: ", link['class'])
         workingChain = chain
         linkHeader = headers[link['class'] + '.h']
         linkcpp = source[link['class'] + '.cpp']

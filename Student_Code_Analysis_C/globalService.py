@@ -1,19 +1,43 @@
 THRESH_SHORT = 3 # minimum number of permitted characters before considered short
 
+
+def keywordExclusion(line):
+    keywords = ["namespace","#include","#ifndef","#define","#pragma"]
+    for word in keywords:
+        if word in line:
+            return False;
+    return True;
+
+def bracketCheck(line,file):
+    print("bracketcheck***************************:",file[file.index(line)+1])
+    if '(' in line and ')' in line and ('{' not in line and '{' not in file[file.index(line)+1]):
+        return True
+    elif "(" in line and ')' in line:
+        return False
+    else:
+        return True
+
+def classCheck(line,scope):
+    if "class" in line and line.find("class") == 0:
+        return False
+    else:
+        return True
+    
 def analyzeGlobalVariables(file):
     currentLine = 0; #used to track the line of the file
-    locationOccurations = [];
+    locationOccurences = [];
     scopeCount = 0;
-  
-
     for line in file:
         # Section used for rules and protections. HEctic section ahead
+        # print("HERE IN GLOBAL VARIABLE",line)
         if("{" in line):
             scopeCount = scopeCount + 1
         if("}" in line):
             scopeCount = scopeCount - 1
-        if(len(line) >= 4 and " " in line and (('(' not in line and ')' not in line) or ('=' in line and '(' in line)) and "#include" not in line and len(line.split(" ")) >= 2 and ("namespace" not in line)):
-            if(scopeCount <= 0 and (('(' not in line) or (')' not in line))):
-                locationOccurations.append(currentLine)
+        if len(line) >= 4 and " " in line and bracketCheck(line,file) and len(line.split(" ")) >= 2 and keywordExclusion(line) and classCheck(line,scopeCount):
+            if scopeCount <= 0:
+                print("PASSED GLOBAL VARIABLE TOOL we found a global variable in: ", line)
+                locationOccurences.append(currentLine)
         currentLine = currentLine + 1
-    return locationOccurations
+    print("IN GLOBAL==========",locationOccurences,"=================")
+    return locationOccurences

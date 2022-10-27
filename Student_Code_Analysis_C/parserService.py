@@ -67,36 +67,6 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
                 counter += 1
 
     return rawLocations
-        
-
-def parseIndents(files):
-    newFiles = files
-   
-    for file in files:
-        indentCount = 0
-       # print(file)
-        for x in files[file]:
-            if "}" in x:
-                indentCount -= 1
-            if indentCount>0:
-                for i in range(indentCount):
-                   # print("in the x forloop and i forloop: ",x)
-                    try:
-                        newFiles[file][files[file].index(x)] = '$' + newFiles[file][files[file].index(x)]  #newFiles[file][files[file].index(x)]
-                    except:
-                        lol = 4
-                        #print("That line kinda deaded")
-                    #print(newFiles[file][files[file].index(x)], "printed stuff")# = '->' + newFiles[file][file.index(x)]
-            if "{" in x:
-                indentCount += 1
-            if('case' in x and ':' in x):
-                indentCount +=1
-            if('break;' in x):  
-                indentCount -= 1
-            
-
-    return newFiles
-
 
 
 def getFiles(path):
