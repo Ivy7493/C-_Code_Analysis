@@ -26,7 +26,7 @@ def analyzePublicMembers(file):
             roundScope+=1
         if(')'in line):
             roundScope-=1
-        if(len(line) >= 4 and " " in line and (('(' not in line and ')' not in line)) and "#include" not in line and len(line.split(" ")) >= 2 and ("namespace" not in line) and underPublic and roundScope <= 0 and scopeCount <= 1):
+        if(len(line) >= 4 and " " in line and (('(' not in line and ')' not in line) or ("(") in line and ')' in line and '=' in line and line.find("=") < line.find("(")) and "#include" not in line and len(line.split(" ")) >= 2 and ("namespace" not in line) and underPublic and roundScope <= 0 and scopeCount <= 1):
             locationOccuration.append(currentLine)
         currentLine= currentLine + 1
     return locationOccuration

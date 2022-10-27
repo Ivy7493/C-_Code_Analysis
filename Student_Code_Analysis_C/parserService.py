@@ -77,7 +77,7 @@ def getFiles(path):
     rawHeaderList = {}
     for (root, dirs, file) in os.walk(path):
         for f in file:
-            if '.cpp' in f or '.h' in f:
+            if '.cpp' in f or '.h' in f and f.count(".") == 1:
                 #print(f)
                 sourceFile = os.path.join(root, f)
                 source = open(sourceFile, "r")

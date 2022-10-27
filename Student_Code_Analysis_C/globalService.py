@@ -2,7 +2,7 @@ THRESH_SHORT = 3 # minimum number of permitted characters before considered shor
 
 
 def keywordExclusion(line):
-    keywords = ["namespace","#include","#ifndef","#define","#pragma"]
+    keywords = ["namespace","#include","#ifndef","#define","#pragma","using","template", "updates", "#if", '#']
     for word in keywords:
         if word in line:
             return False;
@@ -10,15 +10,17 @@ def keywordExclusion(line):
 
 def bracketCheck(line,file):
     print("bracketcheck***************************:",file[file.index(line)+1])
-    if '(' in line and ')' in line and ('{' not in line and '{' not in file[file.index(line)+1]):
+    if '(' in line and ')' in line and ('{' not in line and '{' not in file[file.index(line)+1] and '{' not in file[file.index(line)+2]):
         return True
-    elif "(" in line and ')' in line:
+    elif "(" in line and ')' in line or "(" in line and ")":
         return False
+    elif ")" in line and '(' not in line and "{" in file[file.index[line] + 1]:
+        return False;
     else:
         return True
 
-def classCheck(line,scope):
-    if "class" in line and line.find("class") == 0:
+def classCheck(line,scope,file):
+    if "class" in line and line.find("class") == 0 or ("class" in file[file.index(line) - 1] and file[file.index(line) - 1].find("class") == 0):
         return False
     else:
         return True
@@ -34,7 +36,7 @@ def analyzeGlobalVariables(file):
             scopeCount = scopeCount + 1
         if("}" in line):
             scopeCount = scopeCount - 1
-        if len(line) >= 4 and " " in line and bracketCheck(line,file) and len(line.split(" ")) >= 2 and keywordExclusion(line) and classCheck(line,scopeCount):
+        if len(line) >= 4 and " " in line and bracketCheck(line,file) and len(line.split(" ")) >= 2 and keywordExclusion(line) and classCheck(line,scopeCount,file):
             if scopeCount <= 0:
                 print("PASSED GLOBAL VARIABLE TOOL we found a global variable in: ", line)
                 locationOccurences.append(currentLine)
