@@ -1,7 +1,7 @@
 {% extends 'fileSelect/base.html'%}
 {% block content %}
 {% load my_tags %}
-    <h1>{{fileName}}</h1>
+    <h1 style="font-family:'Google Sans',Roboto,Arial,sans-serif;font:10rem;">{{fileName}}</h1>
     <form method="post">
         {% csrf_token %}
         <button formaction='../../executeProgram/' type="submit" value="" name="folderName" class = "button-23" >RETURN</button>

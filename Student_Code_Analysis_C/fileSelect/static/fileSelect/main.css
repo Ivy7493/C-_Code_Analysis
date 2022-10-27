@@ -2,39 +2,24 @@ html {
   margin: 0px;
   display: grid;
   place-content: center;
-<<<<<<< HEAD
-<<<<<<< HEAD
   height: fit-content;
-=======
-  height:auto;
->>>>>>> 9631e11... fixed all issues button and made inheritance information always display on the right
-=======
   height: fit-content;
->>>>>>> f68f037... Code adjusted to have scrollbar and page not as large
   -webkit-tap-highlight-color: transparent;
 }
 
 body {
 background:linear-gradient(60deg,rgb(255, 255, 255),rgb(12, 36, 255),rgb(255, 255, 7));
 color: #9e9999;
-<<<<<<< HEAD
-<<<<<<< HEAD
 margin-top: 7rem;
 margin-bottom:3rem;
 height: fit-content;
-=======
-margin-top: 5rem;
-height: 60rem;
->>>>>>> 9631e11... fixed all issues button and made inheritance information always display on the right
-=======
 margin-top: 7rem;
 margin-bottom:3rem;
 height: fit-content;
->>>>>>> f68f037... Code adjusted to have scrollbar and page not as large
 background-repeat: no-repeat;
 }
 
-h1, h3, h4, h5, h6 {
+h3, h4, h5, h6 {
   font: Arial;
   color: #fefefe;
 }
@@ -356,7 +341,7 @@ ol li:before {
 }
 
 h1 { color: #111;
-  font-family: 'Helvetica Neue',sans-serif;
+  font-family: "Google Sans",Roboto,Arial,sans-serif;
   font-size: 5rem;
   font-weight: bold;
   letter-spacing: -1px;
