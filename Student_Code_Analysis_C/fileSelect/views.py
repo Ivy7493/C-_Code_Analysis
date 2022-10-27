@@ -172,51 +172,51 @@ def executeProgram(request):
     lastScope=''
     xFile=''
     for x in treeConstruction: 
-        print("I want to know what lastscope is always: ",lastScope)
+        # print("I want to know what lastscope is always: ",lastScope)
         xFile= x +'.h'
         if '{' in x:
             scopeCount+=1
-            print( "HERE =======",scopeCount)
+            #print( "HERE =======",scopeCount)
             if scopeCount==1:
                 # fullFile+= '\n'+"<div>"
                 lastScope="sep"
             else:
-                print("larger than 1 scope count and in {")
+                #print("larger than 1 scope count and in {")
                 fullFile += '\n' + '<ul>'+'\n'
                 if lastScope=="sep":
-                    print("THIS IS WHERE LAST SCOPE IS CHNGED TO TOGETHER: ",scopeCount)
+                    #print("THIS IS WHERE LAST SCOPE IS CHNGED TO TOGETHER: ",scopeCount)
                     lastScope="together"
                 else:
-                    print("this is where lastscope set to nothing ")
+                    #print("this is where lastscope set to nothing ")
                     lastScope=""
         if '}' in x:
             scopeCount-=1
             if scopeCount==1:
-                print(" if in in }")
+                #print(" if in in }")
                 fullFile+= '</ul>'+'\n'+"</div>"
             else:
-                print("else in }")
+                #print("else in }")
                 fullFile += '\n' + '</li>'+'</ul>'
         
         if '{' not in x and '}' not in x and (lastScope!="sep" and lastScope!="together"and scopeCount!=1):
-            print("Generic statement",x)
+            #print("Generic statement",x)
             fullFile+= "<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+"name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"+"\n"
             
         elif'{' not in x and '}' not in x and (lastScope=="sep" and scopeCount==1):
-            print("this only occurs if lastscope=sep and scopecount =1")
+            #print("this only occurs if lastscope=sep and scopecount =1")
             fullFile+= "<div>"+"\n" + "<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+" name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"+'\n'+'</div>'
             
         elif'{' not in x and '}' not in x and (lastScope=="together" and scopeCount==2):
-            print ("This is where last div is removed from line:", lastScope)
+            #print ("This is where last div is removed from line:", lastScope)
             fullFile=removeLastOccurrence(fullFile,"</div>",len(fullFile),6)
             fullFile+= "<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+" name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"
             lastScope=""
         
         elif '{' not in x and '}' not in x and (lastScope!="sep" and lastScope!="together"and scopeCount==1):
-            print("Generic statement MARK @",x)
+            #print("Generic statement MARK @",x)
             fullFile+= "<div>"+"<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+" name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"+"\n"+"</div>"+"\n"
-        print("+",fullFile)
-    print("+",fullFile)
+        #print("+",fullFile)
+    #print("+",fullFile)
 
     try:
         os.remove(os.path.join('fileSelect','templates','fileSelect','tree.html'))

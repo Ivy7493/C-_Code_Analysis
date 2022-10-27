@@ -1,5 +1,5 @@
 #imports for different services
-from parserService import getFiles,findRawLocation, parseIndents
+from parserService import getFiles,findRawLocation
 from friendService import analyzeFriend
 from globalService import analyzeGlobalVariables
 from switchService import analyzeSwitch,analyzeType
@@ -27,13 +27,12 @@ def ProcessController(fileName):
     for x in headers:
         #-----------------Global Variable tool--------------------------------------#
         try:
-            globalVariableLocation = []
-            globalVariablelocation = analyzeGlobalVariables(headers[x])
-            globalVariablelocation = list(set(globalVariableLocation))
-            for member in globalVariablelocation:
-                locationOccurencesForGlobal.append(x + '-' + str(member))
+            globalVariableLocation = analyzeGlobalVariables(headers[x])
+            globalVariableLocation = list(set(globalVariableLocation))
         except:
-            print("global error")
+            print("Global error in header")
+        for member in globalVariableLocation:
+                locationOccurencesForGlobal.append(x + '-' + str(member))
 
         #------------------Friend Tool------------------------------#
         try:
@@ -42,7 +41,7 @@ def ProcessController(fileName):
             for member in fileFriendLocation:
                 locationOccurrencesForFriend.append(x + '-' + str(member))
         except:
-            print("global error")
+            print("Friend error in header")
 
         #------------------Switch Tool------------------------------#
         try:
@@ -76,8 +75,10 @@ def ProcessController(fileName):
     for x in source:
         #-----------------Global Variable tool--------------------------------------#
         try:
+            
             globalVariableLocation = analyzeGlobalVariables(source[x])
             globalVariableLocation = list(set(globalVariableLocation))
+            
         except:
             print("global source error")
         for member in globalVariableLocation:
@@ -95,17 +96,23 @@ def ProcessController(fileName):
 
 
     #======================Raw Location Test===============================#
+    print("========FULL ISSUES=====")
+    print("LOCATION OCCURENCES FOR GLOBAL",locationOccurencesForGlobal)
     rawGlobalLocations = findRawLocation(locationOccurencesForGlobal,rawHeaders,rawSource,source,headers)
+    print("global: ",rawGlobalLocations)
     rawSwitchLocations = findRawLocation(locationOccurrencesForSwitch,rawHeaders,rawSource,source,headers)
+    print("rawswitch: ",rawSwitchLocations)
     rawFriendLocations = findRawLocation(locationOccurrencesForFriend,rawHeaders,rawSource,source,headers)
+    print("rawfriend: ",rawFriendLocations)
     rawPublicLocations = findRawLocation(locationOccurrencesForPublic,rawHeaders,rawSource,source,headers)
+    print("rawpublic: ",rawPublicLocations)
     rawInheritanceLocations = findRawLocation(locationOccurrencesForImplementationInheritance,rawHeaders,rawSource,source,headers)
+    print("rawinheritance: ",rawInheritanceLocations)
     rawDRYLocations = findRawLocation(locationOccurencesForDRY,rawHeaders,rawSource,source,headers)
-    # print("====================HERE=====================")
-    # print(list(set(rawDRYLocations)))
-    #rawHeaders = parseIndents(rawHeaders)
-    #rawSource = parseIndents(rawSource)
-
+    print("rawdry: ",rawDRYLocations)
+    
+    
+    
     #-----------------------TOTAL SECTION--------------------------------#
     issueLocationArr = [list(set(rawInheritanceLocations)),list(set(rawGlobalLocations)),list(set(rawPublicLocations)),list(set(rawSwitchLocations)),list(set(rawFriendLocations)),list(set(rawDRYLocations))]
     # print('=========================================================')
@@ -113,12 +120,12 @@ def ProcessController(fileName):
     # print("Total Implementation Inheritance: ")
     #print("Occurrences: ", locationOccurrencesForImplementationInheritance)
     # print(" ")
-    # print('=========================================================')
-    #locationOccurencesForGlobal = list(set(locationOccurencesForGlobal))
-    # print("Total Global Variables: ")
-    # print("Occurrences: ", locationOccurencesForGlobal)
-    # print(" ")
-    # print('=========================================================')
+    print('=========================================================')
+    locationOccurencesForGlobal = list(set(locationOccurencesForGlobal))
+    print("Total Global Variables: ")
+    print("Occurrences: ", locationOccurencesForGlobal)
+    print(" ")
+    print('=========================================================')
     #locationOccurrencesForPublic = list(set(locationOccurrencesForPublic))
     # print("Total Public Variables: ")
     #print("Occurrences: ", locationOccurrencesForPublic)
