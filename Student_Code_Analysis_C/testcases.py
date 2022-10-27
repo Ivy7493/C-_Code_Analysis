@@ -200,8 +200,8 @@ class TestClass(unittest.TestCase):
             tempLocation = analyzeSwitch(source[x],headers,source,typeData,x)
             if(len(tempLocation) > 0):
                 tempArray.append(tempLocation)
-                print("REEEEE =======> (o)")
-        print(tempArray)
+                #print("REEEEE =======> (o)")
+        #print(tempArray)
         self.assertEqual(len(tempArray[0]),2)
 
     #Test to see if we can find multiple different switch statements in different file structures
@@ -211,8 +211,8 @@ class TestClass(unittest.TestCase):
         checkTwo = False;
         totalCount = 0;
         typeData = analyzeType(headers,source)
-        print("^^^^^^^^^^^^^^^^^^^^")
-        print(len(source))
+        #print("^^^^^^^^^^^^^^^^^^^^")
+        #print(len(source))
         tempArray = []
         for x in source:
             tempLocation = analyzeSwitch(source[x],headers,source,typeData,x)

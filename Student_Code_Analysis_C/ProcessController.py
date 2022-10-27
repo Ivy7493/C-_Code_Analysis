@@ -16,7 +16,12 @@ def ProcessController(fileName):
     locationOccurrencesForFriend = []
     locationOccurencesForGlobal = []
     locationOccurencesForDRY = []
-    typeData = analyzeType(headers,source)
+    typeData,enumNames,classNames,classNameLocations = analyzeType(headers,source)
+    typeData.extend(enumNames)
+    print("START OF PROCESS CONTROLLER",typeData)
+    print("classNames Extracted:",classNames)
+    print("Raw Line numbers of class declarations: ",classNameLocations)
+    classNameLocations=findRawLocation(classNameLocations,rawHeaders,rawSource,source,headers)
     #------------------DRY TOOL---------------------------------------#
     locationOccurencesForDRY = analyzeDRY(headers,source)
     # print("First!")
@@ -96,20 +101,20 @@ def ProcessController(fileName):
 
 
     #======================Raw Location Test===============================#
-    print("========FULL ISSUES=====")
-    print("LOCATION OCCURENCES FOR GLOBAL",locationOccurencesForGlobal)
+    #print("========FULL ISSUES=====")
+    #print("LOCATION OCCURENCES FOR GLOBAL",locationOccurencesForGlobal)
     rawGlobalLocations = findRawLocation(locationOccurencesForGlobal,rawHeaders,rawSource,source,headers)
-    print("global: ",rawGlobalLocations)
+    #print("global: ",rawGlobalLocations)
     rawSwitchLocations = findRawLocation(locationOccurrencesForSwitch,rawHeaders,rawSource,source,headers)
-    print("rawswitch: ",rawSwitchLocations)
+    #print("rawswitch: ",rawSwitchLocations)
     rawFriendLocations = findRawLocation(locationOccurrencesForFriend,rawHeaders,rawSource,source,headers)
-    print("rawfriend: ",rawFriendLocations)
+    #print("rawfriend: ",rawFriendLocations)
     rawPublicLocations = findRawLocation(locationOccurrencesForPublic,rawHeaders,rawSource,source,headers)
-    print("rawpublic: ",rawPublicLocations)
+    #print("rawpublic: ",rawPublicLocations)
     rawInheritanceLocations = findRawLocation(locationOccurrencesForImplementationInheritance,rawHeaders,rawSource,source,headers)
-    print("rawinheritance: ",rawInheritanceLocations)
+    #print("rawinheritance: ",rawInheritanceLocations)
     rawDRYLocations = findRawLocation(locationOccurencesForDRY,rawHeaders,rawSource,source,headers)
-    print("rawdry: ",rawDRYLocations)
+    #print("rawdry: ",rawDRYLocations)
     
     
     
@@ -120,12 +125,12 @@ def ProcessController(fileName):
     # print("Total Implementation Inheritance: ")
     #print("Occurrences: ", locationOccurrencesForImplementationInheritance)
     # print(" ")
-    print('=========================================================')
-    locationOccurencesForGlobal = list(set(locationOccurencesForGlobal))
-    print("Total Global Variables: ")
-    print("Occurrences: ", locationOccurencesForGlobal)
-    print(" ")
-    print('=========================================================')
+    #print('=========================================================')
+    # locationOccurencesForGlobal = list(set(locationOccurencesForGlobal))
+    #print("Total Global Variables: ")
+    #print("Occurrences: ", locationOccurencesForGlobal)
+    #print(" ")
+    #print('=========================================================')
     #locationOccurrencesForPublic = list(set(locationOccurrencesForPublic))
     # print("Total Public Variables: ")
     #print("Occurrences: ", locationOccurrencesForPublic)

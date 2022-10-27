@@ -14,22 +14,22 @@ def hasImplementationPresent(functionType,functionName,cppFile):
             currentLine = functionStart
             scope = 0
             scopeProtect = True
-            print('stage 1')
+            #print('stage 1')
             if('{' in line or '{' in cppFile[functionStart+1]):
-                print('stage 2')
+                #print('stage 2')
                 
                 if " " in line:
                     if('{' in line and '}' in line and line.find(line.split(' ')[1]) == line.find(functionName) and "virtual" not in line and (line.find(functionName) < line.find('{')) and (line.find(functionName) < line.rfind('}'))):
-                        print("stage 2.5")  
+                        #print("stage 2.5")  
                         return str(functionStart)
-                    print('stage 3')
+                    #print('stage 3')
                 while('}' not in cppFile[currentLine] and (scope != 0 or scopeProtect)):
                     if(scopeProtect and "{" in cppFile[currentLine]): #used to ge through first line
                         scopeProtect = False
                     #///Deals with determining if implementation has occured in file
                     if(len(cppFile[currentLine].strip()) > 1 and cppFile[currentLine].strip() != "}" and cppFile[currentLine].strip() != "{") and currentLine != cppFile.index(line):
                         implementationFound = True
-                        print("Implementation found for: ",functionName)
+                        #print("Implementation found for: ",functionName)
 
                     if('{' in cppFile[currentLine]):
                         scope += 1
@@ -106,24 +106,24 @@ def checkForUsage(functionName,file,fileName):
 
 
 def extractImplementationTree(File, headers, source, fileName):
-    print("For file: ", fileName)
+    #print("For file: ", fileName)
     for line in File:
         #print(line)
         if(("private"in line or "protected" in line or "public" in line) and "class" in line and ':' in line) :
-            print("YAAAAS: ", line)
+            #print("YAAAAS: ", line)
             cleanline = line.split(':')[1]
             cleanline = cleanline.rstrip('{')
             cleanline = cleanline.rstrip()
             cleanline = cleanline.lstrip()
-            print("After fixing: ")
-            print(cleanline)
+            #print("After fixing: ")
+            #print(cleanline)
             lastSpacePos = cleanline.rfind(' ')
             NextInheritedClass = cleanline[lastSpacePos+1:]
             try:
                 #print("We trying to get ", NextInheritedClass + '.h')
-                print(NextInheritedClass + '.h')
-                for x in headers:
-                    print(x)
+                #print(NextInheritedClass + '.h')
+                # for x in headers:
+                #     print(x)
                 nextInheritedHeaderFile = headers[NextInheritedClass + '.h']
             except:
                 print("Bugger it got away!")
@@ -246,15 +246,15 @@ def checkChainForImplementationInheritance(chain,source,headers):
 
 def analyzeImplementationInheritance(file,source,headers,passedFileName):
     originalFile = passedFileName.split('.')[0]
-    print("====================== " + passedFileName + " ======================")
+    #print("====================== " + passedFileName + " ======================")
     output,outputLocation = extractImplementationTree(file,headers,source,passedFileName);
     output.append(originalFile)
     preChain = AnalyzeInheritanceChain(output,source,headers)
     results = checkChainForImplementationInheritance(preChain,source,headers)
-    print("This Chains Inheritance issues")
-    print(results)
-    print(output)
-    print('========================================================')
+    #print("This Chains Inheritance issues")
+    #print(results)
+    #print(output)
+    #print('========================================================')
     
     return list(set(results))
 

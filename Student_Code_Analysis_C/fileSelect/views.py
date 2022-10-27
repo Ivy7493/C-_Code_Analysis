@@ -156,18 +156,18 @@ def executeProgram(request):
     # print("HOOOOOOOOOOOOOOOOOOOOOOOOOHAAA")
     for file in dependencyDictionary:
         dependencyDictionary[file] = list(set(dependencyDictionary[file]))
-        print("Class: ", file)
-        print("CLASS DEPENDENCY DICTIONARY FILE: ",dependencyDictionary[file])
+        #print("Class: ", file)
+        #print("CLASS DEPENDENCY DICTIONARY FILE: ",dependencyDictionary[file])
         
-    print("And now for the classes that don't inherit fromo another class: ")
-    print(baseClasses)
+    #print("And now for the classes that don't inherit fromo another class: ")
+    #print(baseClasses)
     treeConstruction = generateUML(baseClasses,dependencyDictionary,0)
 
     # ===============================This creates the html reponsible for generating the uml=============
     
     fullFile =""
-    print("YOLO")
-    print(treeConstruction)
+    #print("YOLO")
+    #print(treeConstruction)
     
     scopeCount=0
     lastScope=''
@@ -246,7 +246,7 @@ def executeProgram(request):
 
 def generateUML(baseClasses,UMLstruct,count):
     if(count == 0):
-        print('}')
+        #print('}')
         temp = getData('tree')
         temp.append('}')
         saveData('tree', temp)
@@ -255,27 +255,27 @@ def generateUML(baseClasses,UMLstruct,count):
         if(baseClass in UMLstruct):
             if(len(UMLstruct[baseClass]) > 0):
                 # print("we in here")
-                print('}')
+                #print('}')
                 temp = getData('tree')
                 temp.append('}')
                 saveData('tree', temp)
                 for x in UMLstruct[baseClass]:
                     generateUML([x],UMLstruct,count + 1)
-                    print(x)
+                    #print(x)
                     temp = getData('tree')
                     temp.append(x)
                     saveData('tree',temp)
-                print('{') #old start
+                #print('{') #old start
                 temp = getData('tree')
                 temp.append('{')
                 saveData('tree', temp)
         if(count == 0):
-            print(baseClass)
+            #print(baseClass)
             temp = getData('tree')
             temp.append(baseClass)
             saveData('tree', temp)
     if(count == 0):
-        print('{')
+        #print('{')
         temp = getData('tree')
         temp.append('{')
         saveData('tree', temp[::-1])

@@ -9,7 +9,7 @@ def keywordExclusion(line):
     return True;
 
 def bracketCheck(line,file):
-    print("bracketcheck***************************:",file[file.index(line)+1])
+    #print("bracketcheck***************************:",file[file.index(line)+1])
     if '(' in line and ')' in line and ('{' not in line and '{' not in file[file.index(line)+1]):
         return True
     elif "(" in line and ')' in line:
@@ -36,8 +36,8 @@ def analyzeGlobalVariables(file):
             scopeCount = scopeCount - 1
         if len(line) >= 4 and " " in line and bracketCheck(line,file) and len(line.split(" ")) >= 2 and keywordExclusion(line) and classCheck(line,scopeCount):
             if scopeCount <= 0:
-                print("PASSED GLOBAL VARIABLE TOOL we found a global variable in: ", line)
+                # print("PASSED GLOBAL VARIABLE TOOL we found a global variable in: ", line)
                 locationOccurences.append(currentLine)
         currentLine = currentLine + 1
-    print("IN GLOBAL==========",locationOccurences,"=================")
+    #print("IN GLOBAL==========",locationOccurences,"=================")
     return locationOccurences
