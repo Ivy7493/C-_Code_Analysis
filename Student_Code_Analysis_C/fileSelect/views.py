@@ -157,7 +157,7 @@ def executeProgram(request):
     for file in dependencyDictionary:
         dependencyDictionary[file] = list(set(dependencyDictionary[file]))
         print("Class: ", file)
-        print(dependencyDictionary[file])
+        print("CLASS DEPENDENCY DICTIONARY FILE: ",dependencyDictionary[file])
         
     print("And now for the classes that don't inherit fromo another class: ")
     print(baseClasses)
@@ -168,6 +168,7 @@ def executeProgram(request):
     fullFile =""
     print("YOLO")
     print(treeConstruction)
+    
     scopeCount=0
     lastScope=''
     xFile=''
