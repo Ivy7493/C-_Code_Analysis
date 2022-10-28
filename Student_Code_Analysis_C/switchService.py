@@ -4,6 +4,8 @@ def analyzeType(headers,sources):
     combined = [headers,sources]
     enumData = []
     enumNameData = []
+    classNameData=[]
+    classNameLocation=[]
     for type in combined:
         for file in type:
             enumScopeCount = 0 
@@ -37,19 +39,37 @@ def analyzeType(headers,sources):
                         enumName = ""
                         if "enum class" in line:
                             startPos = line.find("enum class") + len("enum class") + 1
-                            endPos = line.find('{')
-                            enumName = line[startPos:endPos]
-                            enumName = enumName.strip()
-                            print("Extracted Enum class Name: ", enumName)
+                            enumName = ""
+                            if(line.find("{") != -1):
+                                endPos = line.find('{')
+                                enumName = line[startPos:endPos]
+                                enumName = enumName.strip()
+                            else:
+                                enumName = line[startPos:]
+                                enumName = enumName.strip()
+                            # print("Extracted Enum class Name: ", enumName)
                         elif "enum" in line:
                             startPos = line.find("enum") + len("enum") + 1
-                            endPos = line.find('{')
-                            enumName = line[startPos:endPos]
-                            enumName = enumName.strip()
-                            print("Extracted Enum Name: ", enumName)
+                            enumName = ""
+                            if(line.find("{") != -1):
+                                endPos = line.find('{')
+                                enumName = line[startPos:endPos]
+                                enumName = enumName.strip()
+                            else:
+                                enumName = line[startPos:]
+                                enumName = enumName.strip()
+                            # print("Extracted Enum Name: ", enumName)
                         enumNameData.append(enumName)
-                        
-    return enumData,enumNameData
+                if ".h" in file and "class" in line and line.find("class") == 0 and "enum" not in line:
+                    tempClassLine = line.strip('{')
+                    tempClassLine = tempClassLine.strip('}')
+                    tempClassLine =tempClassLine.split(' ')[1]
+                    tempClassLine=tempClassLine.strip(" ")
+                    tempClassLine=tempClassLine.split(":")[0]
+                    classNameLocation.append(file+"-"+str(type[file].index(line)))
+                    classNameData.append(tempClassLine)
+                    
+    return enumData,enumNameData,classNameData,classNameLocation
 
                         
 

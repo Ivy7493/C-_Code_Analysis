@@ -16,7 +16,14 @@ def ProcessController(fileName):
     locationOccurrencesForFriend = []
     locationOccurencesForGlobal = []
     locationOccurencesForDRY = []
-    typeData = analyzeType(headers,source)
+    # typeData = analyzeType(headers,source)
+    
+    typeData,enumNames,classNames,classNameLocations = analyzeType(headers,source)
+    typeData.extend(enumNames)
+    print("START OF PROCESS CONTROLLER",typeData)
+    print("classNames Extracted:",classNames)
+    print("Raw Line numbers of class declarations: ",classNameLocations)
+    classNameLocations=findRawLocation(classNameLocations,rawHeaders,rawSource,source,headers)
     
     #------------------DRY TOOL---------------------------------------#
     try:
