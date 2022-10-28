@@ -6,10 +6,12 @@ def keywordExclusion(line):
     for word in keywords:
         if word in line:
             return False;
+        elif '{' in line and '}' in line and line.strip().find('{') == 0 and line.strip().find('}') == (len(line) - 1):
+            return False;
     return True;
 
 def bracketCheck(line,file):
-    print("bracketcheck***************************:",file[file.index(line)+1])
+    #print("bracketcheck***************************:",file[file.index(line)+1])
     if '(' in line and ')' in line and ('{' not in line and '{' not in file[file.index(line)+1] and '{' not in file[file.index(line)+2]):
         return True
     elif "(" in line and ')' in line or "(" in line and ")":
@@ -29,6 +31,7 @@ def analyzeGlobalVariables(file):
     currentLine = 0; #used to track the line of the file
     locationOccurences = [];
     scopeCount = 0;
+    roundCount = 0;
     for line in file:
         # Section used for rules and protections. HEctic section ahead
         # print("HERE IN GLOBAL VARIABLE",line)
@@ -36,10 +39,14 @@ def analyzeGlobalVariables(file):
             scopeCount = scopeCount + 1
         if("}" in line):
             scopeCount = scopeCount - 1
-        if len(line) >= 4 and " " in line and bracketCheck(line,file) and len(line.split(" ")) >= 2 and keywordExclusion(line) and classCheck(line,scopeCount,file):
+        if('(' in line):
+            roundCount += 1
+        if(')' in line):
+            roundCount -= 1
+        if len(line) >= 4 and " " in line and bracketCheck(line,file) and len(line.split(" ")) >= 2 and keywordExclusion(line) and classCheck(line,scopeCount,file) and roundCount == 0 and line.strip().find(',') != 0:
             if scopeCount <= 0:
-                print("PASSED GLOBAL VARIABLE TOOL we found a global variable in: ", line)
+                #print("PASSED GLOBAL VARIABLE TOOL we found a global variable in: ", line)
                 locationOccurences.append(currentLine)
         currentLine = currentLine + 1
-    print("IN GLOBAL==========",locationOccurences,"=================")
+    #print("IN GLOBAL==========",locationOccurences,"=================")
     return locationOccurences
