@@ -1,20 +1,20 @@
 {% extends 'fileSelect/base.html'%}
 {% block content %}
 {% load my_tags %}
-    <h1>{{fileName}}</h1>
+    <h1 style="font-family:'Google Sans',Roboto,Arial,sans-serif;font:10rem;">{{fileName}}</h1>
     <form method="post">
         {% csrf_token %}
         <button formaction='../../executeProgram/' type="submit" value="" name="folderName" class = "button-23" >RETURN</button>
     </form> 
-    <div class ="row">
-        <div class = "col">
-            <pre data-line='{{highlight}}' class="line-numbers language-cpp" style = '--color: var(--{{issue}});' tabindex="0">
-                <code>
+    <div class ="row code-div">
+        <div class = "col-sm-9 code-div" style="height:100%;">
+            <pre data-line='{{highlight}}' class="line-numbers language-cpp code-div" style = '--color: var(--{{issue}});' tabindex="0">
+                <code >
                     {{totalString}}
                 </code>
             </pre>
         </div>
-        <div class ="col">
+        <div class ="col-sm-2">
             {% if totalDependencies %}
                 <h4>Inheritance dependencies</h4>
             {%for tree in totalDependencies %}
@@ -22,7 +22,7 @@
             {% for key in tree %}
             <form method="post">
                 {% csrf_token %}
-                <button class="button-23" data-toggle="collapse" data-target="#{{key}}" aria-expanded="false" aria-controls="{{key}}"
+                <button class="button-23-implementation" data-toggle="collapse" data-target="#{{key}}" aria-expanded="false" aria-controls="{{key}}"
                     type="button">
                     {{ key }}
                 </button>

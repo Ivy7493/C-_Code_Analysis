@@ -3,10 +3,10 @@
   <div class="col-sm-auto d-grid gap-4">
     <div class="p-2 bg-light border">
         <button name="button"data-toggle="collapse"data-target="#allIssues"aria-expanded="false"aria-controls="allIssues"type="button"class="p-2 btn">All Issues</button>
-        <div class="col-sm-4 collapse" id="allIssues">
+        <div class="col-sm-auto collapse" id="allIssues">
           <div class="row">
-            <div class="col-9">
-              <h2>Headers</h2>
+            <div class="col-sm-auto">
+              <h2 style="text-shadow:#0000009a;">Headers </h2>
               {% for key,val in headers.items %}
               <form method="post">
                 {% csrf_token %}
@@ -16,8 +16,8 @@
               </form>
               {% endfor %}
             </div>
-            <div class="col-9">
-              <h2>Source</h2>
+            <div class="col-sm-auto">
+              <h2 style="text-shadow:#0000009a;">Source</h2>
               {% for key,val in sources.items %}
               <form method="post">
                 {% csrf_token %}
@@ -140,29 +140,17 @@
   </div>
 
   <!-- code taken from https://stackoverflow.com/questions/49809112/create-a-tree-diagram-multiple-parents-with-pure-html-css -->
-
-  {% include 'fileSelect/tree.html' %}
-
-  <!-- <div class="items">
-    <ul>
-      <a href="#" class="">Dagon/a>
-      <li>
-        <a href="#" class="">Dagon</a>
-        <a href="#" class="">Veil of Discord</a>
-        <a href="#" class="">Other Parent Item</a>
-        <ul>
-          <li>
-            <a href="#">Null Talisman</a>
-            <ul>
-              <li><a href="#">Circlet</a></li>
-              <li><a href="#">Mantle of Intelligence</a></li>
-              <li><a href="#">Recipe: Null Talisman</a></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </div> -->
+  
+  <div class="col-sm-auto">
+    <button name="button-class-structure" data-toggle="collapse" data-target="#classStructure" aria-expanded="false" aria-controls="classStructure"type="button" class="button-17">
+      Class Structure
+    </button>
+  </div>
+  <div class="col-sm-6">
+      <div class="row collapse class-layout"id="classStructure">
+        {% include 'fileSelect/tree.html' %}
+      </div>
+  </div>
 </div>
 
 {% endblock content%}
