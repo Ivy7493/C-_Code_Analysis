@@ -3,7 +3,8 @@ from django.shortcuts import render
 from numpy import append
 from listings.pathForm import getPath
 from ProcessController import ProcessController as PrscC
-from switchService import extractTypeTree
+#from switchService import extractTypeTree
+from implementationInheritanceService import extractImplementationTree
 import os
 from persistentService import saveData,getData
 from tkinter import filedialog
@@ -122,7 +123,7 @@ def executeProgram(request):
     for headerName in headers:
         # print(headerName)
         try:
-            tree,location = extractTypeTree(headers[headerName],headers,headerName)
+            tree,location = extractImplementationTree(headers[headerName],headers,[],headerName)
             # print(tree)
             tree.append(headerName.split(".")[0])
             totalDependencies.append(tree)
@@ -246,7 +247,7 @@ def executeProgram(request):
 
 def generateUML(baseClasses,UMLstruct,count):
     if(count == 0):
-        print('}')
+        #print('}')
         temp = getData('tree')
         temp.append('}')
         saveData('tree', temp)
@@ -255,27 +256,27 @@ def generateUML(baseClasses,UMLstruct,count):
         if(baseClass in UMLstruct):
             if(len(UMLstruct[baseClass]) > 0):
                 # print("we in here")
-                print('}')
+                #print('}')
                 temp = getData('tree')
                 temp.append('}')
                 saveData('tree', temp)
                 for x in UMLstruct[baseClass]:
                     generateUML([x],UMLstruct,count + 1)
-                    print(x)
+                    #print(x)
                     temp = getData('tree')
                     temp.append(x)
                     saveData('tree',temp)
-                print('{') #old start
+                #print('{') #old start
                 temp = getData('tree')
                 temp.append('{')
                 saveData('tree', temp)
         if(count == 0):
-            print(baseClass)
+            #print(baseClass)
             temp = getData('tree')
             temp.append(baseClass)
             saveData('tree', temp)
     if(count == 0):
-        print('{')
+        #print('{')
         temp = getData('tree')
         temp.append('{')
         saveData('tree', temp[::-1])

@@ -45,7 +45,7 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
         if(isRangeInput):
             workingFileCounter = 0;
             for y in workingFile:
-                if(lineInQuestion in y and counter not in blackList):
+                if(lineInQuestion in y and counter not in blackList ):
                     found[0] = True
                     pos1 = counter
                     tempIndex = counter
@@ -60,11 +60,16 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
                     rawLocations.append(data[0] + '-' + str(pos1) + '@' + str(pos2))
                     break
                 counter += 1
-        else:    
+        else:
+            fileCounter = 0
             for y in workingFile:
-                if(lineInQuestion in y):
-                    rawLocations.append(data[0] + '-' + str(counter))
+                workingY = y.strip()
+                workingY = workingY.lstrip()
+                workingY = workingY.rstrip()
+                if(lineInQuestion in workingY):
+                    rawLocations.append(data[0] + '-' + str(fileCounter))
                 counter += 1
+                fileCounter += 1;
 
     return rawLocations
 
@@ -77,7 +82,7 @@ def getFiles(path):
     rawHeaderList = {}
     for (root, dirs, file) in os.walk(path):
         for f in file:
-            if '.cpp' in f or '.h' in f:
+            if '.cpp' in f or '.h' in f and f.count(".") == 1:
                 #print(f)
                 sourceFile = os.path.join(root, f)
                 source = open(sourceFile, "r")
