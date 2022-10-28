@@ -1,46 +1,11 @@
 from implementationInheritanceService import extractImplementationTree
 
-
-def extractTypeTree(file,headers,fileName):
-    #print("Current-Line: ", line)
-    for line in file:
-        #print(line)
-        if ("private" in line or "protected" in line or "public" in line) and "class" in line and ':' in line:
-            #print("YAAAAS: ", line)
-            cleanline = line.split(':')[1]
-            cleanline = cleanline.rstrip('}')
-            cleanline = cleanline.rstrip('{')
-            cleanline = cleanline.rstrip()
-            cleanline = cleanline.lstrip()
-            cleanline = cleanline.replace("{","")
-            #print("After fixing: ")
-            #print(cleanline)            
-            NextInheritedClass = cleanline.split(" ")[1]
-            nextInheritedHeaderFile = []
-            #print("Next Inherited Class: ")
-            #print(NextInheritedClass)
-            try:
-                #print("We trying to get ", NextInheritedClass + '.h')
-                nextInheritedHeaderFile = headers[NextInheritedClass + '.h']
-            except:
-                print("Type got away!")
-            #print("Current Level Extraction: ")
-            #print("Next Class: ",NextInheritedClass)
-            returnedTree,location = extractImplementationTree(nextInheritedHeaderFile,headers,[],NextInheritedClass + '.h')
-            #print("What we got back")
-            #print(returnedTree)
-            returnedTree.append(NextInheritedClass)
-            location.append(fileName + '-' + str(file.index(line)));
-
-            return returnedTree,location
-        elif("class" in line and ':' not in line and line.index('class') == 0 and fileName.split('.')[0].lower() in line.lower()): #Here when we hit the bottom
-            return [],[]
-
-
 def analyzeType(headers,sources):
     combined = [headers,sources]
     enumData = []
     enumNameData = []
+    classNameData=[]
+    classNameLocation=[]
     for type in combined:
         for file in type:
             enumScopeCount = 0 
@@ -74,19 +39,37 @@ def analyzeType(headers,sources):
                         enumName = ""
                         if "enum class" in line:
                             startPos = line.find("enum class") + len("enum class") + 1
-                            endPos = line.find('{')
-                            enumName = line[startPos:endPos]
-                            enumName = enumName.strip()
-                            print("Extracted Enum class Name: ", enumName)
+                            enumName = ""
+                            if(line.find("{") != -1):
+                                endPos = line.find('{')
+                                enumName = line[startPos:endPos]
+                                enumName = enumName.strip()
+                            else:
+                                enumName = line[startPos:]
+                                enumName = enumName.strip()
+                            # print("Extracted Enum class Name: ", enumName)
                         elif "enum" in line:
                             startPos = line.find("enum") + len("enum") + 1
-                            endPos = line.find('{')
-                            enumName = line[startPos:endPos]
-                            enumName = enumName.strip()
-                            print("Extracted Enum Name: ", enumName)
+                            enumName = ""
+                            if(line.find("{") != -1):
+                                endPos = line.find('{')
+                                enumName = line[startPos:endPos]
+                                enumName = enumName.strip()
+                            else:
+                                enumName = line[startPos:]
+                                enumName = enumName.strip()
+                            # print("Extracted Enum Name: ", enumName)
                         enumNameData.append(enumName)
-                        
-    return enumData,enumNameData
+                if ".h" in file and "class" in line and line.find("class") == 0 and "enum" not in line:
+                    tempClassLine = line.strip('{')
+                    tempClassLine = tempClassLine.strip('}')
+                    tempClassLine =tempClassLine.split(' ')[1]
+                    tempClassLine=tempClassLine.strip(" ")
+                    tempClassLine=tempClassLine.split(":")[0]
+                    classNameLocation.append(file+"-"+str(type[file].index(line)))
+                    classNameData.append(tempClassLine)
+                    
+    return enumData,enumNameData,classNameData,classNameLocation
 
                         
 
@@ -97,6 +80,29 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
     extractedLocations = []
     lastestSwitch = -1;
     for line in file:
+        #Case search
+        strippedLine = line.strip()
+        strippedLine = strippedLine.lstrip()
+        strippedLine = strippedLine.rstrip()
+        if("case" in strippedLine and strippedLine.find("case") == 0 and ':' in strippedLine):
+            print("case detected:")
+            print(line)
+            startPos = line.strip().find(" ")
+            caseLine = line[startPos+1:-1]
+            print("Extracted Case condition: ", caseLine)
+            if('::' in caseLine):
+                print("Had to fix a line")
+                caseLine = caseLine[caseLine.rfind('::')+2:]
+                print("Extracted Case condition: ", caseLine)
+            extractedConditions.append(caseLine)
+            currenCount = currentLine
+            while("switch" not in file[currenCount]  and not file[currenCount].strip().find('switch') == 0 and not file[currenCount].find('.') < file[currenCount].find("switch")):
+                currenCount -=1;
+            print("Switch Detected At: ")
+            print(file[currenCount])
+            extractedLocations.append(currenCount)
+
+        #declaration search
         if("switch" in line and line.strip().find('switch') == 0 and ("(" in line) and ( ")" in line) and ('=' not in line)):
             lastestSwitch = currentLine;
             print("switch found in: ",fileName)
@@ -214,16 +220,6 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
                             print("Ignore This")
 
             #locationOccurence.append(str(startBlock) + '@' + str(tempCounter))
-        elif("case" in line and line.strip().find("case") == 0 and line.strip().find(":") == (len(line)-1)):
-            startPos = line.strip().find(" ")
-            caseLine = line[startPos+1:-1]
-            print("Extracted Case condition: ", caseLine)
-            if('::' in caseLine):
-                print("Had to fix a line")
-                caseLine = caseLine[caseLine.find('::')+1:]
-                print("Extracted Case condition: ", caseLine)
-            extractedConditions.append(caseLine)
-            extractedLocations.append(lastestSwitch)
         currentLine = currentLine + 1
     if(len(extractedConditions) > 0):
         listCounter = 0;
