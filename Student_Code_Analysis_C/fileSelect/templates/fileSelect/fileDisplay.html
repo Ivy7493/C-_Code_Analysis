@@ -140,8 +140,18 @@
   </div>
 
   <!-- code taken from https://stackoverflow.com/questions/49809112/create-a-tree-diagram-multiple-parents-with-pure-html-css -->
-
-  {% include 'fileSelect/tree.html' %}
+  
+  <div>
+    <button name="button-class-structure" data-toggle="collapse" data-target="#classStructure" aria-expanded="false" aria-controls="classStructure"type="button" class="button-17">
+      Class Structure
+    </button>
+  </div>
+  <div class="collapse col-sm-7"id="classStructure">
+      <div class="row class-layout">
+        {% include 'fileSelect/tree.html' %}
+      </div>
+  </div>
+  
 
   <!-- <div class="items">
     <ul>

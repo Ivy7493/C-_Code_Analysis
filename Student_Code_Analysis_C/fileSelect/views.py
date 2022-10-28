@@ -205,7 +205,7 @@ def executeProgram(request):
             
         elif'{' not in x and '}' not in x and (lastScope=="sep" and scopeCount==1):
             #print("this only occurs if lastscope=sep and scopecount =1")
-            fullFile+= "<div>"+"\n" + "<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+" name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"+'\n'+'</div>'
+            fullFile+= "<div class='tree col-sm-auto'>"+"\n" + "<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+" name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"+'\n'+'</div>'
             
         elif'{' not in x and '}' not in x and (lastScope=="together" and scopeCount==2):
             #print ("This is where last div is removed from line:", lastScope)
@@ -215,7 +215,7 @@ def executeProgram(request):
         
         elif '{' not in x and '}' not in x and (lastScope!="sep" and lastScope!="together"and scopeCount==1):
             #print("Generic statement MARK @",x)
-            fullFile+= "<div>"+"<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+" name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"+"\n"+"</div>"+"\n"
+            fullFile+= "<div class='tree col-sm-auto'>"+"<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"\n"+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+" name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"+"\n"+"</div>"+"\n"
         #print("+",fullFile)
     #print("+",fullFile)
 
