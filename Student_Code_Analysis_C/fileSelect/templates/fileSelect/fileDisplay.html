@@ -141,38 +141,16 @@
 
   <!-- code taken from https://stackoverflow.com/questions/49809112/create-a-tree-diagram-multiple-parents-with-pure-html-css -->
   
-  <div>
+  <div class="col-sm-auto">
     <button name="button-class-structure" data-toggle="collapse" data-target="#classStructure" aria-expanded="false" aria-controls="classStructure"type="button" class="button-17">
       Class Structure
     </button>
   </div>
-  <div class="collapse col-sm-7"id="classStructure">
-      <div class="row class-layout">
+  <div class="col-sm-6">
+      <div class="row collapse class-layout"id="classStructure">
         {% include 'fileSelect/tree.html' %}
       </div>
   </div>
-  
-
-  <!-- <div class="items">
-    <ul>
-      <a href="#" class="">Dagon/a>
-      <li>
-        <a href="#" class="">Dagon</a>
-        <a href="#" class="">Veil of Discord</a>
-        <a href="#" class="">Other Parent Item</a>
-        <ul>
-          <li>
-            <a href="#">Null Talisman</a>
-            <ul>
-              <li><a href="#">Circlet</a></li>
-              <li><a href="#">Mantle of Intelligence</a></li>
-              <li><a href="#">Recipe: Null Talisman</a></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </div> -->
 </div>
 
 {% endblock content%}
