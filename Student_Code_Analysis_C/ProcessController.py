@@ -17,8 +17,12 @@ def ProcessController(fileName):
     locationOccurencesForGlobal = []
     locationOccurencesForDRY = []
     typeData = analyzeType(headers,source)
+    
     #------------------DRY TOOL---------------------------------------#
-    locationOccurencesForDRY = analyzeDRY(headers,source)
+    try:
+        locationOccurencesForDRY = analyzeDRY(headers,source)
+    except:
+        print("Dry princple errors")
     # print("First!")
     # print(locationOccurencesForDRY)
     # print('----testing Section-----')
@@ -142,4 +146,8 @@ def ProcessController(fileName):
     #locationOccurencesForDRY = list(set(locationOccurencesForDRY))
     # print("Total DRY Sections: ")
     # print("Occurrences: ", locationOccurencesForDRY)
+    try:
+        print(headers["Map.h"])
+    except:
+        print("Good try")
     return rawHeaders,rawSource,issueLocationArr
