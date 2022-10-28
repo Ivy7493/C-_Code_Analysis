@@ -124,12 +124,12 @@ def ProcessController(fileName):
     # print("Total Implementation Inheritance: ")
     #print("Occurrences: ", locationOccurrencesForImplementationInheritance)
     # print(" ")
-    print('=========================================================')
-    locationOccurencesForGlobal = list(set(locationOccurencesForGlobal))
-    print("Total Global Variables: ")
-    print("Occurrences: ", locationOccurencesForGlobal)
-    print(" ")
-    print('=========================================================')
+    #print('=========================================================')
+    #locationOccurencesForGlobal = list(set(locationOccurencesForGlobal))
+    #print("Total Global Variables: ")
+    #print("Occurrences: ", locationOccurencesForGlobal)
+    #print(" ")
+    #print('=========================================================')
     #locationOccurrencesForPublic = list(set(locationOccurrencesForPublic))
     # print("Total Public Variables: ")
     #print("Occurrences: ", locationOccurrencesForPublic)
@@ -147,7 +147,19 @@ def ProcessController(fileName):
     # print("Total DRY Sections: ")
     # print("Occurrences: ", locationOccurencesForDRY)
     try:
-        print(headers["Map.h"])
+        print("======88888========")
+        print(headers["TexturesClass.h"])
+        print('---------------')
+        #print(locationOccurrencesForPublic)
+        for d in locationOccurrencesForPublic:
+            if "TexturesClass" in d:
+                print(d)
+        
+        print('####################')
+        for d in rawPublicLocations:
+            if "TexturesClass" in d:
+                print(d)
+        #print(rawPublicLocations)
     except:
         print("Good try")
     return rawHeaders,rawSource,issueLocationArr

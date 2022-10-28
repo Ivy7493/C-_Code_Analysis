@@ -1,21 +1,24 @@
+from implementationInheritanceService import extractImplementationTree
+
+
 def extractTypeTree(file,headers,fileName):
     #print("Current-Line: ", line)
     for line in file:
         #print(line)
         if ("private" in line or "protected" in line or "public" in line) and "class" in line and ':' in line:
-            print("YAAAAS: ", line)
+            #print("YAAAAS: ", line)
             cleanline = line.split(':')[1]
             cleanline = cleanline.rstrip('}')
             cleanline = cleanline.rstrip('{')
             cleanline = cleanline.rstrip()
             cleanline = cleanline.lstrip()
             cleanline = cleanline.replace("{","")
-            print("After fixing: ")
-            print(cleanline)            
+            #print("After fixing: ")
+            #print(cleanline)            
             NextInheritedClass = cleanline.split(" ")[1]
             nextInheritedHeaderFile = []
-            print("Next Inherited Class: ")
-            print(NextInheritedClass)
+            #print("Next Inherited Class: ")
+            #print(NextInheritedClass)
             try:
                 #print("We trying to get ", NextInheritedClass + '.h')
                 nextInheritedHeaderFile = headers[NextInheritedClass + '.h']
@@ -23,7 +26,7 @@ def extractTypeTree(file,headers,fileName):
                 print("Type got away!")
             #print("Current Level Extraction: ")
             #print("Next Class: ",NextInheritedClass)
-            returnedTree,location = extractTypeTree(nextInheritedHeaderFile,headers,NextInheritedClass + '.h')
+            returnedTree,location = extractImplementationTree(nextInheritedHeaderFile,headers,[],NextInheritedClass + '.h')
             #print("What we got back")
             #print(returnedTree)
             returnedTree.append(NextInheritedClass)
@@ -90,9 +93,12 @@ def analyzeType(headers,sources):
 def analyzeSwitch(file,headers,sources,typeData,fileName):
     locationOccurence = [];
     currentLine = 0;
-    
+    extractedConditions = []
+    extractedLocations = []
+    lastestSwitch = -1;
     for line in file:
-        if("switch" in line and ("(" in line) and ( ")" in line) and ('=' not in line) and ('{' in line or '{' in file[file.index(line) + 1])):
+        if("switch" in line and line.strip().find('switch') == 0 and ("(" in line) and ( ")" in line) and ('=' not in line)):
+            lastestSwitch = currentLine;
             print("switch found in: ",fileName)
             print(line)
             print("pos: ", str(currentLine))
@@ -113,7 +119,7 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
             try:
                 extractedName = fileName.split('.')[0]
                 passedFile = headers[extractedName + '.h']
-                output,outputlocation = extractTypeTree(passedFile,headers,fileName)
+                output,outputlocation = extractImplementationTree(passedFile,headers,[],fileName)
                 output.append(extractedName)
                 types = ['.h','.cpp']
                
@@ -139,7 +145,7 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
             
             if(fileList == []):
                 continue
-            print("stage 1")
+            #print("stage 1")
             for retrievedFile in fileList:
                 firstReference = False;
                 for sourceLine in retrievedFile:
@@ -208,7 +214,23 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
                             print("Ignore This")
 
             #locationOccurence.append(str(startBlock) + '@' + str(tempCounter))
+        elif("case" in line and line.strip().find("case") == 0 and line.strip().find(":") == (len(line)-1)):
+            startPos = line.strip().find(" ")
+            caseLine = line[startPos+1:-1]
+            print("Extracted Case condition: ", caseLine)
+            if('::' in caseLine):
+                print("Had to fix a line")
+                caseLine = caseLine[caseLine.find('::')+1:]
+                print("Extracted Case condition: ", caseLine)
+            extractedConditions.append(caseLine)
+            extractedLocations.append(lastestSwitch)
         currentLine = currentLine + 1
+    if(len(extractedConditions) > 0):
+        listCounter = 0;
+        for extracted in extractedConditions:
+            if(extracted in typeData[0]):
+                locationOccurence.append(extractedLocations[listCounter])
+            listCounter += 1;
     return locationOccurence
 
 
