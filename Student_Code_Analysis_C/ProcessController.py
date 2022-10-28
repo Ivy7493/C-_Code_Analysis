@@ -19,7 +19,8 @@ def ProcessController(fileName):
     # typeData = analyzeType(headers,source)
     
     typeData,enumNames,classNames,classNameLocations = analyzeType(headers,source)
-    typeData.extend(enumNames)
+    #typeData.extend(enumNames)
+    typeData = [typeData,enumNames]
     print("START OF PROCESS CONTROLLER",typeData)
     print("classNames Extracted:",classNames)
     print("Raw Line numbers of class declarations: ",classNameLocations)
