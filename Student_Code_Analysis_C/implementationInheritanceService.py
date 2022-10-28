@@ -104,12 +104,12 @@ def checkForUsage(functionName,file,fileName):
 
 
 def extractImplementationTree(File, headers, source, fileName):
-    print("For file: ", fileName)
-    print("$$$$$$$$$$$$$$$$$$$$$$")
+    #print("For file: ", fileName)
+    #print("$$$$$$$$$$$$$$$$$$$$$$")
     for line in File:
         #print(line)
         if("class" in line and ':' in line and line.find('class') == 0) :
-            print("YAAAAS: ", line)
+            #print("YAAAAS: ", line)
             cleanline = "";
             workingLine = line.strip()
             if workingLine.find(':') == (len(workingLine) -1):
@@ -124,13 +124,13 @@ def extractImplementationTree(File, headers, source, fileName):
             cleanline = cleanline.rstrip('{')
             cleanline = cleanline.rstrip()
             cleanline = cleanline.lstrip()
-            print("stage 2")
+            #print("stage 2")
            
 
             allInheritedClasses = []
             if("," in cleanline):
                 workingCleanLine = cleanline.split(",")
-                print(workingCleanLine)
+                #print(workingCleanLine)
                 for x in workingCleanLine:
                     temp = x.strip()
                     temp = temp.rstrip()
@@ -142,13 +142,13 @@ def extractImplementationTree(File, headers, source, fileName):
 
                 lastSpacePos = cleanline.rfind(' ')
                 allInheritedClasses.append(cleanline[lastSpacePos+1:])
-            print("After fixing: ")
-            print(allInheritedClasses)
+            #print("After fixing: ")
+            #print(allInheritedClasses)
             returnedTree = []
             location = []
             for foundClass in allInheritedClasses:
                 if foundClass + '.h' in headers:
-                    print("we found :", foundClass + '.h')
+                    #print("we found :", foundClass + '.h')
                     nextInheritedHeaderFile = headers[foundClass + '.h']
                     workingTree,workingLocation = extractImplementationTree(nextInheritedHeaderFile,headers,source,foundClass + '.h')
                     # returnedTree,location = extractImplementationTree(nextInheritedHeaderFile,headers,source,NextInheritedClass + '.h')

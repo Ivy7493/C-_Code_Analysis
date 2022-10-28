@@ -100,20 +100,20 @@ def ProcessController(fileName):
 
 
     #======================Raw Location Test===============================#
-    print("========FULL ISSUES=====")
-    print("LOCATION OCCURENCES FOR GLOBAL",locationOccurencesForGlobal)
+    #print("========FULL ISSUES=====")
+    #print("LOCATION OCCURENCES FOR GLOBAL",locationOccurencesForGlobal)
     rawGlobalLocations = findRawLocation(locationOccurencesForGlobal,rawHeaders,rawSource,source,headers)
-    print("global: ",rawGlobalLocations)
+    #print("global: ",rawGlobalLocations)
     rawSwitchLocations = findRawLocation(locationOccurrencesForSwitch,rawHeaders,rawSource,source,headers)
-    print("rawswitch: ",rawSwitchLocations)
+    #print("rawswitch: ",rawSwitchLocations)
     rawFriendLocations = findRawLocation(locationOccurrencesForFriend,rawHeaders,rawSource,source,headers)
-    print("rawfriend: ",rawFriendLocations)
+    #print("rawfriend: ",rawFriendLocations)
     rawPublicLocations = findRawLocation(locationOccurrencesForPublic,rawHeaders,rawSource,source,headers)
-    print("rawpublic: ",rawPublicLocations)
+    #print("rawpublic: ",rawPublicLocations)
     rawInheritanceLocations = findRawLocation(locationOccurrencesForImplementationInheritance,rawHeaders,rawSource,source,headers)
-    print("rawinheritance: ",rawInheritanceLocations)
+    #print("rawinheritance: ",rawInheritanceLocations)
     rawDRYLocations = findRawLocation(locationOccurencesForDRY,rawHeaders,rawSource,source,headers)
-    print("rawdry: ",rawDRYLocations)
+    #print("rawdry: ",rawDRYLocations)
     
     
     
@@ -146,20 +146,4 @@ def ProcessController(fileName):
     #locationOccurencesForDRY = list(set(locationOccurencesForDRY))
     # print("Total DRY Sections: ")
     # print("Occurrences: ", locationOccurencesForDRY)
-    try:
-        print("======88888========")
-        print(headers["TexturesClass.h"])
-        print('---------------')
-        #print(locationOccurrencesForPublic)
-        for d in locationOccurrencesForPublic:
-            if "TexturesClass" in d:
-                print(d)
-        
-        print('####################')
-        for d in rawPublicLocations:
-            if "TexturesClass" in d:
-                print(d)
-        #print(rawPublicLocations)
-    except:
-        print("Good try")
     return rawHeaders,rawSource,issueLocationArr
