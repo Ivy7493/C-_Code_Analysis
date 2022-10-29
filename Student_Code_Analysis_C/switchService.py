@@ -6,6 +6,7 @@ def analyzeType(headers,sources):
     enumNameData = []
     classNameData=[]
     classNameLocation=[]
+    classScopes=[]
     for type in combined:
         for file in type:
             enumScopeCount = 0 
@@ -60,16 +61,35 @@ def analyzeType(headers,sources):
                                 enumName = enumName.strip()
                             # print("Extracted Enum Name: ", enumName)
                         enumNameData.append(enumName)
-                if ".h" in file and "class" in line and line.find("class") == 0 and "enum" not in line:
+                if ".h" in file and "class" in line and line.find("class") == 0 and "enum" not in line and ('{' in line or '{' in type[file][type[file].index(line)+1] or '{' in type[file][type[file].index(line)+2]):
+                    
+                    ###Extracting Scope
+                    scopeCount = 1
+                    scopeProtect = False
+                    currentLine = type[file].index(line)
+                    startOfClass=currentLine
+                    firstOc = True;
+                    while scopeCount>0:
+                        if '{' in type[file][currentLine] and firstOc:
+                            firsOc=False
+                        elif '{' in type[file][currentLine] and not fistOc:
+                            scopeCount+=1
+                        if '}' in type[file][currentLine]:
+                            scopeCount-=1
+                        currentLine += 1
+                    endOfClass = currentLine
+                       
+                    # Getting the classNames
                     tempClassLine = line.strip('{')
                     tempClassLine = tempClassLine.strip('}')
                     tempClassLine =tempClassLine.split(' ')[1]
                     tempClassLine=tempClassLine.strip(" ")
                     tempClassLine=tempClassLine.split(":")[0]
                     classNameLocation.append(file+"-"+str(type[file].index(line)))
+                    classScopes.append(str(startOfClass)+'@'+str(endOfClass))
                     classNameData.append(tempClassLine)
                     
-    return enumData,enumNameData,classNameData,classNameLocation
+    return enumData,enumNameData,classNameData,classNameLocation,classScopes
 
                         
 

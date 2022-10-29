@@ -18,7 +18,7 @@ def ProcessController(fileName):
     locationOccurencesForDRY = []
     # typeData = analyzeType(headers,source)
     
-    typeData,enumNames,classNames,classNameLocations = analyzeType(headers,source)
+    typeData,enumNames,classNames,classNameLocations,classScopes = analyzeType(headers,source)
     #typeData.extend(enumNames)
     typeData = [typeData,enumNames]
     print("START OF PROCESS CONTROLLER",typeData)
@@ -34,6 +34,16 @@ def ProcessController(fileName):
     # print("First!")
     # print(locationOccurencesForDRY)
     # print('----testing Section-----')
+    for currentClass in classNames:
+        #------------------Implementation Inheritance---------------------#
+        try:
+            impLine = analyzeImplementationInheritance(source,headers,currentClass,classNames,classNameLocations,classScopes)
+            if(len(impLine) != 0):
+                impLine = list(set(impLine))
+            for member in impLine:
+                locationOccurrencesForImplementationInheritance.append(member)
+        except:
+            print("IMplementation error")
 
     
     for x in headers:
@@ -73,14 +83,7 @@ def ProcessController(fileName):
         except:
             print("PDM error")
 
-        #------------------Implementation Inheritance---------------------#
-        try:
-            impLine = analyzeImplementationInheritance(headers[x],source,headers,x)
-            impLine = list(set(impLine))
-            for member in impLine:
-                locationOccurrencesForImplementationInheritance.append(member)
-        except:
-            print("Implementation Error")
+        
         
 
    
