@@ -108,11 +108,18 @@ def extractImplementationTree(File, headers, source, fileName):
     #print("$$$$$$$$$$$$$$$$$$$$$$")
     for line in File:
         #print(line)
-        if("class" in line and ':' in line and line.find('class') == 0) :
+        nextLine  =""
+        try:
+            nextLine = File[File.index(line) + 1]
+        except:
+            print("Next line out of index")
+
+        if("class" in line and (':' in line or ':' in nextLine ) and line.find('class') == 0) :
             #print("YAAAAS: ", line)
             cleanline = "";
             workingLine = line.strip()
-            if workingLine.find(':') == (len(workingLine) -1):
+            nextWorkingLine = nextLine.strip()
+            if workingLine.find(':') == (len(workingLine) -1) or nextWorkingLine.find(':') == 0:
                 print("Passed weird line")
                 try:
                     cleanline = File[File.index(line)+1]
@@ -142,8 +149,8 @@ def extractImplementationTree(File, headers, source, fileName):
 
                 lastSpacePos = cleanline.rfind(' ')
                 allInheritedClasses.append(cleanline[lastSpacePos+1:])
-            #print("After fixing: ")
-            #print(allInheritedClasses)
+            print("After fixing: ")
+            print(allInheritedClasses)
             returnedTree = []
             location = []
             for foundClass in allInheritedClasses:
@@ -221,7 +228,7 @@ def findClassDeclaration(file,className):
     for line in file:
         fixedLine = line.lower()
         if(className in fixedLine and 'class' in fixedLine and (fixedLine.find('class') < fixedLine.find(className)) and ' ' in fixedLine and fixedLine.find('class') == 0):
-            print("YEEE FOUND IT", className)
+            #print("YEEE FOUND IT", className)
             return file.index(line)
 
 def checkChainForImplementationInheritance(chain,source,headers):
@@ -272,6 +279,8 @@ def analyzeImplementationInheritance(file,source,headers,passedFileName):
     print("====================== " + passedFileName + " ======================")
     output,outputLocation = extractImplementationTree(file,headers,source,passedFileName);
     output.append(originalFile)
+    #print("->")
+    #print(output)
     preChain = AnalyzeInheritanceChain(output,source,headers)
     results = checkChainForImplementationInheritance(preChain,source,headers)
     print("This Chains Inheritance issues")
