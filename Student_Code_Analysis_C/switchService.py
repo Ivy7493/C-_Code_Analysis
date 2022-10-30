@@ -1,11 +1,13 @@
-from implementationInheritanceService import extractImplementationTree
+from numpy import save
+from implementationInheritanceService import extractImplementationTreeClassName
+from persistentService import saveData,getData
 
 def analyzeType(headers,sources):
     combined = [headers,sources]
     enumData = []
     enumNameData = []
     classNameData=[]
-    classNameLocation=[]
+    classNameLocations=[]
     classScopes=[]
     for type in combined:
         for file in type:
@@ -85,11 +87,14 @@ def analyzeType(headers,sources):
                     tempClassLine =tempClassLine.split(' ')[1]
                     tempClassLine=tempClassLine.strip(" ")
                     tempClassLine=tempClassLine.split(":")[0]
-                    classNameLocation.append(file+"-"+str(type[file].index(line)))
+                    classNameLocations.append(file+"-"+str(type[file].index(line)))
                     classScopes.append(str(startOfClass)+'@'+str(endOfClass))
                     classNameData.append(tempClassLine)
+    saveData("classNames",classNameData)
+    saveData("classNameLocations",classNameLocations)
+    saveData("classScopes",classScopes)
                     
-    return enumData,enumNameData,classNameData,classNameLocation,classScopes
+    return enumData,enumNameData,classNameData,classNameLocations,classScopes
 
                         
 
@@ -145,8 +150,16 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
             try:
                 extractedName = fileName.split('.')[0]
                 passedFile = headers[extractedName + '.h']
-                output,outputlocation = extractImplementationTree(passedFile,headers,[],fileName)
-                output.append(extractedName)
+                classNames=getData("classNames")
+                classLocations=getData("classNameLocations")
+                passedClassNames=[]
+                output=[]
+                for className in classNames:
+                    if extractedName in classLocations[classNames.index(className)]:
+                        passedClassNames.append(className)
+                for passedClassName in passedClassNames:
+                    output,outputlocation = extractImplementationTreeClassName(headers,sources,passedClassName,classNames,classLocations)
+                    output.append(extractedName)
                 types = ['.h','.cpp']
                
                 for type in types:

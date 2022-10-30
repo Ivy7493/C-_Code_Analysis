@@ -24,7 +24,7 @@ def ProcessController(fileName):
     print("START OF PROCESS CONTROLLER",typeData)
     print("classNames Extracted:",classNames)
     print("Raw Line numbers of class declarations: ",classNameLocations)
-    classNameLocations=findRawLocation(classNameLocations,rawHeaders,rawSource,source,headers)
+    
     
     #------------------DRY TOOL---------------------------------------#
     try:
@@ -157,4 +157,5 @@ def ProcessController(fileName):
     #locationOccurencesForDRY = list(set(locationOccurencesForDRY))
     # print("Total DRY Sections: ")
     # print("Occurrences: ", locationOccurencesForDRY)
+    classNameLocations=findRawLocation(classNameLocations,rawHeaders,rawSource,source,headers)
     return rawHeaders,rawSource,issueLocationArr

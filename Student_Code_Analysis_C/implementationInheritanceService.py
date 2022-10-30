@@ -4,6 +4,7 @@ def hasImplementationPresent(functionType,functionName,cppFile):
     functionStart = -1
     implementationFound = False
     bigScope = 0;
+    functionEnd =-1
     for line in cppFile: #Run through all lines
         implementationFound = False
         if((functionName in line) and (functionType in line) and ("(" in line and ")" in line )): #if we find the function okay cool
@@ -35,7 +36,7 @@ def hasImplementationPresent(functionType,functionName,cppFile):
                         scope -= 1
                     currentLine +=1
                 functionEnd = currentLine
-            if(implementationFound):
+            if implementationFound:
                 return str(functionStart) + '@' + str(functionEnd)
     return ""
                 
@@ -103,72 +104,6 @@ def checkForUsage(functionName,file,fileName):
     return locations
 
 
-def extractImplementationTree(File, headers, source, fileName):
-    #print("For file: ", fileName)
-    #print("$$$$$$$$$$$$$$$$$$$$$$")
-    for line in File:
-        #print(line)
-        nextLine  =""
-        try:
-            nextLine = File[File.index(line) + 1]
-        except:
-            print("Next line out of index")
-
-        if("class" in line and (':' in line or ':' in nextLine ) and line.find('class') == 0) :
-            #print("YAAAAS: ", line)
-            cleanline = "";
-            workingLine = line.strip()
-            nextWorkingLine = nextLine.strip()
-            if workingLine.find(':') == (len(workingLine) -1) or nextWorkingLine.find(':') == 0:
-                print("Passed weird line")
-                try:
-                    cleanline = File[File.index(line)+1]
-                except:
-                    print("Can't find it in the file for clean line i guess")
-                print("stage1")
-            else:
-                cleanline = line.split(':')[1]
-            cleanline = cleanline.rstrip('{')
-            cleanline = cleanline.rstrip()
-            cleanline = cleanline.lstrip()
-            #print("stage 2")
-           
-
-            allInheritedClasses = []
-            if("," in cleanline):
-                workingCleanLine = cleanline.split(",")
-                #print(workingCleanLine)
-                for x in workingCleanLine:
-                    temp = x.strip()
-                    temp = temp.rstrip()
-                    temp = temp.lstrip()
-                    temp = temp.split(" ")[1]
-                    
-                    allInheritedClasses.append(temp)
-            else:
-
-                lastSpacePos = cleanline.rfind(' ')
-                allInheritedClasses.append(cleanline[lastSpacePos+1:])
-            print("After fixing: ")
-            print(allInheritedClasses)
-            returnedTree = []
-            location = []
-            for foundClass in allInheritedClasses:
-                if foundClass + '.h' in headers:
-                    #print("we found :", foundClass + '.h')
-                    nextInheritedHeaderFile = headers[foundClass + '.h']
-                    workingTree,workingLocation = extractImplementationTree(nextInheritedHeaderFile,headers,source,foundClass + '.h')
-                    # returnedTree,location = extractImplementationTree(nextInheritedHeaderFile,headers,source,NextInheritedClass + '.h')
-                    for branch in workingTree:
-                        returnedTree.append(branch)
-                    for loc in workingLocation:
-                        location.append(loc)
-                    returnedTree.append(foundClass)
-                    location.append(fileName + '-' + str(File.index(line))); 
-                    continue           
-            return returnedTree,location
-        elif "class" in line and ':' not in line and line.find('class') == 0 and fileName.split('.')[0].lower() in line.lower(): #Here when we hit the bottom
-            return [],[]
 
 def extractImplementationTreeClassName(headers, source, className ,classNames,classLocations):
     #print("For file: ", fileName)
