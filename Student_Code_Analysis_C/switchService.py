@@ -71,8 +71,8 @@ def analyzeType(headers,sources):
                     firstOc = True;
                     while scopeCount>0:
                         if '{' in type[file][currentLine] and firstOc:
-                            firsOc=False
-                        elif '{' in type[file][currentLine] and not fistOc:
+                            firstOc=False
+                        elif '{' in type[file][currentLine] and not firstOc:
                             scopeCount+=1
                         if '}' in type[file][currentLine]:
                             scopeCount-=1
