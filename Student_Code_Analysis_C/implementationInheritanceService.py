@@ -94,7 +94,7 @@ def checkForUsage(functionName,file,fileName):
             scope += 1
         if('}' in line):
             scope -= 1; 
-        if(functionName in line and '(' in line and ')' in line and (line[line.find(functionName) + len(functionName)] == '(' or line[line.find(functionName) + len(functionName)] == ' (')):
+        if(functionName in line and '(' in line and ')' in line and (line[line.find(functionName) + len(functionName)] == '(' or line[line.find(functionName) + len(functionName)] == ' (') and 'override' not in line):
             if('::' in line and line.find('::') < line.find(functionName) and ' ' in line and line.find(" ") < line.find('::')):
                 continue
             elif '.h' in fileName and scope <= 1:

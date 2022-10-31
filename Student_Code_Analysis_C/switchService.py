@@ -112,8 +112,15 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
         if("case" in strippedLine and strippedLine.find("case") == 0 and ':' in strippedLine):
             print("case detected:")
             print(line)
-            startPos = line.strip().find(" ")
-            caseLine = line[startPos+1:-1]
+            startPos = 0;
+            caseLine = ""
+            if('(' in strippedLine and ')' in line and strippedLine.find(')') < strippedLine.find(':')):
+                startPos = line.strip().find("(")
+                endPos = line.strip().find(')')
+                caseLine = line[startPos+1:endPos]
+            else:
+                startPos = line.strip().find(" ")
+                caseLine = line[startPos+1:-1]
             print("Extracted Case condition: ", caseLine)
             if('::' in caseLine):
                 print("Had to fix a line")
