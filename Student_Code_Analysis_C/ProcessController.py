@@ -44,6 +44,27 @@ def ProcessController(fileName):
                 locationOccurrencesForImplementationInheritance.append(member)
         except:
             print("IMplementation error")
+        
+        try:
+            print("========"+ currentClass + '========')
+            #print("what we passing in")
+            scope = classScopes[classNames.index(currentClass)];
+            scope = scope.split("@")
+            startPos = int(scope[0])
+            endPos = int(scope[1])
+            fileName = classNameLocations[classNames.index(currentClass)].split('-')[0]
+            classScope = []
+            if(".cpp" in fileName):
+                classScope = source[fileName]
+            elif(".h" in fileName):    
+                classScope = headers[fileName]
+            #print(classScope)
+            publicDataMemberLocation = analyzePublicMembers(classScope)
+            publicDataMemberLocation = list(set(publicDataMemberLocation))
+            for member in publicDataMemberLocation:
+                locationOccurrencesForPublic.append(classNameLocations[classNames.index(currentClass)].split('-')[0] + '-' + str(member))
+        except:
+            print("PDM error")
 
     
     for x in headers:
@@ -75,18 +96,8 @@ def ProcessController(fileName):
             print("switch error")
 
         #------------------Public Data Member------------------------------#
-        try:
-            publicDataMemberLocation = analyzePublicMembers(headers[x])
-            publicDataMemberLocation = list(set(publicDataMemberLocation))
-            for member in publicDataMemberLocation:
-                locationOccurrencesForPublic.append(x + '-' + str(member))
-        except:
-            print("PDM error")
+       
 
-        
-        
-
-   
     for x in source:
         #-----------------Global Variable tool--------------------------------------#
         try:

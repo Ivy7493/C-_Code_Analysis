@@ -286,18 +286,18 @@ def checkChainForImplementationInheritance(chain,source,headers):
 
 def analyzeImplementationInheritance(source,headers,className,classNames,classLocations,classScopes):
     #  originalFile = classLocation.split('-')[0]
-    print("====================== " + className + " ======================")
+    #print("====================== " + className + " ======================")
     output,outputLocation = extractImplementationTreeClassName(headers,source,className,classNames,classLocations); # class name, All classes, all class locations 1-1
     output.append(className)
     #print("->")
     #print(output)
-    print("ANALYZE IMPLEMENTATION INHERITANCE: ",output)
+   #print("ANALYZE IMPLEMENTATION INHERITANCE: ",output)
     preChain = AnalyzeInheritanceChain(output,source,headers,classNames,classLocations,classScopes)
     results = checkChainForImplementationInheritance(preChain,source,headers)
-    print("This Chains Inheritance issues results:")
-    print(results)
-    print("This Chains Inheritance issues output:",output)
-    print('========================================================')
+    #print("This Chains Inheritance issues results:")
+    #print(results)
+    #print("This Chains Inheritance issues output:",output)
+    #print('========================================================')
     
     return list(set(results))
 
