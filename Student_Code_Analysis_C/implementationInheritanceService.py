@@ -110,29 +110,43 @@ def extractImplementationTreeClassName(headers, source, className ,classNames,cl
     #print("$$$$$$$$$$$$$$$$$$$$$$")
     #print(line)
     fileName = classLocations[classNames.index(className)].split("-")[0]
-    File = headers[fileName]
+    file = headers[fileName]
+    # print("$$$$$$$$$$$$$$$$$$$$$$ ",fileName," $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
     lineNumOfClass = int(classLocations[classNames.index(className)].split("-")[1])
-    lineOfClass =File[lineNumOfClass]
-    nextLine  =""
+    lineOfClass =file[lineNumOfClass]
+    lineOfClass=lineOfClass.strip()
+    nextLine=""
     try:
-        nextLine = File[lineNumOfClass + 1]
+        nextLine = file[lineNumOfClass + 1]
+        nextLine=nextLine.strip()
     except:
         print("Next line out of index")
-
-    if ':' in lineOfClass or ':' in nextLine:
-        #print("YAAAAS: ", line)
+    # print("stage 1",lineOfClass)
+    if (':' in lineOfClass and "class" in lineOfClass and lineOfClass.find("class")==0) or (':' in nextLine and nextLine.find(":")==0):
+        # print("__:__ in line :", lineOfClass,"or : in the nextline:",nextLine)
         cleanline = "";
         workingLine = lineOfClass.strip()
         nextWorkingLine = nextLine.strip()
-        if workingLine.find(':') == (len(workingLine) -1) or nextWorkingLine.find(':') == 0:
-            print("Passed weird line")
+        if "::" in workingLine:
+            # print(":: in working Line")
+            workingLine=workingLine.replace("::","``")
+            # print(workingLine)
+        if "::" in nextWorkingLine:
+            # print(":: in nextworking Line")
+            nextWorkingLine=nextWorkingLine.replace("::","``")
+            
+        if workingLine.find(':') == (len(workingLine) -1):
+            # print("Passed weird line")
             try:
-                cleanline = File[lineNumOfClass+1]
+                cleanline = nextWorkingLine;
             except:
                 print("Can't find it in the file for clean line i guess")
-            print("stage1")
+            # print("stage1")
+        elif nextWorkingLine.find(':') == 0:
+            cleanline = nextWorkingLine
+            cleanline = cleanline.replace(":","")
         else:
-            cleanline = lineOfClass.split(':')[1]
+            cleanline = workingLine.split(':')[1]
         cleanline = cleanline.rstrip('{')
         cleanline = cleanline.rstrip()
         cleanline = cleanline.lstrip()
@@ -147,11 +161,18 @@ def extractImplementationTreeClassName(headers, source, className ,classNames,cl
                 temp = temp.rstrip()
                 temp = temp.lstrip()
                 temp = temp.split(" ")[1]
-                
+                if "``" in temp:
+                    # print("`` in cleanline in if statement")
+                    temp =temp.split("``")[1]
                 allInheritedClasses.append(temp)
         else:
-            lastSpacePos = cleanline.rfind(' ')
-            allInheritedClasses.append(cleanline[lastSpacePos+1:])
+            if "``" in cleanline:
+                # print("`` in cleanline in else statement not if")
+                cleanline =cleanline.split("``")[1]
+            elif " " in cleanline:
+                cleanline =cleanline.split(" ")[1]
+
+            allInheritedClasses.append(cleanline)
         print("After fixing: ")
         print(allInheritedClasses)
         returnedTree = []
@@ -171,6 +192,7 @@ def extractImplementationTreeClassName(headers, source, className ,classNames,cl
                 continue           
         return returnedTree,location
     elif ':' not in lineOfClass and className in lineOfClass: #Here when we hit the bottom
+        # print("ELSE TRIGGERED IN TREE IN IMPLEMENTATION")
         return [],[]
 
 def AnalyzeInheritanceChain(chain,source,headers,classNames,classLocations,classScopes):
@@ -181,10 +203,10 @@ def AnalyzeInheritanceChain(chain,source,headers,classNames,classLocations,class
         fileScope = classScopes[classNames.index(member)]
         fileScopeStart=int(fileScope.split("@")[0])
         fileScopeEnd=int(fileScope.split("@")[1])
-        File = headers[fileName]
-        classLines = File[fileScopeStart:fileScopeEnd]
+        file = headers[fileName]
+        classLines = file[fileScopeStart:fileScopeEnd]
         lineNumOfClass = int(classLocations[classNames.index(member)].split("-")[1])
-        lineOfClass =File[lineNumOfClass]
+        lineOfClass =file[lineNumOfClass]
         nextLine  =""
         header = []
         cpp = []

@@ -32,7 +32,7 @@ def analyzePublicMembers(file):
     roundScope = 0;
     
     for line in file:
-        print(line)
+        #print(line)
         if("{" in line): #we inc for open scope
             scopeCount = scopeCount + 1
         if("}" in line): #we dec for closed scope 
@@ -51,7 +51,7 @@ def analyzePublicMembers(file):
         if(')'in line):
             roundScope-=1
         if(lengthCheck(line) and " " in line and bracketCheck(line) and keywordExclusion(line) and underPublic and roundScope <= 0 and scopeCount <= 1 and 'public' not in line):
-            print("YAAAAS PUBLIC LINE: ", line )
+            # print("YAAAAS PUBLIC LINE: ", line )
             locationOccuration.append(currentLine)
         currentLine= currentLine + 1
     return locationOccuration
