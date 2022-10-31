@@ -23,6 +23,3 @@ def addCPP(l):
 @register.filter
 def addH(l):
     return l + '.h'
-
-
-
