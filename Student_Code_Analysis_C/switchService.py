@@ -110,8 +110,8 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
         strippedLine = strippedLine.lstrip()
         strippedLine = strippedLine.rstrip()
         if("case" in strippedLine and strippedLine.find("case") == 0 and ':' in strippedLine):
-            print("case detected:")
-            print(line)
+            #print("case detected:")
+            #print(line)
             startPos = 0;
             caseLine = ""
             if('(' in strippedLine and ')' in line and strippedLine.find(')') < strippedLine.find(':')):
@@ -121,25 +121,25 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
             else:
                 startPos = line.strip().find(" ")
                 caseLine = line[startPos+1:-1]
-            print("Extracted Case condition: ", caseLine)
+            #print("Extracted Case condition: ", caseLine)
             if('::' in caseLine):
-                print("Had to fix a line")
+                #print("Had to fix a line")
                 caseLine = caseLine[caseLine.rfind('::')+2:]
-                print("Extracted Case condition: ", caseLine)
+                #print("Extracted Case condition: ", caseLine)
             extractedConditions.append(caseLine)
             currenCount = currentLine
             while("switch" not in file[currenCount]  and not file[currenCount].strip().find('switch') == 0 and not file[currenCount].find('.') < file[currenCount].find("switch")):
                 currenCount -=1;
-            print("Switch Detected At: ")
-            print(file[currenCount])
+            #print("Switch Detected At: ")
+            #print(file[currenCount])
             extractedLocations.append(currenCount)
 
         #declaration search
         if("switch" in line and line.strip().find('switch') == 0 and ("(" in line) and ( ")" in line) and ('=' not in line)):
             lastestSwitch = currentLine;
-            print("switch found in: ",fileName)
-            print(line)
-            print("pos: ", str(currentLine))
+            #print("switch found in: ",fileName)
+            #print(line)
+            #print("pos: ", str(currentLine))
             startPos = line.find("(")
             counter = startPos
             while(line[counter] != ')'):
@@ -199,8 +199,8 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
                         if(( '=' in sourceLine and sourceLine.find('=') > sourceLine.find(temp) and sourceLine.find(temp) != 0) or (sourceLine.find(temp) != 0 and sourceLine[sourceLine.find(temp) + len(temp)] == ';' and "=" not in sourceLine and sourceLine.count(';') == 1) ):
                             if(not firstReference):
                                 #print("For file: " , fileListName[fileList.index(retrievedFile)])
-                                print("WE found Something Cap'n!")
-                                print(sourceLine)
+                                #print("WE found Something Cap'n!")
+                                #print(sourceLine)
                                 firstReference = True; 
                                 cleanLine = sourceLine.rstrip();
                                 startPos = 0;

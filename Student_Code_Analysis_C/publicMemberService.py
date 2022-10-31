@@ -51,7 +51,7 @@ def analyzePublicMembers(file):
         if(')'in line):
             roundScope-=1
         if(lengthCheck(line) and " " in line and bracketCheck(line) and keywordExclusion(line) and underPublic and roundScope <= 0 and scopeCount <= 1 and 'public' not in line):
-            print("YAAAAS PUBLIC LINE: ", line )
+            # print("YAAAAS PUBLIC LINE: ", line )
             locationOccuration.append(currentLine)
         currentLine= currentLine + 1
     return locationOccuration

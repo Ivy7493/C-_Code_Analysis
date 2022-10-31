@@ -21,7 +21,7 @@ def ProcessController(fileName):
     typeData,enumNames,classNames,classNameLocations,classScopes = analyzeType(headers,source)
     #typeData.extend(enumNames)
     typeData = [typeData,enumNames]
-    print("START OF PROCESS CONTROLLER",typeData)
+    print("START OF PROCESS CONTROLLER")
     print("classNames Extracted:",classNames)
     print("Raw Line numbers of class declarations: ",classNameLocations)
     
@@ -46,7 +46,7 @@ def ProcessController(fileName):
             print("IMplementation error")
         
         try:
-            print("========"+ currentClass + '========')
+            # print("========"+ currentClass + '========')
             #print("what we passing in")
             scope = classScopes[classNames.index(currentClass)];
             scope = scope.split("@")
@@ -69,6 +69,7 @@ def ProcessController(fileName):
     
     for x in headers:
         #-----------------Global Variable tool--------------------------------------#
+        globalVariableLocation=[]
         try:
             globalVariableLocation = analyzeGlobalVariables(headers[x])
             globalVariableLocation = list(set(globalVariableLocation))
