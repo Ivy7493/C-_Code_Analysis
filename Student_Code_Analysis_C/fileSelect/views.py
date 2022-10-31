@@ -104,19 +104,28 @@ def executeProgram(request):
     classNames=getData("classNames")
     classLocations=getData("classNameLocations")
 
-    occurArrFile = []
+    occurArrFile_H = []
+    occurArrFile_C=[]
     for x in occurArr:
-        newList = []
+        newList_H = []
+        newList_C=[]
         for y in x:
             if('@' in y):
                 firstStage = y.split('@')
                 for item  in firstStage:
                     temp = y.split('-')
-                    newList.append(temp[0])
+                    if ".h" in temp[0]:
+                        newList_H.append(temp[0])
+                    else:
+                        newList_C.append(temp[0])
             else:
                 temp = y.split('-')
-                newList.append(temp[0])
-        occurArrFile.append(list(set(newList)))
+                if ".h" in temp[0]:
+                    newList_H.append(temp[0])
+                else:
+                    newList_C.append(temp[0])
+        occurArrFile_H.append(list(set(newList_H)))
+        occurArrFile_C.append(list(set(newList_C)))
 
 
         #=================Running Tree of program======#
@@ -234,12 +243,24 @@ def executeProgram(request):
         'title':'File Viewer',
         'headers':headers,
         'sources':sources,
-        'implementationIssues':occurArrFile[0],
-        'globalVarIssues':occurArrFile[1],
-        'publicDataIssues':occurArrFile[2],
-        'switchIssues':occurArrFile[3],
-        'friendIssues':occurArrFile[4],
-        'dryIssues' : occurArrFile[5]
+        'implementationIssues_H':occurArrFile_H[0],
+        'implementationIssues_C':occurArrFile_C[0],
+        'implementationLength':len(occurArrFile_C[0])+len(occurArrFile_H[0]),
+        'globalVarIssues_H':occurArrFile_H[1],
+        'globalVarIssues_C':occurArrFile_C[1],
+        'globalLength':len(occurArrFile_C[1])+len(occurArrFile_H[1]),
+        'publicDataIssues_H':occurArrFile_H[2],
+        'publicDataIssues_C':occurArrFile_C[2],
+        'publicLength':len(occurArrFile_C[2])+len(occurArrFile_H[2]),
+        'switchIssues_H':occurArrFile_H[3],
+        'switchIssues_C':occurArrFile_C[3],
+        'switchLength':len(occurArrFile_C[3])+len(occurArrFile_H[3]),
+        'friendIssues_H':occurArrFile_H[4],
+        'friendIssues_C':occurArrFile_C[4],
+        'friendLength':len(occurArrFile_C[4])+len(occurArrFile_H[4]),
+        'dryIssues_H' : occurArrFile_H[5],
+        'dryIssues_C' : occurArrFile_C[5],
+        'dryLength':len(occurArrFile_C[5])+len(occurArrFile_H[5]),
     }
 
     
