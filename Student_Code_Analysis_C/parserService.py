@@ -9,6 +9,7 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
         lineInQuestion = ""
         endLineInQuestion = ""
         isRangeInput = False
+        difference = 0
         if('.cpp' in data[0]):
             workingFile = rawSource[data[0]]
             lineInQuestion = source[data[0]]
@@ -21,6 +22,7 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
                 #print("IS this okay? ", int(points[1]))
                 #print("How about this? ", lineInQuestion[int(points[1])])  
                 lineInQuestion = lineInQuestion[int(points[0])] #beginning points
+                difference = int(points[1]) - int(points[0])
                 
             else:
                 lineInQuestion = lineInQuestion[int(data[1])]
@@ -36,6 +38,7 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
                 #print("IS this okay? ", int(points[1]))
                 #print("How about this? ", lineInQuestion[int(points[1])])  
                 lineInQuestion = lineInQuestion[int(points[0])] #beginning points
+                difference = int(points[1]) - int(points[0])
             else:
                 lineInQuestion = header[data[0]][int(data[1])] 
         counter = 0
@@ -43,24 +46,27 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
         pos1 = 0
         pos2 = 0
         if(isRangeInput):
-            workingFileCounter = 0;
+            workingFileCounter = 0
             for y in workingFile:
                 workingY = y.strip()
                 workingY = workingY.lstrip()
                 workingY = workingY.rstrip()
+                commentCounter = 0;
                 if(lineInQuestion in y and counter not in blackList and (workingY.find('*') != 0 and workingY.find('*/') != len(workingY) -1 and workingY.find('/*') != 0)):
                     found[0] = True
                     pos1 = counter
                     tempIndex = counter
                     blackList.append(tempIndex)
-                    while(endLineInQuestion not in workingFile[tempIndex]):
+                    startingPos = pos1 + difference
+                    tempIndex = startingPos
+                    while endLineInQuestion not in workingFile[tempIndex]:
                         tempIndex += 1
                     found[1] = True
                     pos2 = tempIndex
                 if(found[0] and found[1]):
                     #print("Check to see if this is okay?")
                     #print(data[0] + '-' + str(pos1) + '@' + str(pos2))
-                    rawLocations.append(data[0] + '-' + str(pos1) + '@' + str(pos2))
+                    rawLocations.append(data[0] + '-' + str(pos1) + '@' + str(pos2+1))
                     break
                 counter += 1
         else:

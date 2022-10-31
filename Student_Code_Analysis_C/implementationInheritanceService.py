@@ -3,8 +3,9 @@
 def hasImplementationPresent(functionType,functionName,cppFile):
     functionStart = -1
     implementationFound = False
-    bigScope = 0;
+    bigScope = 0
     functionEnd =-1
+    print("FILENAME FOR HAS IMPLEMENTATION PRESENT: ",functionName)
     for line in cppFile: #Run through all lines
         implementationFound = False
         if((functionName in line) and (functionType in line) and ("(" in line and ")" in line )): #if we find the function okay cool
@@ -16,28 +17,35 @@ def hasImplementationPresent(functionType,functionName,cppFile):
             #print('stage 1')
             if('{' in line or '{' in cppFile[functionStart+1]):
                 #print('stage 2')
-                
+                scope=1
                 if " " in line:
                     if('{' in line and '}' in line and line.find(line.split(' ')[1]) == line.find(functionName) and "virtual" not in line and (line.find(functionName) < line.find('{')) and (line.find(functionName) < line.rfind('}'))):
                         #print("stage 2.5")  
+                        scope=0
                         return str(functionStart)
                     #print('stage 3')
-                while('}' not in cppFile[currentLine] and (scope != 0 or scopeProtect)):
-                    if(scopeProtect and "{" in cppFile[currentLine]): #used to ge through first line
+
+                # print(" STARTING NUM:",functionStart)
+                    
+                while scope != 0:
+                    if scopeProtect and "{" in cppFile[currentLine]: #used to ge through first line
                         scopeProtect = False
+                    
+                    elif '{' in cppFile[currentLine]:
+                        scope += 1
+                    if '}' in cppFile[currentLine]:
+                        scope -= 1
                     #///Deals with determining if implementation has occured in file
                     if(len(cppFile[currentLine].strip()) > 1 and cppFile[currentLine].strip() != "}" and cppFile[currentLine].strip() != "{") and currentLine != cppFile.index(line):
                         implementationFound = True
                         #print("Implementation found for: ",functionName)
-
-                    if('{' in cppFile[currentLine]):
-                        scope += 1
-                    if('}' in cppFile[currentLine]):
-                        scope -= 1
                     currentLine +=1
+                
                 functionEnd = currentLine
+                # print("function END =",functionEnd)
             if implementationFound:
-                return str(functionStart) + '@' + str(functionEnd)
+                # print("implementation Found ++++++++",str(functionStart) + '@' + str(functionEnd))    
+                return str(functionStart) + '@' + str(functionEnd-1)
     return ""
                 
 
