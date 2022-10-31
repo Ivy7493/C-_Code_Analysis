@@ -18,13 +18,13 @@ def ProcessController(fileName):
     locationOccurencesForDRY = []
     # typeData = analyzeType(headers,source)
     
-    typeData,enumNames,classNames,classNameLocations = analyzeType(headers,source)
+    typeData,enumNames,classNames,classNameLocations,classScopes = analyzeType(headers,source)
     #typeData.extend(enumNames)
     typeData = [typeData,enumNames]
     print("START OF PROCESS CONTROLLER",typeData)
     print("classNames Extracted:",classNames)
     print("Raw Line numbers of class declarations: ",classNameLocations)
-    classNameLocations=findRawLocation(classNameLocations,rawHeaders,rawSource,source,headers)
+    
     
     #------------------DRY TOOL---------------------------------------#
     try:
@@ -34,6 +34,37 @@ def ProcessController(fileName):
     # print("First!")
     # print(locationOccurencesForDRY)
     # print('----testing Section-----')
+    for currentClass in classNames:
+        #------------------Implementation Inheritance---------------------#
+        try:
+            impLine = analyzeImplementationInheritance(source,headers,currentClass,classNames,classNameLocations,classScopes)
+            if(len(impLine) != 0):
+                impLine = list(set(impLine))
+            for member in impLine:
+                locationOccurrencesForImplementationInheritance.append(member)
+        except:
+            print("IMplementation error")
+        
+        try:
+            print("========"+ currentClass + '========')
+            #print("what we passing in")
+            scope = classScopes[classNames.index(currentClass)];
+            scope = scope.split("@")
+            startPos = int(scope[0])
+            endPos = int(scope[1])
+            fileName = classNameLocations[classNames.index(currentClass)].split('-')[0]
+            classScope = []
+            if(".cpp" in fileName):
+                classScope = source[fileName]
+            elif(".h" in fileName):    
+                classScope = headers[fileName]
+            #print(classScope)
+            publicDataMemberLocation = analyzePublicMembers(classScope)
+            publicDataMemberLocation = list(set(publicDataMemberLocation))
+            for member in publicDataMemberLocation:
+                locationOccurrencesForPublic.append(classNameLocations[classNames.index(currentClass)].split('-')[0] + '-' + str(member))
+        except:
+            print("PDM error")
 
     
     for x in headers:
@@ -65,25 +96,8 @@ def ProcessController(fileName):
             print("switch error")
 
         #------------------Public Data Member------------------------------#
-        try:
-            publicDataMemberLocation = analyzePublicMembers(headers[x])
-            publicDataMemberLocation = list(set(publicDataMemberLocation))
-            for member in publicDataMemberLocation:
-                locationOccurrencesForPublic.append(x + '-' + str(member))
-        except:
-            print("PDM error")
+       
 
-        #------------------Implementation Inheritance---------------------#
-        try:
-            impLine = analyzeImplementationInheritance(headers[x],source,headers,x)
-            impLine = list(set(impLine))
-            for member in impLine:
-                locationOccurrencesForImplementationInheritance.append(member)
-        except:
-            print("Implementation Error")
-        
-
-   
     for x in source:
         #-----------------Global Variable tool--------------------------------------#
         try:
@@ -154,4 +168,5 @@ def ProcessController(fileName):
     #locationOccurencesForDRY = list(set(locationOccurencesForDRY))
     # print("Total DRY Sections: ")
     # print("Occurrences: ", locationOccurencesForDRY)
+    classNameLocations=findRawLocation(classNameLocations,rawHeaders,rawSource,source,headers)
     return rawHeaders,rawSource,issueLocationArr

@@ -1,11 +1,14 @@
-from implementationInheritanceService import extractImplementationTree
+from numpy import save
+from implementationInheritanceService import extractImplementationTreeClassName
+from persistentService import saveData,getData
 
 def analyzeType(headers,sources):
     combined = [headers,sources]
     enumData = []
     enumNameData = []
     classNameData=[]
-    classNameLocation=[]
+    classNameLocations=[]
+    classScopes=[]
     for type in combined:
         for file in type:
             enumScopeCount = 0 
@@ -60,16 +63,38 @@ def analyzeType(headers,sources):
                                 enumName = enumName.strip()
                             # print("Extracted Enum Name: ", enumName)
                         enumNameData.append(enumName)
-                if ".h" in file and "class" in line and line.find("class") == 0 and "enum" not in line:
+                if ".h" in file and "class" in line and line.find("class") == 0 and "enum" not in line and ('{' in line or '{' in type[file][type[file].index(line)+1] or '{' in type[file][type[file].index(line)+2]):
+                    
+                    ###Extracting Scope
+                    scopeCount = 1
+                    scopeProtect = False
+                    currentLine = type[file].index(line)
+                    startOfClass=currentLine
+                    firstOc = True;
+                    while scopeCount>0:
+                        if '{' in type[file][currentLine] and firstOc:
+                            firstOc=False
+                        elif '{' in type[file][currentLine] and not firstOc:
+                            scopeCount+=1
+                        if '}' in type[file][currentLine]:
+                            scopeCount-=1
+                        currentLine += 1
+                    endOfClass = currentLine
+                       
+                    # Getting the classNames
                     tempClassLine = line.strip('{')
                     tempClassLine = tempClassLine.strip('}')
                     tempClassLine =tempClassLine.split(' ')[1]
                     tempClassLine=tempClassLine.strip(" ")
                     tempClassLine=tempClassLine.split(":")[0]
-                    classNameLocation.append(file+"-"+str(type[file].index(line)))
+                    classNameLocations.append(file+"-"+str(type[file].index(line)))
+                    classScopes.append(str(startOfClass)+'@'+str(endOfClass))
                     classNameData.append(tempClassLine)
+    saveData("classNames",classNameData)
+    saveData("classNameLocations",classNameLocations)
+    saveData("classScopes",classScopes)
                     
-    return enumData,enumNameData,classNameData,classNameLocation
+    return enumData,enumNameData,classNameData,classNameLocations,classScopes
 
                         
 
@@ -87,8 +112,15 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
         if("case" in strippedLine and strippedLine.find("case") == 0 and ':' in strippedLine):
             print("case detected:")
             print(line)
-            startPos = line.strip().find(" ")
-            caseLine = line[startPos+1:-1]
+            startPos = 0;
+            caseLine = ""
+            if('(' in strippedLine and ')' in line and strippedLine.find(')') < strippedLine.find(':')):
+                startPos = line.strip().find("(")
+                endPos = line.strip().find(')')
+                caseLine = line[startPos+1:endPos]
+            else:
+                startPos = line.strip().find(" ")
+                caseLine = line[startPos+1:-1]
             print("Extracted Case condition: ", caseLine)
             if('::' in caseLine):
                 print("Had to fix a line")
@@ -125,8 +157,16 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
             try:
                 extractedName = fileName.split('.')[0]
                 passedFile = headers[extractedName + '.h']
-                output,outputlocation = extractImplementationTree(passedFile,headers,[],fileName)
-                output.append(extractedName)
+                classNames=getData("classNames")
+                classLocations=getData("classNameLocations")
+                passedClassNames=[]
+                output=[]
+                for className in classNames:
+                    if extractedName in classLocations[classNames.index(className)]:
+                        passedClassNames.append(className)
+                for passedClassName in passedClassNames:
+                    output,outputlocation = extractImplementationTreeClassName(headers,sources,passedClassName,classNames,classLocations)
+                    output.append(extractedName)
                 types = ['.h','.cpp']
                
                 for type in types:

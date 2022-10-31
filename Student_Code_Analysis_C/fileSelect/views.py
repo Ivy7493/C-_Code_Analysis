@@ -4,7 +4,7 @@ from numpy import append
 from listings.pathForm import getPath
 from ProcessController import ProcessController as PrscC
 #from switchService import extractTypeTree
-from implementationInheritanceService import extractImplementationTree
+from implementationInheritanceService import extractImplementationTreeClassName
 import os
 from persistentService import saveData,getData
 from tkinter import filedialog
@@ -101,6 +101,8 @@ def executeProgram(request):
     saveData('issues',occurArr)
     saveData('headers',headers)
     saveData('sources',sources)
+    classNames=getData("classNames")
+    classLocations=getData("classNameLocations")
 
     occurArrFile = []
     for x in occurArr:
@@ -120,11 +122,11 @@ def executeProgram(request):
         #=================Running Tree of program======#
 
     totalDependencies = []
-    for headerName in headers:
+    for className in classNames:
         # print(headerName)
         try:
-            tree,location = extractImplementationTree(headers[headerName],headers,[],headerName)
-            tree.append(headerName.split(".")[0])
+            tree,location = extractImplementationTreeClassName(headers, sources, className ,classNames,classLocations)
+            tree.append(className)
             totalDependencies.append(tree)
         except:
             print("noneTYpe")
