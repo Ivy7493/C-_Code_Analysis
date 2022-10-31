@@ -32,7 +32,7 @@ def analyzePublicMembers(file):
     roundScope = 0;
     
     for line in file:
-        # print(line)
+        #print(line)
         if("{" in line): #we inc for open scope
             scopeCount = scopeCount + 1
         if("}" in line): #we dec for closed scope 
