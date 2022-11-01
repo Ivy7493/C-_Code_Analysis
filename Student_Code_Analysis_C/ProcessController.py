@@ -36,13 +36,13 @@ def ProcessController(fileName):
     # print('----testing Section-----')
     for currentClass in classNames:
         #------------------Implementation Inheritance---------------------#
-        try:
-            impLine = analyzeImplementationInheritance(source,headers,currentClass,classNames,classNameLocations,classScopes)
-            if(len(impLine) != 0):
-                impLine = list(set(impLine))
-            for member in impLine:
-                locationOccurrencesForImplementationInheritance.append(member)
-        except:
+        #try:
+        impLine = analyzeImplementationInheritance(source,headers,currentClass,classNames,classNameLocations,classScopes)
+        if(len(impLine) != 0):
+            impLine = list(set(impLine))
+        for member in impLine:
+            locationOccurrencesForImplementationInheritance.append(member)
+        #except:
             print("IMplementation error")
         
         try:
@@ -96,7 +96,7 @@ def ProcessController(fileName):
                 locationOccurrencesForSwitch.append(x + '-' + str(member))
         except:
             print("switch error")
-        print("FILE SWITCH LOCATIONS IN HEADERS :", locationOccurrencesForSwitch)
+        #print("FILE SWITCH LOCATIONS IN HEADERS :", locationOccurrencesForSwitch)
 
         #------------------Public Data Member------------------------------#
        
@@ -122,7 +122,7 @@ def ProcessController(fileName):
             #print("switch source error")
         for member in fileSwitchLocation:
             locationOccurrencesForSwitch.append(x + '-' + str(member))
-        print("FILE switsfhfsoh locations in sources:",locationOccurrencesForSwitch)
+        #print("FILE switsfhfsoh locations in sources:",locationOccurrencesForSwitch)
 
 
 

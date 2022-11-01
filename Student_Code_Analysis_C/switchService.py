@@ -290,7 +290,7 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
             if(extracted in typeData[0]):
                 locationOccurence.append(extractedLocations[listCounter])
             listCounter += 1
-    print("EXTRACTED LOCATION :", extractedLocations)
+    #print("EXTRACTED LOCATION :", extractedLocations)
     return locationOccurence
 
 
