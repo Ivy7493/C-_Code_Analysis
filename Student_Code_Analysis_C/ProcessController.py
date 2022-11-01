@@ -36,13 +36,13 @@ def ProcessController(fileName):
     # print('----testing Section-----')
     for currentClass in classNames:
         #------------------Implementation Inheritance---------------------#
-        try:
-            impLine = analyzeImplementationInheritance(source,headers,currentClass,classNames,classNameLocations,classScopes)
-            if(len(impLine) != 0):
-                impLine = list(set(impLine))
-            for member in impLine:
-                locationOccurrencesForImplementationInheritance.append(member)
-        except:
+        #try:
+        impLine = analyzeImplementationInheritance(source,headers,currentClass,classNames,classNameLocations,classScopes)
+        if(len(impLine) != 0):
+            impLine = list(set(impLine))
+        for member in impLine:
+            locationOccurrencesForImplementationInheritance.append(member)
+        #except:
             print("IMplementation error")
         
         try:
@@ -91,10 +91,12 @@ def ProcessController(fileName):
         try:
             fileSwitchLocation = analyzeSwitch(headers[x],headers,source,typeData,x)
             fileSwitchLocation = list(set(fileSwitchLocation))
+            
             for member in fileSwitchLocation:
                 locationOccurrencesForSwitch.append(x + '-' + str(member))
         except:
             print("switch error")
+        #print("FILE SWITCH LOCATIONS IN HEADERS :", locationOccurrencesForSwitch)
 
         #------------------Public Data Member------------------------------#
        
@@ -115,10 +117,12 @@ def ProcessController(fileName):
         #try:
         fileSwitchLocation = analyzeSwitch(source[x],headers,source,typeData,x)
         fileSwitchLocation = list(set(fileSwitchLocation))
+        
         #except:
             #print("switch source error")
         for member in fileSwitchLocation:
             locationOccurrencesForSwitch.append(x + '-' + str(member))
+        #print("FILE switsfhfsoh locations in sources:",locationOccurrencesForSwitch)
 
 
 
@@ -128,7 +132,7 @@ def ProcessController(fileName):
     rawGlobalLocations = findRawLocation(locationOccurencesForGlobal,rawHeaders,rawSource,source,headers)
     #print("global: ",rawGlobalLocations)
     rawSwitchLocations = findRawLocation(locationOccurrencesForSwitch,rawHeaders,rawSource,source,headers)
-    #print("rawswitch: ",rawSwitchLocations)
+    print("rawswitch: ",rawSwitchLocations)
     rawFriendLocations = findRawLocation(locationOccurrencesForFriend,rawHeaders,rawSource,source,headers)
     #print("rawfriend: ",rawFriendLocations)
     rawPublicLocations = findRawLocation(locationOccurrencesForPublic,rawHeaders,rawSource,source,headers)

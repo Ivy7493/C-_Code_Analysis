@@ -5,7 +5,7 @@ from threading import Thread #WE NEED MORE POWER BOSS
 
 
 #settings
-scoreThreshold = 0.85
+scoreThreshold = 0.75
 reduceChar = ["int ", "float ", "string ", "double ", "auto ",
 "char ", "const ", "static ", "vector", "()", ";", "{", "}", "->", '::']
 

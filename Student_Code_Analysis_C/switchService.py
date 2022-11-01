@@ -132,7 +132,30 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
                 currenCount -=1;
             #print("Switch Detected At: ")
             #print(file[currenCount])
-            extractedLocations.append(currenCount)
+
+        ###Extracting Scope
+
+            # scopeCount = 1
+            # lineOfCurrent = currenCount
+            # startOfClass=currentLine
+            # firstOc = True;
+            # print("====" + fileName + "===="+str(startOfClass))
+            # print("start of while loop")
+            # while scopeCount != 0:
+            #     if '{' in file[lineOfCurrent] and firstOc:
+            #         firstOc=False
+            #     elif '{' in file[lineOfCurrent] and not firstOc:
+            #         scopeCount+=1
+            #     if '}' in file[lineOfCurrent]:
+            #         scopeCount-=1
+            #     lineOfCurrent += 1
+            # endOfClass = lineOfCurrent
+            # print("end of while loop")
+            # print(str(startOfClass) + '@' + str(endOfClass - 1))
+            # if(endOfClass > len(file)):
+            extractedLocations.append(str(currenCount))
+            # else:
+            #     extractedLocations.append(str(currenCount) + '@' + str(endOfClass - 1))
 
         #declaration search
         if("switch" in line and line.strip().find('switch') == 0 and ("(" in line) and ( ")" in line) and ('=' not in line)):
@@ -262,11 +285,12 @@ def analyzeSwitch(file,headers,sources,typeData,fileName):
             #locationOccurence.append(str(startBlock) + '@' + str(tempCounter))
         currentLine = currentLine + 1
     if(len(extractedConditions) > 0):
-        listCounter = 0;
+        listCounter = 0
         for extracted in extractedConditions:
             if(extracted in typeData[0]):
                 locationOccurence.append(extractedLocations[listCounter])
-            listCounter += 1;
+            listCounter += 1
+    #print("EXTRACTED LOCATION :", extractedLocations)
     return locationOccurence
 
 
