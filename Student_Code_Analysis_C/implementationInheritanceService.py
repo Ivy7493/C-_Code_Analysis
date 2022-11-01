@@ -189,7 +189,7 @@ def extractImplementationTreeClassName(headers, source, className ,classNames,cl
         location = []
         for foundClass in allInheritedClasses:
             if foundClass in classNames:
-                #print("we found :", foundClass + '.h')
+                print("we found :", foundClass + '.h')
                 nextInheritedHeaderFile = headers[classLocations[classNames.index(foundClass)].split('-')[0]]
                 workingTree,workingLocation = extractImplementationTreeClassName(headers,source,foundClass,classNames,classLocations)
                 # returnedTree,location = extractImplementationTree(nextInheritedHeaderFile,headers,source,NextInheritedClass + '.h')
@@ -203,6 +203,8 @@ def extractImplementationTreeClassName(headers, source, className ,classNames,cl
         return returnedTree,location
     elif ':' not in lineOfClass and className in lineOfClass: #Here when we hit the bottom
         # print("ELSE TRIGGERED IN TREE IN IMPLEMENTATION")
+        return [],[]
+    else:
         return [],[]
 
 def AnalyzeInheritanceChain(chain,source,headers,classNames,classLocations,classScopes):

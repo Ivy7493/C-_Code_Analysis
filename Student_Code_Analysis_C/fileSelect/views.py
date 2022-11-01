@@ -133,12 +133,12 @@ def executeProgram(request):
     totalDependencies = []
     for className in classNames:
         # print(headerName)
-        try:
-            tree,location = extractImplementationTreeClassName(headers, sources, className ,classNames,classLocations)
-            tree.append(className)
-            totalDependencies.append(tree)
-        except:
-            print("noneTYpe")
+        # try:
+        tree,location = extractImplementationTreeClassName(headers, sources, className ,classNames,classLocations)
+        tree.append(className)
+        totalDependencies.append(tree)
+        # except:
+        #     print("noneType")
 
     # print("OOOGA BOOOGA: ")
     # print(totalDependencies)
@@ -170,66 +170,77 @@ def executeProgram(request):
         print("Class: ", file)
         print("CLASS DEPENDENCY DICTIONARY FILE: ",dependencyDictionary[file])
         
-    print("And now for the classes that don't inherit fromo another class: ")
-    print(baseClasses)
-    treeConstruction = generateUML(baseClasses,dependencyDictionary,0)
+    # print("And now for the classes that don't inherit fromo another class: ")
+    # print(baseClasses)
+    # treeConstruction = generateUML(baseClasses,dependencyDictionary,0)
 
     # ===============================This creates the html reponsible for generating the uml=============
     
-    fullFile =""
-    print("YOLO")
-    print(treeConstruction)
+    # print("YOLO")
+    # print(treeConstruction)
     
     scopeCount=0
     lastScope=''
-    xFile=''
-    for x in treeConstruction: 
-        # print("I want to know what lastscope is always: ",lastScope)
-        xFile= x +'.h'
-        if '{' in x:
-            scopeCount+=1
-            #print( "HERE =======",scopeCount)
-            if scopeCount==1:
-                # fullFile+= '\n'+"<div>"
-                lastScope="sep"
+    fullFile='<pre class="mermaid"><code>'+'\n'"classDiagram"+'\n'
+    
+    for key in dependencyDictionary:
+        if dependencyDictionary[key]:
+            if len(dependencyDictionary[key])>0:
+                for classFile in dependencyDictionary[key]:
+                    fullFile+=key+"&lt;--"+classFile+'\n'
             else:
-                #print("larger than 1 scope count and in {")
-                fullFile += '\n' + '<ul>'+'\n'
-                if lastScope=="sep":
-                    #print("THIS IS WHERE LAST SCOPE IS CHNGED TO TOGETHER: ",scopeCount)
-                    lastScope="together"
-                else:
-                    #print("this is where lastscope set to nothing ")
-                    lastScope=""
-        if '}' in x:
-            scopeCount-=1
-            if scopeCount==1:
-                #print(" if in in }")
-                fullFile+= '</ul>'+'\n'+"</div>"
-            else:
-                #print("else in }")
-                fullFile += '\n' + '</li>'+'</ul>'
+                fullFile+=key+'\n'
+                    
+  
+    # for x in treeConstruction: 
+    #     # print("I want to know what lastscope is always: ",lastScope)
+    #     xFile= x +'.h'
+    #     if '{' in x:
+    #         scopeCount+=1
+    #         #print( "HERE =======",scopeCount)
+    #         if scopeCount==1:
+    #             # fullFile+= '\n'+"<div>"
+    #             lastScope="sep"
+    #         else:
+    #             #print("larger than 1 scope count and in {")
+    #             fullFile += '\n' + '<ul>'+'\n'
+    #             if lastScope=="sep":
+    #                 #print("THIS IS WHERE LAST SCOPE IS CHNGED TO TOGETHER: ",scopeCount)
+    #                 lastScope="together"
+    #             else:
+    #                 #print("this is where lastscope set to nothing ")
+    #                 lastScope=""
+    #     if '}' in x:
+    #         scopeCount-=1
+    #         if scopeCount==1:
+    #             #print(" if in in }")
+    #             fullFile+= '</ul>'+'\n'+"</div>"
+    #         else:
+    #             #print("else in }")
+    #             fullFile += '\n' + '</li>'+'</ul>'
         
-        if '{' not in x and '}' not in x and (lastScope!="sep" and lastScope!="together"and scopeCount!=1):
-            #print("Generic statement",x)
-            fullFile+= "<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+"name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"+"\n"
+    #     if '{' not in x and '}' not in x and (lastScope!="sep" and lastScope!="together"and scopeCount!=1):
+    #         #print("Generic statement",x)
+    #         fullFile+= "<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+"name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"+"\n"
             
-        elif'{' not in x and '}' not in x and (lastScope=="sep" and scopeCount==1):
-            #print("this only occurs if lastscope=sep and scopecount =1")
-            fullFile+= "<div class='tree col-sm-auto'>"+"\n" + "<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+" name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"+'\n'+'</div>'
+    #     elif'{' not in x and '}' not in x and (lastScope=="sep" and scopeCount==1):
+    #         #print("this only occurs if lastscope=sep and scopecount =1")
+    #         fullFile+= "<div class='tree col-sm-auto'>"+"\n" + "<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+" name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"+'\n'+'</div>'
             
-        elif'{' not in x and '}' not in x and (lastScope=="together" and scopeCount==2):
-            #print ("This is where last div is removed from line:", lastScope)
-            fullFile=removeLastOccurrence(fullFile,"</div>",len(fullFile),6)
-            fullFile+= "<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+" name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"
-            lastScope=""
+    #     elif'{' not in x and '}' not in x and (lastScope=="together" and scopeCount==2):
+    #         #print ("This is where last div is removed from line:", lastScope)
+    #         fullFile=removeLastOccurrence(fullFile,"</div>",len(fullFile),6)
+    #         fullFile+= "<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+" name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"
+    #         lastScope=""
         
-        elif '{' not in x and '}' not in x and (lastScope!="sep" and lastScope!="together"and scopeCount==1):
-            #print("Generic statement MARK @",x)
-            fullFile+= "<div class='tree col-sm-auto'>"+"<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"\n"+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+" name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"+"\n"+"</div>"+"\n"
-        #print("+",fullFile)
-    #print("+",fullFile)
+    #     elif '{' not in x and '}' not in x and (lastScope!="sep" and lastScope!="together"and scopeCount==1):
+    #         #print("Generic statement MARK @",x)
+    #         fullFile+= "<div class='tree col-sm-auto'>"+"<li>"+"<form method='post'>"+'\n'+'{% csrf_token %}'+"\n"+"<input type='hidden' name='issue' value='implementation' />"+"<button id='buttonList' type='submit' value="+"'"+xFile +"'"+" name='key' formaction='displayCode/'>" + x +"</button>"+"</form>"+"</li>"+"\n"+"</div>"+"\n"
+    #     #print("+",fullFile)
+    # #print("+",fullFile)
 
+    fullFile+="</code></pre>"
+    
     try:
         os.remove(os.path.join('fileSelect','templates','fileSelect','tree.html'))
     except:
@@ -261,6 +272,7 @@ def executeProgram(request):
         'dryIssues_H' : occurArrFile_H[5],
         'dryIssues_C' : occurArrFile_C[5],
         'dryLength':len(occurArrFile_C[5])+len(occurArrFile_H[5]),
+        'mermaidText':fullFile,
     }
 
     
