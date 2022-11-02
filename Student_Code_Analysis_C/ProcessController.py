@@ -31,6 +31,8 @@ def ProcessController(fileName):
     #------------------DRY TOOL---------------------------------------#
     try:
         locationOccurencesForDRY = analyzeDRY(headers,source)
+        print("=====Dry====")
+        print(locationOccurencesForDRY)
     except:
         print("Dry princople errors")
     # print("First!")

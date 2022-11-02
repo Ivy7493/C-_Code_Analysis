@@ -105,7 +105,7 @@ def checkForUsage(functionName,file,fileName):
         if(functionName in line and '(' in line and ')' in line and (line[line.find(functionName) + len(functionName)] == '(' or line[line.find(functionName) + len(functionName)] == ' (') and 'override' not in line and not ("=" in line and '0' in line and line.find('0') > line.find('=') )):
             if('::' in line and line.find('::') < line.find(functionName) and ' ' in line and line.find(" ") < line.find('::')):
                 continue
-            elif '.h' in fileName and scope <= 1:
+            elif '.h' in fileName and (scope <= 1 or ('{' not in file[file.index(line) + 1] and '{' not in line)):
                 continue
             else:
                 locations.append(fileName + '-' + str(file.index(line)))
