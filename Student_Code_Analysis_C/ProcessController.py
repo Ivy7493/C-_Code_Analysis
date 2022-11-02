@@ -6,7 +6,7 @@ from switchService import analyzeSwitch,analyzeType
 from publicMemberService import analyzePublicMembers
 from implementationInheritanceService import analyzeImplementationInheritance
 from dryService import analyzeDRY
-
+from persistentService import saveData,getData
 
 def ProcessController(fileName):
     headers,source,rawHeaders,rawSource = getFiles(fileName)
@@ -21,10 +21,12 @@ def ProcessController(fileName):
     typeData,enumNames,classNames,classNameLocations,classScopes = analyzeType(headers,source)
     #typeData.extend(enumNames)
     typeData = [typeData,enumNames]
-    print("START OF PROCESS CONTROLLER")
-    print("classNames Extracted:",classNames)
-    print("Raw Line numbers of class declarations: ",classNameLocations)
+    # print("START OF PROCESS CONTROLLER")
+    # print("classNames Extracted:",classNames)
+    # print("Raw Line numbers of class declarations: ",classNameLocations)
     
+    saveData("processedHeaders",headers)
+    saveData("processedSources",source)
     
     #------------------DRY TOOL---------------------------------------#
     try:
@@ -32,10 +34,11 @@ def ProcessController(fileName):
         print("=====Dry====")
         print(locationOccurencesForDRY)
     except:
-        print("Dry princple errors")
+        print("Dry princople errors")
     # print("First!")
     # print(locationOccurencesForDRY)
     # print('----testing Section-----')
+    print("classnames in processCOntroller :", classNames)
     for currentClass in classNames:
         #------------------Implementation Inheritance---------------------#
         #try:
@@ -134,7 +137,7 @@ def ProcessController(fileName):
     rawGlobalLocations = findRawLocation(locationOccurencesForGlobal,rawHeaders,rawSource,source,headers)
     #print("global: ",rawGlobalLocations)
     rawSwitchLocations = findRawLocation(locationOccurrencesForSwitch,rawHeaders,rawSource,source,headers)
-    #print("rawswitch: ",rawSwitchLocations)
+    # print("rawswitch: ",rawSwitchLocations)
     rawFriendLocations = findRawLocation(locationOccurrencesForFriend,rawHeaders,rawSource,source,headers)
     #print("rawfriend: ",rawFriendLocations)
     rawPublicLocations = findRawLocation(locationOccurrencesForPublic,rawHeaders,rawSource,source,headers)

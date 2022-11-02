@@ -1,4 +1,6 @@
+
 {% extends 'fileSelect/base.html'%} {% block content %}
+{% load static %}
 <div class="row">
   <div class="col-sm-auto d-grid gap-4">
     <h3>Problematic files found:</h3>
@@ -268,10 +270,12 @@
   </div>
   <div class="col-sm-6">
     <div class="row collapse class-layout" id="classStructure">
-      {% include 'fileSelect/tree.html' %}
+    
     </div>
   </div>
 </div>
 </div>
-
+{% include 'fileSelect/tree.html' %}
+<script src="https://unpkg.com/mermaid@8.14.0/dist/mermaid.min.js"></script>
+<script src="{% static 'fileSelect/mermaid.js' %}" ></script>
 {% endblock content%}

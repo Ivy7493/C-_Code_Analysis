@@ -119,6 +119,8 @@ def extractImplementationTreeClassName(headers, source, className ,classNames,cl
     #print("For file: ", fileName)
     #print("$$$$$$$$$$$$$$$$$$$$$$")
     #print(line)
+    if not className in classNames:
+        return {}
     fileName = classLocations[classNames.index(className)].split("-")[0]
     file = headers[fileName]
     # print("$$$$$$$$$$$$$$$$$$$$$$ ",fileName," $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
@@ -161,7 +163,7 @@ def extractImplementationTreeClassName(headers, source, className ,classNames,cl
         cleanline = cleanline.rstrip()
         cleanline = cleanline.lstrip()
         #print("stage 2")
-
+     
         allInheritedClasses = []
         if("," in cleanline):
             workingCleanLine = cleanline.split(",")
@@ -183,13 +185,30 @@ def extractImplementationTreeClassName(headers, source, className ,classNames,cl
                 cleanline =cleanline.split(" ")[1]
 
             allInheritedClasses.append(cleanline)
-        #print("After fixing: ")
+            
+        #print(" After fixing: ")
         #print(allInheritedClasses)
+
+        tempWorkingObject = {
+            "className" : className,
+            "classesInheritedFrom" : allInheritedClasses,
+            "inheritedObjects": [], 
+            "classDeclaration": lineOfClass,
+            "lineNumber" : lineNumOfClass,
+            "fileName" : fileName
+        }
+
+        for inheritedClass in tempWorkingObject['classesInheritedFrom']:
+            obj = extractImplementationTreeClassName(headers,source,inheritedClass,classNames,classLocations)
+            tempWorkingObject['inheritedObjects'].append(obj)
+
+        return tempWorkingObject
+            
         returnedTree = []
         location = []
         for foundClass in allInheritedClasses:
             if foundClass in classNames:
-                #print("we found :", foundClass + '.h')
+                print("we found :", foundClass + '.h')
                 nextInheritedHeaderFile = headers[classLocations[classNames.index(foundClass)].split('-')[0]]
                 workingTree,workingLocation = extractImplementationTreeClassName(headers,source,foundClass,classNames,classLocations)
                 # returnedTree,location = extractImplementationTree(nextInheritedHeaderFile,headers,source,NextInheritedClass + '.h')
@@ -203,7 +222,17 @@ def extractImplementationTreeClassName(headers, source, className ,classNames,cl
         return returnedTree,location
     elif ':' not in lineOfClass and className in lineOfClass: #Here when we hit the bottom
         # print("ELSE TRIGGERED IN TREE IN IMPLEMENTATION")
-        return [],[]
+        tempWorkingObject = {
+            "className" : className,
+            "classesInheritedFrom" : [],
+            "inheritedObjects": [], 
+            "classDeclaration": lineOfClass,
+            "lineNumber" : lineNumOfClass,
+            "fileName" : fileName
+        }
+        return tempWorkingObject
+    else:
+        return {}
 
 def AnalyzeInheritanceChain(chain,source,headers,classNames,classLocations,classScopes):
     ImplementedMembers = []
@@ -336,16 +365,41 @@ def checkChainForImplementationInheritance(chain,source,headers):
         linkCounter+=1
 
     return highlights
+       
+def convertToArrayOfInheritance(inheritanceChain):
+    outputChain = []
+    currentNode = inheritanceChain['inheritedObjects']
+    for x in currentNode:
+        if(x):
+            outputChain.append(x['className'])
+            resultChain = convertToArrayOfInheritance(x)
+            for y in resultChain:
+                outputChain.append(y)
+            
+
+    return outputChain
+            
+    
+            
+            
         
+
 
 def analyzeImplementationInheritance(source,headers,className,classNames,classLocations,classScopes):
     #  originalFile = classLocation.split('-')[0]
-    #print("====================== " + className + " ======================")
-    output,outputLocation = extractImplementationTreeClassName(headers,source,className,classNames,classLocations); # class name, All classes, all class locations 1-1
-    output.append(className)
-    #print("->")
+    print("====================== " + className + " ======================")
+    output = extractImplementationTreeClassName(headers,source,className,classNames,classLocations); # class name, All classes, all class locations 1-1
+    # output.append(className)
+    # print("TREEE IN IMPLEMENTATION->",output)
     #print(output)
-   #print("ANALYZE IMPLEMENTATION INHERITANCE: ",output)
+
+    
+    results = []
+    output = convertToArrayOfInheritance(output)
+    #print("ANALYZE IMPLEMENTATION INHERITANCE: ",output)
+    print (" OUTPUT OF COVERSION:")
+    output.append(className)
+    print(output)
     preChain = AnalyzeInheritanceChain(output,source,headers,classNames,classLocations,classScopes)
     results = checkChainForImplementationInheritance(preChain,source,headers)
     #print("This Chains Inheritance issues results:")
