@@ -29,6 +29,8 @@ def ProcessController(fileName):
     #------------------DRY TOOL---------------------------------------#
     try:
         locationOccurencesForDRY = analyzeDRY(headers,source)
+        print("=====Dry====")
+        print(locationOccurencesForDRY)
     except:
         print("Dry princple errors")
     # print("First!")
@@ -132,7 +134,7 @@ def ProcessController(fileName):
     rawGlobalLocations = findRawLocation(locationOccurencesForGlobal,rawHeaders,rawSource,source,headers)
     #print("global: ",rawGlobalLocations)
     rawSwitchLocations = findRawLocation(locationOccurrencesForSwitch,rawHeaders,rawSource,source,headers)
-    print("rawswitch: ",rawSwitchLocations)
+    #print("rawswitch: ",rawSwitchLocations)
     rawFriendLocations = findRawLocation(locationOccurrencesForFriend,rawHeaders,rawSource,source,headers)
     #print("rawfriend: ",rawFriendLocations)
     rawPublicLocations = findRawLocation(locationOccurrencesForPublic,rawHeaders,rawSource,source,headers)
