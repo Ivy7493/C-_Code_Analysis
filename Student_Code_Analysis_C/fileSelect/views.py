@@ -138,8 +138,7 @@ def executeProgram(request):
     for className in classNames:
         print('--' + className + '--')
         # try:
-        tree,location = extractImplementationTreeClassName(processedHeaders, processedSources, className ,classNames,classLocations)
-        tree.append(className)
+        tree = extractImplementationTreeClassName(processedHeaders, processedSources, className ,classNames,classLocations)
         print("Tree: ")
         print(tree)
         totalDependencies.append(tree)
@@ -155,16 +154,21 @@ def executeProgram(request):
     dependencyDictionary = {}
     baseClasses = []
     for dependency in totalDependencies:
-        if(len(dependency) == 1):
-            baseClasses.append(dependency[0])
+        #if(len(dependency) == 1):
+         #   baseClasses.append(dependency[0])
             # print("baseClasses iteration - ", len(baseClasses)," : ",dependency[0])
-        for entity in dependency:
-                if dependency.index(entity) + 1 < len(dependency):
-                    if not entity in dependencyDictionary:
-                        dependencyDictionary[entity] = []
-                        dependencyDictionary[entity].append(dependency[dependency.index(entity) + 1])
-                    else:
-                        dependencyDictionary[entity].append(dependency[dependency.index(entity) + 1])
+        for entity in dependency['classesInheritedFrom']:
+            if entity not in dependencyDictionary:
+                dependencyDictionary[entity] = []
+                dependencyDictionary[entity].append(dependency['className'])
+            else:
+                dependencyDictionary[entity].append(dependency['className'])
+                # if dependency.index(entity) + 1 < len(dependency):
+                #     if not entity in dependencyDictionary:
+                #         dependencyDictionary[entity] = []
+                #         dependencyDictionary[entity].append(dependency[dependency.index(entity) + 1])
+                #     else:
+                #         dependencyDictionary[entity].append(dependency[dependency.index(entity) + 1])
     
     # print("HOOOOOOOOOOOOOOOOOOOOOOOOOHAAA -",dependencyDictionary)
     for file in dependencyDictionary:
