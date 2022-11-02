@@ -183,8 +183,10 @@ def extractImplementationTreeClassName(headers, source, className ,classNames,cl
                 cleanline =cleanline.split(" ")[1]
 
             allInheritedClasses.append(cleanline)
-        #print("After fixing: ")
-        #print(allInheritedClasses)
+            
+        print(" After fixing: ")
+        print(allInheritedClasses)
+        
         returnedTree = []
         location = []
         for foundClass in allInheritedClasses:
@@ -345,7 +347,7 @@ def analyzeImplementationInheritance(source,headers,className,classNames,classLo
     #print("====================== " + className + " ======================")
     output,outputLocation = extractImplementationTreeClassName(headers,source,className,classNames,classLocations); # class name, All classes, all class locations 1-1
     output.append(className)
-    #print("->")
+    # print("TREEE IN IMPLEMENTATION->",output)
     #print(output)
    #print("ANALYZE IMPLEMENTATION INHERITANCE: ",output)
     preChain = AnalyzeInheritanceChain(output,source,headers,classNames,classLocations,classScopes)
