@@ -51,8 +51,8 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
                 workingY = y.strip()
                 workingY = workingY.lstrip()
                 workingY = workingY.rstrip()
-                commentCounter = 0;
-                if(lineInQuestion in y and counter not in blackList and (workingY.find('*') != 0 and workingY.find('*/') != len(workingY) -1 and workingY.find('/*') != 0)):
+                commentCounter = 0
+                if(lineInQuestion in y and counter not in blackList and (workingY.find('*') != 0 and workingY.find('*/') != len(workingY) -1 and workingY.find('/*') != 0) ):
                     found[0] = True
                     pos1 = counter
                     tempIndex = counter
@@ -78,7 +78,7 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
                 if(lineInQuestion in workingY and workingY.find('*') != 0 and workingY.find('*/') != len(workingY) -1 and workingY.find('/*') != 0):
                     rawLocations.append(data[0] + '-' + str(fileCounter))
                 counter += 1
-                fileCounter += 1;
+                fileCounter += 1
 
     return rawLocations
 
