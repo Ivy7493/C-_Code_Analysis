@@ -16,11 +16,7 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
             if('@' in data[1]):
                 isRangeInput = True
                 points = data[1].split("@")
-                #print("YAAAASSSS POINTS", points)
-                #print("And the len of file: ", len(lineInQuestion))
                 endLineInQuestion = lineInQuestion[int(points[1])]
-                #print("IS this okay? ", int(points[1]))
-                #print("How about this? ", lineInQuestion[int(points[1])])  
                 lineInQuestion = lineInQuestion[int(points[0])] #beginning points
                 difference = int(points[1]) - int(points[0])
                 
@@ -32,11 +28,7 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
             if('@' in data[1]):
                 isRangeInput = True
                 points = data[1].split("@")
-                #print("YAAAASSSS POINTS", points)
-                #print("And the len of file: ", len(lineInQuestion))
                 endLineInQuestion = lineInQuestion[int(points[1])]
-                #print("IS this okay? ", int(points[1]))
-                #print("How about this? ", lineInQuestion[int(points[1])])  
                 lineInQuestion = lineInQuestion[int(points[0])] #beginning points
                 difference = int(points[1]) - int(points[0])
             else:
@@ -64,8 +56,7 @@ def findRawLocation(issue,rawHeaders,rawSource,source,header):
                     found[1] = True
                     pos2 = tempIndex
                 if(found[0] and found[1]):
-                    #print("Check to see if this is okay?")
-                    #print(data[0] + '-' + str(pos1) + '@' + str(pos2))
+
                     rawLocations.append(data[0] + '-' + str(pos1) + '@' + str(pos2+1))
                     break
                 counter += 1
@@ -92,7 +83,6 @@ def getFiles(path):
     for (root, dirs, file) in os.walk(path):
         for f in file:
             if '.cpp' in f or '.h' in f and f.count(".") == 1 and ".html" not in f:
-                #print(f)
                 sourceFile = os.path.join(root, f)
                 source = open(sourceFile, "r")
                 source_lines = []
@@ -117,7 +107,6 @@ def getFiles(path):
                             else:    
                                 source_lines.append(source_line.split('//')[0].strip()) # if not in code block, insert line with comments removed         
                           
-                #print(source_lines)
                 if('.cpp' in f):
                     cppList[f]=source_lines
                     rawCppList[f]=rawSourceLines
@@ -126,17 +115,4 @@ def getFiles(path):
                     rawHeaderList[f] = rawSourceLines
                 source.close()
                 
-    
-    # for x in cppList:
-    #     print(" ")
-    #     print("cpp Item: ", x)
-    #     for y in cppList[x]:
-    #         print(y)
-
-    # for x in headerList:
-    #     print(" ")
-    #     print("header Item: ", x)
-    #     for y in headerList[x]:
-    #         print(y)
-
     return headerList,cppList,rawHeaderList,rawCppList

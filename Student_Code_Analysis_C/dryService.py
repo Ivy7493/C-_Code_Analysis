@@ -43,8 +43,7 @@ def analyze(headers,source):
                         tempCounter += 1
                     fileScopes.append(outputBlock)
                     fileScopeSplits.append(str(startScope) + '@' + str(endScope ))
-                    #print("Obtained scope: ")
-                    #print(str(startScope) + '@' + str(endScope ))
+
                     currentLine=endScope
             currentLine += 1
 
@@ -63,16 +62,8 @@ def analyze(headers,source):
                     if(fixedScore > scoreThreshold):
                         lineIndex = fileScopes.index(y)
                         lineIndex2 = fileScopes.index(j)
-                        print("leny",len(y),"lenj:")
-                        print(len(j))
-                        print("scopes that passed")
-                        print(j)
-                        print(" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ")
-                        print(y)
                         output = x + '-' + fileScopeSplits[lineIndex]
                         output2 = x + '-' + fileScopeSplits[lineIndex2]
-                        #print("OUTPUT 1:",output)
-                        #print("OUTPUT 2:",output2)
                         locationOccurance.append(output)
                         locationOccurance.append(output2)
                 innerCounter += 1

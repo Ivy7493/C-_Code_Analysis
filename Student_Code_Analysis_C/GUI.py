@@ -2,7 +2,7 @@ import PySimpleGUI as sg
 import os.path
 import textwrap
 from ProcessController import ProcessController as PrscC
-
+# We have sentimental attachmen to the GUI... This doesn't do anything in the program but it is our child
 file_list_column = [
     [
         sg.Text("Folder"),
@@ -98,10 +98,7 @@ while True:
         window["-FILE LIST-"].update(fnames)
     if event == "OK":
         try:
-            # print(os.path.join(folder))
             headers,sources,countArr,occurArr = PrscC(os.path.join(folder))
-            # print(headers.keys())
-            # print(sources.keys())
             window["-TOUT-"].Update("Press VIEW to see the report on bad practice")
             window["impText"].Update(str(countArr[0]))
             window["impLocText"].Update(occurArr[0])
@@ -121,14 +118,13 @@ while True:
             window["viewButton"].Update(visible = True)
         except:
             file_list = []
-            print("OOPS something went wrong")
     if event == "viewButton":
         window["fileColumn"].Update(visible = False)
         window["headerColumn"].Update(visible = False)
         window["sourceColumn"].Update(visible = False)
         window["reportColumn"].Update(visible = True)
-    #if event == "-FILE LIST-":  # A file was chosen from the listbox
-       # print("butts")
+# A file was chosen from the listbox
+
     if event == "returnFromReportButton":
         window["fileColumn"].Update(visible = True)
         window["headerColumn"].Update(visible = True)
