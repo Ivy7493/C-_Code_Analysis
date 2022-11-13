@@ -12,6 +12,7 @@ Code snitch is a tool that can be used to detect and visually display code smell
 - Python 3
 
 ## How to Run:
+Clone the repo to your local machine : https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository
 pip install _______ the following libraries for python:
 - pysimilar
 - django
