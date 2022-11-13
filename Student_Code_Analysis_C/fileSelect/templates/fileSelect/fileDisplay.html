@@ -263,19 +263,14 @@
   <!-- code taken from https://stackoverflow.com/questions/49809112/create-a-tree-diagram-multiple-parents-with-pure-html-css -->
 
   <div class="col-sm-auto">
-    <button name="button-class-structure" data-toggle="collapse" data-target="#classStructure" aria-expanded="false"
-      aria-controls="classStructure" type="button" class="button-17">
+    <h2>
       Class Structure
-    </button>
-  </div>
-  <div class="col-sm-6">
-    <div class="row collapse class-layout" id="classStructure">
-    
-    </div>
+    </h2>
+    {% include 'fileSelect/tree.html' %}
   </div>
 </div>
 </div>
-{% include 'fileSelect/tree.html' %}
+
 <script src="https://unpkg.com/mermaid@8.14.0/dist/mermaid.min.js"></script>
 <script src="{% static 'fileSelect/mermaid.js' %}" ></script>
 {% endblock content%}
