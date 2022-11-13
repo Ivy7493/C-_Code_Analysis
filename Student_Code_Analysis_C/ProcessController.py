@@ -71,6 +71,26 @@ def ProcessController(fileName):
         except:
             print("PDM error")
 
+          #------------------Friend Tool------------------------------#
+        try:
+            scope = classScopes[classNames.index(currentClass)];
+            scope = scope.split("@")
+            startPos = int(scope[0])
+            endPos = int(scope[1])
+            fileName = classNameLocations[classNames.index(currentClass)].split('-')[0]
+            classScope = []
+            if(".cpp" in fileName):
+                classScope = source[fileName]
+            elif(".h" in fileName):    
+                classScope = headers[fileName]
+            #classScope = classScope[startPos:endPos]
+            fileFriendLocation = analyzeFriend(classScope)
+            fileFriendLocation = list(set(fileFriendLocation))
+            for member in fileFriendLocation:
+                locationOccurrencesForFriend.append(fileName + '-' + str(member))
+        except:
+            print("Friend error in header")
+
     
     for x in headers:
         #-----------------Global Variable tool--------------------------------------#
@@ -83,14 +103,7 @@ def ProcessController(fileName):
         for member in globalVariableLocation:
                 locationOccurencesForGlobal.append(x + '-' + str(member))
 
-        #------------------Friend Tool------------------------------#
-        try:
-            fileFriendLocation = analyzeFriend(headers[x])
-            fileFriendLocation = list(set(fileFriendLocation))
-            for member in fileFriendLocation:
-                locationOccurrencesForFriend.append(x + '-' + str(member))
-        except:
-            print("Friend error in header")
+      
 
         #------------------Switch Tool------------------------------#
         try:
