@@ -49,7 +49,7 @@ def ProcessController(fileName):
             locationOccurrencesForImplementationInheritance.append(member)
         #except:
             print("IMplementation error")
-        
+        #-------------------------Public Data Member-----------------------#
         try:
             # print("========"+ currentClass + '========')
             #print("what we passing in")
@@ -192,4 +192,5 @@ def ProcessController(fileName):
     # print("Total DRY Sections: ")
     # print("Occurrences: ", locationOccurencesForDRY)
     classNameLocations=findRawLocation(classNameLocations,rawHeaders,rawSource,source,headers)
+    
     return rawHeaders,rawSource,issueLocationArr

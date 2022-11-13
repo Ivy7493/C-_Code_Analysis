@@ -180,17 +180,20 @@ def executeProgram(request):
     scopeCount=0
     lastScope=''
     fullFile='<pre class="mermaid"><code>'+'\n'"classDiagram"+'\n'
+    if dependencyDictionary:
+        for key in dependencyDictionary:
+            if dependencyDictionary[key]:
+                if len(dependencyDictionary[key])>0:
+                    for classFile in dependencyDictionary[key]:
+                        fullFile+=key+"&lt;--"+classFile+'\n'
+                else:
+                    fullFile+=key+'\n'
+        fullFile+="</code></pre>"
     
-    for key in dependencyDictionary:
-        if dependencyDictionary[key]:
-            if len(dependencyDictionary[key])>0:
-                for classFile in dependencyDictionary[key]:
-                    fullFile+=key+"&lt;--"+classFile+'\n'
-            else:
-                fullFile+=key+'\n'
-                    
+    else:
+        fullFile='<h3> No inheritance detected in this program </h3>'
 
-    fullFile+="</code></pre>"
+    
     
     try:
         os.remove(os.path.join('fileSelect','templates','fileSelect','tree.html'))
