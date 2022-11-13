@@ -10,6 +10,9 @@ from tkinter import *
 from tkinter import filedialog
 import concurrent.futures
 
+def information(request):
+    return render(request,'fileSelect/information.html')
+
 def fileSelectHome(request):
     saveData('folder',"")
     form = getPath()

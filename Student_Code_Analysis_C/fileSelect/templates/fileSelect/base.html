@@ -33,6 +33,14 @@
                             class="button-23">Start Analysis</button>
                     </form>
                 </div>
+                <div>
+                    <form method="post">
+                        {% csrf_token %}
+                        &nbsp;
+                        <button formaction='../../information/' type="submit" name="informationButton"
+                            class="button-23">Information</button>
+                    </form>
+                </div>
                 <div class="page-name-nav">
                     <h3>Code_Snitch</h3>
                 </div>
@@ -59,6 +67,7 @@
         
                     </script>
                 </div>
+  
             </nav>
         </div>
 
