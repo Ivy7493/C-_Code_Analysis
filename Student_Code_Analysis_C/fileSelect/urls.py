@@ -7,4 +7,5 @@ urlpatterns = [
     path('executeProgram/',views.executeProgram,name ="executeProgram"),
     path('navBarLaunch/',views.navBarLaunch, name="navBarLaunch"),
     path('executeProgram/displayCode/',views.displayCode,name = "displayCode"),
+    path('information/',views.information, name ="information"),
 ]

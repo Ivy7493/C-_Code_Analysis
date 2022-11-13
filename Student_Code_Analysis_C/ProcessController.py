@@ -16,14 +16,9 @@ def ProcessController(fileName):
     locationOccurrencesForFriend = []
     locationOccurencesForGlobal = []
     locationOccurencesForDRY = []
-    # typeData = analyzeType(headers,source)
     
     typeData,enumNames,classNames,classNameLocations,classScopes = analyzeType(headers,source)
-    #typeData.extend(enumNames)
     typeData = [typeData,enumNames]
-    # print("START OF PROCESS CONTROLLER")
-    # print("classNames Extracted:",classNames)
-    # print("Raw Line numbers of class declarations: ",classNameLocations)
     
     saveData("processedHeaders",headers)
     saveData("processedSources",source)
@@ -31,28 +26,20 @@ def ProcessController(fileName):
     #------------------DRY TOOL---------------------------------------#
     try:
         locationOccurencesForDRY = analyzeDRY(headers,source)
-        print("=====Dry====")
-        print(locationOccurencesForDRY)
     except:
-        print("Dry princople errors")
-    # print("First!")
-    # print(locationOccurencesForDRY)
-    # print('----testing Section-----')
-    print("classnames in processCOntroller :", classNames)
+        pass
     for currentClass in classNames:
         #------------------Implementation Inheritance---------------------#
-        #try:
-        impLine = analyzeImplementationInheritance(source,headers,currentClass,classNames,classNameLocations,classScopes)
-        if(len(impLine) != 0):
-            impLine = list(set(impLine))
-        for member in impLine:
-            locationOccurrencesForImplementationInheritance.append(member)
-        #except:
-            print("IMplementation error")
+        try:
+            impLine = analyzeImplementationInheritance(source,headers,currentClass,classNames,classNameLocations,classScopes)
+            if(len(impLine) != 0):
+                impLine = list(set(impLine))
+            for member in impLine:
+                locationOccurrencesForImplementationInheritance.append(member)
+        except:
+            pass
         #-------------------------Public Data Member-----------------------#
         try:
-            # print("========"+ currentClass + '========')
-            #print("what we passing in")
             scope = classScopes[classNames.index(currentClass)];
             scope = scope.split("@")
             startPos = int(scope[0])
@@ -69,7 +56,7 @@ def ProcessController(fileName):
             for member in publicDataMemberLocation:
                 locationOccurrencesForPublic.append(classNameLocations[classNames.index(currentClass)].split('-')[0] + '-' + str(member))
         except:
-            print("PDM error")
+            pass
 
           #------------------Friend Tool------------------------------#
         try:
@@ -120,6 +107,7 @@ def ProcessController(fileName):
        
 
     for x in source:
+        globalVariableLocation=[]
         #-----------------Global Variable tool--------------------------------------#
         try:
             
@@ -132,65 +120,37 @@ def ProcessController(fileName):
             locationOccurencesForGlobal.append(x + '-' + str(member))
 
         #------------------Switch Tool------------------------------#
-        #try:
-        fileSwitchLocation = analyzeSwitch(source[x],headers,source,typeData,x)
-        fileSwitchLocation = list(set(fileSwitchLocation))
+        try:
+            fileSwitchLocation = analyzeSwitch(source[x],headers,source,typeData,x)
+            fileSwitchLocation = list(set(fileSwitchLocation))
         
-        #except:
-            #print("switch source error")
+        except:
+            pass
         for member in fileSwitchLocation:
             locationOccurrencesForSwitch.append(x + '-' + str(member))
-        #print("FILE switsfhfsoh locations in sources:",locationOccurrencesForSwitch)
+ 
 
 
 
     #======================Raw Location Test===============================#
-    #print("========FULL ISSUES=====")
-    #print("LOCATION OCCURENCES FOR GLOBAL",locationOccurencesForGlobal)
+
     rawGlobalLocations = findRawLocation(locationOccurencesForGlobal,rawHeaders,rawSource,source,headers)
-    #print("global: ",rawGlobalLocations)
+
     rawSwitchLocations = findRawLocation(locationOccurrencesForSwitch,rawHeaders,rawSource,source,headers)
-    # print("rawswitch: ",rawSwitchLocations)
+
     rawFriendLocations = findRawLocation(locationOccurrencesForFriend,rawHeaders,rawSource,source,headers)
-    #print("rawfriend: ",rawFriendLocations)
+
     rawPublicLocations = findRawLocation(locationOccurrencesForPublic,rawHeaders,rawSource,source,headers)
-    #print("rawpublic: ",rawPublicLocations)
+
     rawInheritanceLocations = findRawLocation(locationOccurrencesForImplementationInheritance,rawHeaders,rawSource,source,headers)
-    #print("rawinheritance: ",rawInheritanceLocations)
+
     rawDRYLocations = findRawLocation(locationOccurencesForDRY,rawHeaders,rawSource,source,headers)
-    #print("rawdry: ",rawDRYLocations)
-    
+
     
     
     #-----------------------TOTAL SECTION--------------------------------#
     issueLocationArr = [list(set(rawInheritanceLocations)),list(set(rawGlobalLocations)),list(set(rawPublicLocations)),list(set(rawSwitchLocations)),list(set(rawFriendLocations)),list(set(rawDRYLocations))]
-    # print('=========================================================')
     locationOccurrencesForImplementationInheritance = list(set(locationOccurrencesForImplementationInheritance))    
-    # print("Total Implementation Inheritance: ")
-    #print("Occurrences: ", locationOccurrencesForImplementationInheritance)
-    # print(" ")
-    #print('=========================================================')
-    #locationOccurencesForGlobal = list(set(locationOccurencesForGlobal))
-    #print("Total Global Variables: ")
-    #print("Occurrences: ", locationOccurencesForGlobal)
-    #print(" ")
-    #print('=========================================================')
-    #locationOccurrencesForPublic = list(set(locationOccurrencesForPublic))
-    # print("Total Public Variables: ")
-    #print("Occurrences: ", locationOccurrencesForPublic)
-    # print(" ")
-    # print('=========================================================')
-    #locationOccurrencesForSwitch = list(set(locationOccurrencesForSwitch))
-    # print("Total switch Statements: ")
-    # print("Occurrences: ", locationOccurrencesForSwitch)
-    # print(" ")
-    # print('=========================================================')
-    #locationOccurrencesForFriend = list(set(locationOccurrencesForFriend))
-    # print("Total Friend Statements: ")
-    # print("Occurrences: ", locationOccurrencesForFriend)
-    #locationOccurencesForDRY = list(set(locationOccurencesForDRY))
-    # print("Total DRY Sections: ")
-    # print("Occurrences: ", locationOccurencesForDRY)
     classNameLocations=findRawLocation(classNameLocations,rawHeaders,rawSource,source,headers)
     
     return rawHeaders,rawSource,issueLocationArr

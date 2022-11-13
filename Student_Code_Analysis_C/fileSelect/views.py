@@ -10,6 +10,9 @@ from tkinter import *
 from tkinter import filedialog
 import concurrent.futures
 
+def information(request):
+    return render(request,'fileSelect/information.html')
+
 def fileSelectHome(request):
     saveData('folder',"")
     form = getPath()
@@ -83,27 +86,23 @@ def executeProgram(request):
     try:
         buttonVal = request.POST["folderName"]
     except:
-        print("do not need to restart");
+        pass
 
     folder = ""
     if(buttonVal != "restart"):
         folder = getData("folder")
     if(folder == ""):
-        # print("this hit ======================")
         with concurrent.futures.ThreadPoolExecutor() as executor:
             future = executor.submit(select_folder)
             folder = future.result()
             saveData('folder',folder)
-        # print(folder)
 
     headers,sources,occurArr = PrscC(os.path.join(folder))
     saveData('issues',occurArr)
     saveData('headers',headers)
     saveData('sources',sources)
     classNames=getData("classNames")
-    # print("classNames IN VIEEEEEEWWWWWWWWWWWWWs: ",classNames)
     classLocations=getData("classNameLocations")
-    # print("classLocations in VIEWWWWWW :" ,classLocations)
     processedHeaders=getData("processedHeaders")
     processedSources=getData("processedSources")
 
@@ -136,47 +135,30 @@ def executeProgram(request):
     totalDependencies = []
     tree = []
     for className in classNames:
-        print('--' + className + '--')
-        # try:
-        tree = extractImplementationTreeClassName(processedHeaders, processedSources, className ,classNames,classLocations)
-        print("Tree: ")
-        print(tree)
-        totalDependencies.append(tree)
-        # except:
-        #     print("noneType")
+        try:
+            tree = extractImplementationTreeClassName(processedHeaders, processedSources, className ,classNames,classLocations)
+            totalDependencies.append(tree)
+        except:
+            pass
 
-    # print("Total Dependencies before dependency dictionary: ")
-    # print(totalDependencies)
-    # print("=================")
+
     dependencyDiagram=[]
     baseClasses =[]
     firstInstance=True
     dependencyDictionary = {}
     baseClasses = []
     for dependency in totalDependencies:
-        #if(len(dependency) == 1):
-         #   baseClasses.append(dependency[0])
-            # print("baseClasses iteration - ", len(baseClasses)," : ",dependency[0])
+
         for entity in dependency['classesInheritedFrom']:
             if entity not in dependencyDictionary:
                 dependencyDictionary[entity] = []
                 dependencyDictionary[entity].append(dependency['className'])
             else:
                 dependencyDictionary[entity].append(dependency['className'])
-                # if dependency.index(entity) + 1 < len(dependency):
-                #     if not entity in dependencyDictionary:
-                #         dependencyDictionary[entity] = []
-                #         dependencyDictionary[entity].append(dependency[dependency.index(entity) + 1])
-                #     else:
-                #         dependencyDictionary[entity].append(dependency[dependency.index(entity) + 1])
-    
-    # print("HOOOOOOOOOOOOOOOOOOOOOOOOOHAAA -",dependencyDictionary)
+
     for file in dependencyDictionary:
         dependencyDictionary[file] = list(set(dependencyDictionary[file]))
-        # print("Class: ", file)
-        # print("CLASS DEPENDENCY DICTIONARY FILE: ",dependencyDictionary[file])
-    # print("==========================================",dependencyDictionary)
-    
+
     scopeCount=0
     lastScope=''
     fullFile='<pre class="mermaid"><code>'+'\n'"classDiagram"+'\n'
@@ -198,7 +180,7 @@ def executeProgram(request):
     try:
         os.remove(os.path.join('fileSelect','templates','fileSelect','tree.html'))
     except:
-        print("Not tree html found")
+        pass
     
     with open(os.path.join('fileSelect','templates','fileSelect','tree.html'), "w+") as file:
         file.write(fullFile)
@@ -235,56 +217,46 @@ def executeProgram(request):
 
 def generateUML(baseClasses,UMLstruct,count):
     if(count == 0):
-        #print('}')
         temp = getData('tree')
         temp.append('}')
         saveData('tree', temp)
-    #print('->',baseClass)
     for baseClass in baseClasses:
         if(baseClass in UMLstruct):
             if(len(UMLstruct[baseClass]) > 0):
-                # print("we in here")
-                #print('}')
                 temp = getData('tree')
                 temp.append('}')
                 saveData('tree', temp)
                 for x in UMLstruct[baseClass]:
                     generateUML([x],UMLstruct,count + 1)
-                    #print(x)
                     temp = getData('tree')
                     temp.append(x)
                     saveData('tree',temp)
-                #print('{') #old start
                 temp = getData('tree')
                 temp.append('{')
                 saveData('tree', temp)
         if(count == 0):
-            #print(baseClass)
             temp = getData('tree')
             temp.append(baseClass)
             saveData('tree', temp)
     if(count == 0):
-        #print('{')
         temp = getData('tree')
         temp.append('{')
         saveData('tree', temp[::-1])
-        #print(getData('tree'))
         return getData('tree')
 
 
 def displayCode(request):
-    # saveData('tree',[])   
+    fileName=""
     try:
         fileName = request.POST["key"]
     except:
-        print('no filename provided')
+        pass
         
     issueId = ""
     try:
         issueId = request.POST["issue"]
     except:
         issueId = "allIssues"
-        print("Caught Empty issueID")
         
     file =[]
     if ".h" in fileName:
@@ -309,7 +281,6 @@ def displayCode(request):
                     linesOfIssues.append(int(tempSplit[1]))
         allIssuesArray.append(linesOfIssues) 
         linesOfIssues = []
-    #print("Issue lines for file:" )
     lineStatus = [False] * len(file)
     convertedColour = [""]*len(file)
     totalString = ""

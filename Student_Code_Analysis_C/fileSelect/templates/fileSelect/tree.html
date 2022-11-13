@@ -1,11 +1,12 @@
 <pre class="mermaid"><code>
 classDiagram
-GameStateEventListener&lt;--GameEngine
-GameState&lt;--instructionState
-GameState&lt;--GameOverState
-GameState&lt;--SplashState
-GameState&lt;--PlayingState
-GameState&lt;--HighScoreState
-body&lt;--PacMan
-body&lt;--Ghosts
+Entity&lt;--Spider
+Entity&lt;--Bomb
+Entity&lt;--Player
+Entity&lt;--Flea
+Entity&lt;--Mushroom
+Entity&lt;--Centipede
+Entity&lt;--Projectile
+State&lt;--GameState
+State&lt;--MainMenuState
 </code></pre>
